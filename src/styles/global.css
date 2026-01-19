@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* 
+ * Accessibility: Honor user's motion preferences (WCAG 2.3.3)
+ * Users with vestibular disorders may experience dizziness from animations.
+ * This disables transitions/animations when the user has enabled 
+ * "Reduce motion" in their OS settings.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
