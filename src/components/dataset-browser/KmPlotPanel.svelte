@@ -1,0 +1,170 @@
+<script lang="ts">
+	interface Props {
+		isOpen: boolean;
+		kmWidgetIframeSrc: string;
+		candidateGenes: string[];
+		selectedCandidateGene: string | null;
+		onToggleOpen: () => void;
+		onSelectGene: (gene: string) => void;
+	}
+
+	let {
+		isOpen,
+		kmWidgetIframeSrc,
+		candidateGenes,
+		selectedCandidateGene,
+		onToggleOpen,
+		onSelectGene,
+	}: Props = $props();
+
+	let candidateGenesListEl = $state<HTMLUListElement | null>(null);
+	let canScrollCandidateGenesUp = $state(false);
+	let canScrollCandidateGenesDown = $state(false);
+	let kmWidgetHasLoaded = $state(false);
+	let kmWidgetLoadError = $state<string | null>(null);
+
+	function updateCandidateGenesScrollAffordance(): void {
+		if (!candidateGenesListEl) {
+			canScrollCandidateGenesUp = false;
+			canScrollCandidateGenesDown = false;
+			return;
+		}
+
+		const { scrollTop, scrollHeight, clientHeight } = candidateGenesListEl;
+		const maxScrollTop = Math.max(0, scrollHeight - clientHeight);
+		canScrollCandidateGenesUp = scrollTop > 2;
+		canScrollCandidateGenesDown = maxScrollTop - scrollTop > 2;
+	}
+
+	$effect(() => {
+		candidateGenes.length;
+		selectedCandidateGene;
+		requestAnimationFrame(() => updateCandidateGenesScrollAffordance());
+	});
+
+	$effect(() => {
+		kmWidgetIframeSrc;
+		kmWidgetHasLoaded = false;
+		kmWidgetLoadError = null;
+	});
+
+	function handleKmWidgetLoad(): void {
+		kmWidgetHasLoaded = true;
+		kmWidgetLoadError = null;
+	}
+
+	function handleKmWidgetError(): void {
+		kmWidgetHasLoaded = false;
+		kmWidgetLoadError = 'The Kaplan-Meier plot failed to load. Try selecting another dataset or reloading the page.';
+	}
+</script>
+
+<svelte:window onresize={updateCandidateGenesScrollAffordance} />
+
+<section>
+	<button
+		onclick={onToggleOpen}
+		aria-expanded={isOpen}
+		aria-controls="km-plot-panel-content"
+		class="mb-3 flex w-full items-center gap-2 cursor-pointer text-left text-slate-600 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+	>
+		<svg class="h-4 w-4 text-slate-400 {isOpen ? 'rotate-90' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+		</svg>
+		<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Kaplan-Meier plot</h3>
+	</button>
+	{#if isOpen}
+		<div id="km-plot-panel-content">
+		<div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+			<div class="relative grid bg-white md:h-[800px] md:grid-cols-[280px_minmax(0,1fr)]">
+				<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
+					<div class="flex items-center gap-1.5">
+						<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Candidate genes</p>
+						<span class="group relative inline-flex">
+							<button
+								type="button"
+								class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-50"
+								aria-label="How candidate genes are selected"
+								aria-describedby="candidate-genes-help"
+							>
+								i
+							</button>
+							<span
+								id="candidate-genes-help"
+								role="tooltip"
+								class="pointer-events-none absolute left-0 top-full z-10 mt-2 w-64 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+							>
+								Genes are selected by filtering with univariate Cox regression analysis. The plot shows two patient groups split by the median value of gene expression.
+							</span>
+						</span>
+					</div>
+					<div class="relative mt-2 min-h-0 flex-1 overflow-hidden bg-transparent">
+						{#if candidateGenes.length > 0}
+							<ul
+								bind:this={candidateGenesListEl}
+								onscroll={updateCandidateGenesScrollAffordance}
+								role="list"
+								aria-label="Candidate Genes"
+								class="h-full overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgb(148_163_184)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-400/60 [&::-webkit-scrollbar-thumb:hover]:bg-slate-500/70 [&::-webkit-scrollbar-track]:bg-transparent"
+							>
+								{#each candidateGenes as gene (gene)}
+									<li class="border-b border-slate-100 last:border-b-0">
+										<button
+											type="button"
+											aria-pressed={selectedCandidateGene === gene}
+											onclick={() => onSelectGene(gene)}
+											class="block w-full px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {selectedCandidateGene ===
+											gene
+												? 'bg-slate-800 text-white'
+												: 'bg-transparent text-slate-700 hover:bg-slate-100/70'}"
+											title={gene}
+										>
+											<span class="block break-all leading-5">{gene}</span>
+										</button>
+									</li>
+								{/each}
+							</ul>
+							{#if canScrollCandidateGenesUp}
+								<div class="pointer-events-none absolute left-0 right-0 top-0 h-6 bg-gradient-to-b from-slate-100/85 via-slate-50/45 to-transparent"></div>
+							{/if}
+							{#if canScrollCandidateGenesDown}
+								<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-100/85 via-slate-50/45 to-transparent"></div>
+								<div class="pointer-events-none absolute bottom-1.5 right-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100/95 text-slate-500 shadow-sm ring-1 ring-slate-200/70">
+									<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10l5 5 5-5"></path>
+									</svg>
+								</div>
+							{/if}
+						{:else}
+							<p class="px-1 py-3 text-sm italic text-slate-400">No candidate genes available for this dataset.</p>
+						{/if}
+					</div>
+				</aside>
+				<iframe
+					src={kmWidgetIframeSrc}
+					onload={handleKmWidgetLoad}
+					onerror={handleKmWidgetError}
+					sandbox="allow-scripts allow-same-origin allow-forms"
+					referrerpolicy="strict-origin-when-cross-origin"
+					class="w-full overflow-hidden border-0 {kmWidgetHasLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity"
+					style="height: 800px; min-height: 800px;"
+					title="Kaplan Meier Plot"
+					loading="lazy"
+				></iframe>
+				{#if !kmWidgetHasLoaded && !kmWidgetLoadError}
+					<div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/80 text-sm text-slate-600" role="status" aria-live="polite">
+						Loading Kaplan-Meier plot…
+					</div>
+				{/if}
+				{#if kmWidgetLoadError}
+					<div class="absolute inset-0 flex items-center justify-center bg-white p-6">
+						<p role="alert" class="max-w-md rounded border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
+							{kmWidgetLoadError}
+						</p>
+					</div>
+				{/if}
+			</div>
+		</div>
+		</div>
+	{/if}
+</section>

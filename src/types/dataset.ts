@@ -4,6 +4,9 @@ export interface DatasetSummary {
 	genes: number;
 }
 
+export type ReproducibleValue = 'YES' | 'NO' | 'PARTIALLY';
+export type NcbiDataValue = 'Available' | 'Not available';
+
 export interface SurvivalTimeVar {
 	var_name: string;
 	var_unit: string;
@@ -31,11 +34,7 @@ export interface Dataset {
 	data_summary: DatasetSummary;
 	data_file_names?: string[];
 	'Experiment type': string;
-	Reproducible: string;
-	'NCBI-generated data': string;
+	Reproducible: ReproducibleValue;
+	'NCBI-generated data': NcbiDataValue;
 	Notes?: string;
-	iframe_urls?: {
-		table: string;
-		plot: string;
-	};
 }
