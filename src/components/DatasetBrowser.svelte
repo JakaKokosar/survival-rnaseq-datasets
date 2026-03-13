@@ -8,6 +8,7 @@
 		getEndpointFullName,
 		formatEventValues,
 		getEndpointCardBorderClass,
+		isEndpointIncomplete,
 		sortIndicator,
 		ariaSort,
 		sortDatasets,
@@ -17,6 +18,15 @@
 		saveSplitRatio,
 		clampSplitRatio,
 	} from '../lib/dataset-utils';
+	import {
+		createWidgetTarget,
+		fetchEmbedSession,
+		resolveMasterToFork,
+		patchWidgetSettings,
+		patchWorkflowSettings,
+		type WorkflowStep,
+		type WidgetTarget,
+	} from '../lib/widget-api';
 
 	// ── Props ────────────────────────────────────────────────────────────
 	interface Props {
@@ -36,18 +46,68 @@
 	let isDragging = $state(false);
 
 	let mobileTab: 'list' | 'details' = $state('list');
-	let sampleDataTab: 'table' | 'plot' = $state('table');
 	let isDesktop = $state(true);
 
 	let openNotes = $state(new Set<number>());
-	let isPublicationsOpen = $state(false);
-	let isEndpointsOpen = $state(false);
-	let isDataViewerOpen = $state(true);
+	let isEndpointsOpen = $state(true);
+	let isKmPlotOpen = $state(true);
+	let isSampleDataViewerOpen = $state(true);
+	let datasetIframeEl = $state<HTMLIFrameElement | undefined>(undefined);
+	let kmIframeEl = $state<HTMLIFrameElement | undefined>(undefined);
+	let selectedKMPlotEndpointKey: string | null = $state(null);
+	let selectedCandidateGene: string | null = $state(null);
+	let canScrollCandidateGenesUp = $state(false);
+	let canScrollCandidateGenesDown = $state(false);
+	let canScrollEndpointsLeft = $state(false);
+	let canScrollEndpointsRight = $state(false);
+	let notesCanScrollUp = $state(new Set<number>());
+	let notesCanScrollDown = $state(new Set<number>());
+
+	const WIDGET_CONFIG = {
+		masterWs: 'test',
+		masterDatasetWidget: 'c98a3522-27f0-4b19-a8e9-0041c1f88a65',
+		masterKmWidget: '52cfecf4-c671-4692-9ef1-12b62ea7d297',
+		masterDataTableWidget: '372d2689-e2a9-4752-8809-93303c4b466b',
+	} as const;
+	let sessionId = $state<string | null>(null);
+	const widgetFrontendOrigin =
+		import.meta.env.PUBLIC_WIDGET_FRONTEND_ORIGIN ?? 'http://localhost:3000';
+	const widgetBackendOrigin =
+		import.meta.env.PUBLIC_WIDGET_BACKEND_ORIGIN ?? 'http://localhost:4000';
+	const hasWidgetIframes = true;
+
+	const hiddenDatasetWidgetIframeSrc = $derived(
+		sessionId
+			? `${widgetFrontendOrigin}/embed/${WIDGET_CONFIG.masterWs}/${WIDGET_CONFIG.masterDatasetWidget}/${sessionId}?hidden=footer,,enter-data-set-url...,file,header,url`
+			: '',
+	);
+	const kmWidgetIframeSrc = $derived(
+		sessionId
+			? `${widgetFrontendOrigin}/embed/${WIDGET_CONFIG.masterWs}/${WIDGET_CONFIG.masterKmWidget}/${sessionId}?hidden=survival-variables,sidebar,header,footer`
+			: '',
+	);
+	const dataTableWidgetIframeSrc = $derived(
+		sessionId
+			? `${widgetFrontendOrigin}/embed/${WIDGET_CONFIG.masterWs}/${WIDGET_CONFIG.masterDataTableWidget}/${sessionId}?hidden=footer`
+			: '',
+	);
+
+	const datasetWidgetTarget: WidgetTarget = createWidgetTarget();
+	const kmWidgetTarget: WidgetTarget = createWidgetTarget();
+	let pendingWorkflowPatchDatasetId: string | null = null;
+	let pendingWorkflowPatchKey: string | null = null;
+	let lastPatchedWorkflowPatchKey: string | null = null;
+	let isWorkflowPatchInFlight = false;
+	let pendingGroupVariablePatch: string | null = null;
+	let lastPatchedGroupVariable: string | null = null;
+	let isGroupVariablePatchInFlight = false;
 
 	// ── Refs (plain variables, not $state) ───────────────────────────────
 	let mainEl: HTMLElement;
 	let listTabEl: HTMLButtonElement;
 	let detailsTabEl: HTMLButtonElement;
+	let endpointsScrollerEl: HTMLDivElement;
+	let candidateGenesListEl: HTMLUListElement;
 
 	// ── Derived ──────────────────────────────────────────────────────────
 	let sortedDatasets = $derived.by(() => sortDatasets(datasets, sortColumn, sortDirection));
@@ -55,6 +115,71 @@
 	let selectedDataset = $derived(
 		selectedId ? datasets.find((d) => d.data_id === selectedId) ?? null : null,
 	);
+
+	function isUnknownFieldValue(value: string | null | undefined): boolean {
+		if (!value) return true;
+		const normalized = value.trim().toLowerCase();
+		return normalized === '' || normalized === 'unknown';
+	}
+
+	function isCompleteKMPlotEndpoint(endpoint: Dataset['survival-endpoints'][number]): boolean {
+		return (
+			!isUnknownFieldValue(endpoint.time_var.var_name) &&
+			!isUnknownFieldValue(endpoint.event_var.var_name)
+		);
+	}
+
+	function getKMPlotEndpointKey(endpoint: Dataset['survival-endpoints'][number]): string {
+		return `${endpoint.abbrv ?? ''}::${endpoint.time_var.var_name}::${endpoint.event_var.var_name}`;
+	}
+
+	function getKMPlotEndpointButtonLabel(
+		endpoint: Dataset['survival-endpoints'][number],
+		endpoints: Dataset['survival-endpoints'],
+	): string {
+		const abbr = endpoint.abbrv ?? '';
+		if (!abbr) return '';
+		const duplicateCount = endpoints.filter((candidate) => candidate.abbrv === abbr).length;
+		if (duplicateCount <= 1) return abbr;
+
+		return `${abbr} (${endpoint.time_var.var_name})`;
+	}
+
+	function getCompleteKMPlotEndpoints(dataset: Dataset | null): Dataset['survival-endpoints'] {
+		if (!dataset) return [];
+		return dataset['survival-endpoints'].filter(
+			(endpoint) => Boolean(endpoint.abbrv) && isCompleteKMPlotEndpoint(endpoint),
+		);
+	}
+
+	let kmPlotEndpointsForSelectedDataset = $derived.by(() => getCompleteKMPlotEndpoints(selectedDataset));
+	let candidateGenesForSelectedDataset = $derived.by(() => selectedDataset?.candidate_genes ?? []);
+
+	$effect(() => {
+		selectedId;
+		if (endpointsScrollerEl) {
+			endpointsScrollerEl.scrollLeft = 0;
+			requestAnimationFrame(() => updateEndpointsScrollAffordance());
+		}
+	});
+
+	$effect(() => {
+		isEndpointsOpen;
+		isDesktop;
+		const endpointCount = selectedDataset?.['survival-endpoints'].length ?? 0;
+		endpointCount;
+		requestAnimationFrame(() => updateEndpointsScrollAffordance());
+	});
+
+	$effect(() => {
+		openNotes;
+		requestAnimationFrame(() => {
+			openNotes.forEach((idx) => {
+				const notesEl = document.getElementById(`endpoint-notes-body-${idx}`) as HTMLDivElement | null;
+				updateNotesScrollAffordanceForIndex(idx, notesEl);
+			});
+		});
+	});
 
 	// ── Lifecycle ────────────────────────────────────────────────────────
 	onMount(() => {
@@ -74,17 +199,84 @@
 				if (idx !== -1) focusedIndex = idx;
 			}
 		}
+
+		async function initWidgetApi() {
+			try {
+				const sessData = await fetchEmbedSession(widgetBackendOrigin);
+				sessionId = sessData.session_id;
+
+				const [dsData, kmData] = await Promise.all([
+					resolveMasterToFork(
+						widgetBackendOrigin,
+						WIDGET_CONFIG.masterWs,
+						WIDGET_CONFIG.masterDatasetWidget,
+						sessData.session_id,
+					),
+					resolveMasterToFork(
+						widgetBackendOrigin,
+						WIDGET_CONFIG.masterWs,
+						WIDGET_CONFIG.masterKmWidget,
+						sessData.session_id,
+					),
+				]);
+
+				datasetWidgetTarget.wsId = dsData.workSessionId;
+				datasetWidgetTarget.widgetId = dsData.widgetId;
+				kmWidgetTarget.wsId = kmData.workSessionId;
+				kmWidgetTarget.widgetId = kmData.widgetId;
+
+				void triggerWorkflowPatchIfReady();
+			} catch (e) {
+				console.warn('[Widget] Init error:', e);
+			}
+		}
+
+		void initWidgetApi();
 	});
 
 	// ── Selection & Navigation ───────────────────────────────────────────
+	function getDefaultEndpointKey(dataset: Dataset | null): string | null {
+		const completeEndpoints = getCompleteKMPlotEndpoints(dataset);
+		const osEndpoint = completeEndpoints.find((endpoint) => endpoint.abbrv === 'OS');
+		if (osEndpoint) return getKMPlotEndpointKey(osEndpoint);
+		const firstEndpoint = completeEndpoints[0];
+		return firstEndpoint ? getKMPlotEndpointKey(firstEndpoint) : null;
+	}
+
+	function syncKMPlotEndpointSelectionForDataset(datasetId: string): void {
+		const dataset = datasets.find((d) => d.data_id === datasetId) ?? null;
+		const completeEndpoints = getCompleteKMPlotEndpoints(dataset);
+		const hasSelectedEndpoint =
+			selectedKMPlotEndpointKey &&
+			completeEndpoints.some((endpoint) => getKMPlotEndpointKey(endpoint) === selectedKMPlotEndpointKey);
+
+		if (!hasSelectedEndpoint) {
+			selectedKMPlotEndpointKey = getDefaultEndpointKey(dataset);
+		}
+	}
+
+	function queueWorkflowPatch(datasetId: string): void {
+		pendingWorkflowPatchDatasetId = datasetId;
+		pendingWorkflowPatchKey = `${datasetId}::${selectedKMPlotEndpointKey ?? ''}`;
+		void triggerWorkflowPatchIfReady();
+	}
+
+	function queueGroupVariablePatch(gene: string | null): void {
+		pendingGroupVariablePatch = gene && gene.trim() ? gene : null;
+		void triggerGroupVariablePatchIfReady();
+	}
+
 	function selectDataset(id: string) {
 		selectedId = id;
 		const idx = sortedDatasets.findIndex((d) => d.data_id === id);
 		if (idx !== -1) focusedIndex = idx;
 		if (window.innerWidth < 1024) mobileTab = 'details';
 		openNotes = new Set();
-		sampleDataTab = 'table';
+		notesCanScrollUp = new Set();
+		notesCanScrollDown = new Set();
+		syncKMPlotEndpointSelectionForDataset(id);
 		updateUrlParams(selectedId, sortColumn, sortDirection);
+		queueWorkflowPatch(id);
 	}
 
 	function navigateRow(delta: number) {
@@ -92,7 +284,9 @@
 		const idx = Math.max(0, Math.min(sortedDatasets.length - 1, focusedIndex + delta));
 		focusedIndex = idx;
 		selectedId = sortedDatasets[idx].data_id;
+		syncKMPlotEndpointSelectionForDataset(selectedId);
 		updateUrlParams(selectedId, sortColumn, sortDirection);
+		queueWorkflowPatch(selectedId);
 		requestAnimationFrame(() => {
 			document
 				.getElementById('row-' + sortedDatasets[idx].data_id)
@@ -105,7 +299,9 @@
 		const idx = position === 'first' ? 0 : sortedDatasets.length - 1;
 		focusedIndex = idx;
 		selectedId = sortedDatasets[idx].data_id;
+		syncKMPlotEndpointSelectionForDataset(selectedId);
 		updateUrlParams(selectedId, sortColumn, sortDirection);
+		queueWorkflowPatch(selectedId);
 		requestAnimationFrame(() => {
 			document
 				.getElementById('row-' + sortedDatasets[idx].data_id)
@@ -117,6 +313,8 @@
 		selectedId = null;
 		focusedIndex = -1;
 		updateUrlParams(selectedId, sortColumn, sortDirection);
+		pendingWorkflowPatchDatasetId = null;
+		pendingWorkflowPatchKey = null;
 	}
 
 	// ── Sorting ──────────────────────────────────────────────────────────
@@ -169,6 +367,60 @@
 	function adjustSplit(delta: number) {
 		splitRatio = clampSplitRatio(splitRatio + delta);
 		saveSplitRatio(splitRatio);
+	}
+
+	function updateEndpointsScrollAffordance(): void {
+		if (!endpointsScrollerEl || !isDesktop) {
+			canScrollEndpointsLeft = false;
+			canScrollEndpointsRight = false;
+			return;
+		}
+
+		const { scrollLeft, scrollWidth, clientWidth } = endpointsScrollerEl;
+		const maxScroll = Math.max(0, scrollWidth - clientWidth);
+		canScrollEndpointsLeft = scrollLeft > 2;
+		canScrollEndpointsRight = maxScroll - scrollLeft > 2;
+	}
+
+	function updateNotesScrollAffordanceForIndex(idx: number, element: HTMLDivElement | null): void {
+		if (!element || !openNotes.has(idx)) {
+			const nextUp = new Set(notesCanScrollUp);
+			nextUp.delete(idx);
+			notesCanScrollUp = nextUp;
+
+			const nextDown = new Set(notesCanScrollDown);
+			nextDown.delete(idx);
+			notesCanScrollDown = nextDown;
+			return;
+		}
+
+		const { scrollTop, scrollHeight, clientHeight } = element;
+		const maxScrollTop = Math.max(0, scrollHeight - clientHeight);
+		const canUp = scrollTop > 2;
+		const canDown = maxScrollTop - scrollTop > 2;
+
+		const nextUp = new Set(notesCanScrollUp);
+		if (canUp) nextUp.add(idx);
+		else nextUp.delete(idx);
+		notesCanScrollUp = nextUp;
+
+		const nextDown = new Set(notesCanScrollDown);
+		if (canDown) nextDown.add(idx);
+		else nextDown.delete(idx);
+		notesCanScrollDown = nextDown;
+	}
+
+	function updateCandidateGenesScrollAffordance(): void {
+		if (!candidateGenesListEl) {
+			canScrollCandidateGenesUp = false;
+			canScrollCandidateGenesDown = false;
+			return;
+		}
+
+		const { scrollTop, scrollHeight, clientHeight } = candidateGenesListEl;
+		const maxScrollTop = Math.max(0, scrollHeight - clientHeight);
+		canScrollCandidateGenesUp = scrollTop > 2;
+		canScrollCandidateGenesDown = maxScrollTop - scrollTop > 2;
 	}
 
 	// ── Keyboard Handlers ────────────────────────────────────────────────
@@ -237,10 +489,232 @@
 		if (next.has(idx)) next.delete(idx);
 		else next.add(idx);
 		openNotes = next;
+		requestAnimationFrame(() => {
+			const notesEl = document.getElementById(`endpoint-notes-body-${idx}`) as HTMLDivElement | null;
+			updateNotesScrollAffordanceForIndex(idx, notesEl);
+		});
 	}
+
+	function handleKMPlotEndpointSelect(endpointKey: string): void {
+		const hasEndpoint = kmPlotEndpointsForSelectedDataset.some(
+			(endpoint) => getKMPlotEndpointKey(endpoint) === endpointKey,
+		);
+		if (!hasEndpoint) return;
+
+		const nextEndpoint = kmPlotEndpointsForSelectedDataset.find(
+			(endpoint) => getKMPlotEndpointKey(endpoint) === endpointKey,
+		);
+		if (nextEndpoint) {
+			console.log('[KMPlot] select endpoint', {
+				datasetId: selectedDataset?.data_id ?? null,
+				endpointKey,
+				label: getKMPlotEndpointButtonLabel(nextEndpoint, kmPlotEndpointsForSelectedDataset),
+				abbrv: nextEndpoint.abbrv ?? null,
+				timeVar: nextEndpoint.time_var,
+				eventVar: nextEndpoint.event_var,
+			});
+		} else {
+			console.log('[KMPlot] select endpoint (not found after hasEndpoint)', {
+				datasetId: selectedDataset?.data_id ?? null,
+				endpointKey,
+			});
+		}
+
+		selectedKMPlotEndpointKey = endpointKey;
+		if (selectedDataset?.data_id) {
+			queueWorkflowPatch(selectedDataset.data_id);
+		}
+	}
+
+	function handleCandidateGeneSelect(gene: string): void {
+		selectedCandidateGene = gene;
+		queueGroupVariablePatch(gene);
+	}
+
+	function buildWorkflowSteps(datasetId: string | null): WorkflowStep[] {
+		if (!datasetWidgetTarget.widgetId) return [];
+		if (!datasetId) return [];
+
+		const dataset = datasets.find((d) => d.data_id === datasetId);
+		if (!dataset) return [];
+
+		const datasetUrl = `${widgetBackendOrigin}/files/sample-data/${dataset.data_id}_preprocessed_sample.tab`;
+		const dataSetSettings: Record<string, unknown> = {
+			selectedInput: 'url',
+			url: datasetUrl,
+		};
+
+		const steps: WorkflowStep[] = [{ widgetId: datasetWidgetTarget.widgetId, settings: dataSetSettings }];
+
+		const completeEndpoints = getCompleteKMPlotEndpoints(dataset);
+		const selectedEndpoint =
+			(selectedKMPlotEndpointKey
+				? completeEndpoints.find((endpoint) => getKMPlotEndpointKey(endpoint) === selectedKMPlotEndpointKey)
+				: null) ??
+			completeEndpoints.find((endpoint) => endpoint.abbrv === 'OS') ??
+			completeEndpoints[0] ??
+			null;
+		if (kmWidgetTarget.widgetId && selectedEndpoint) {
+			const kmSettings: Record<string, unknown> = {};
+			if (selectedEndpoint.time_var.var_name && selectedEndpoint.time_var.var_name !== 'unknown') {
+				kmSettings.timeVariable = selectedEndpoint.time_var.var_name;
+			}
+			if (selectedEndpoint.event_var.var_name && selectedEndpoint.event_var.var_name !== 'unknown') {
+				kmSettings.eventVariable = selectedEndpoint.event_var.var_name;
+			}
+			if (Object.keys(kmSettings).length > 0) {
+				steps.unshift({ widgetId: kmWidgetTarget.widgetId, settings: kmSettings });
+			}
+		}
+
+		console.log('[KMPlot] buildWorkflowSteps', {
+			datasetId,
+			selectedKMPlotEndpointKey,
+			selectedEndpoint: selectedEndpoint
+				? {
+						key: getKMPlotEndpointKey(selectedEndpoint),
+						abbrv: selectedEndpoint.abbrv ?? null,
+						timeVar: selectedEndpoint.time_var,
+						eventVar: selectedEndpoint.event_var,
+				  }
+				: null,
+			steps,
+		});
+
+		// TODO: Append additional widget steps here when we enable multi-widget updates.
+		return steps;
+	}
+
+	async function triggerWorkflowPatchIfReady(): Promise<void> {
+		if (!pendingWorkflowPatchDatasetId) return;
+		if (!pendingWorkflowPatchKey) return;
+		if (pendingWorkflowPatchKey === lastPatchedWorkflowPatchKey) return;
+		if (isWorkflowPatchInFlight) return;
+
+		if (!datasetWidgetTarget.wsId || !datasetWidgetTarget.widgetId) {
+			return;
+		}
+
+		const steps = buildWorkflowSteps(pendingWorkflowPatchDatasetId);
+		if (steps.length === 0) return;
+
+		try {
+			isWorkflowPatchInFlight = true;
+			console.log('[KMPlot] PATCH workflow-settings', {
+				wsId: datasetWidgetTarget.wsId,
+				pendingWorkflowPatchDatasetId,
+				pendingWorkflowPatchKey,
+				steps,
+			});
+			const response = await patchWorkflowSettings({
+				backendOrigin: widgetBackendOrigin,
+				wsId: datasetWidgetTarget.wsId,
+				steps,
+			});
+			if (!response.ok) {
+				console.warn(
+					`Workflow PATCH failed (status ${response.status}) for ${pendingWorkflowPatchDatasetId}`,
+				);
+				return;
+			}
+			lastPatchedWorkflowPatchKey = pendingWorkflowPatchKey;
+			pendingWorkflowPatchDatasetId = null;
+			pendingWorkflowPatchKey = null;
+		} catch (error) {
+			console.warn('Workflow PATCH error', error);
+		} finally {
+			isWorkflowPatchInFlight = false;
+			if (pendingWorkflowPatchKey && pendingWorkflowPatchKey !== lastPatchedWorkflowPatchKey) {
+				void triggerWorkflowPatchIfReady();
+			}
+		}
+	}
+
+	async function triggerGroupVariablePatchIfReady(): Promise<void> {
+		if (!pendingGroupVariablePatch) return;
+		if (pendingGroupVariablePatch === lastPatchedGroupVariable) return;
+		if (isGroupVariablePatchInFlight) return;
+		if (!kmWidgetTarget.wsId || !kmWidgetTarget.widgetId) return;
+
+		const groupVariable = pendingGroupVariablePatch;
+		try {
+			isGroupVariablePatchInFlight = true;
+			console.log('[KMPlot] PATCH settings', {
+				wsId: kmWidgetTarget.wsId,
+				widgetId: kmWidgetTarget.widgetId,
+				groupVariable,
+			});
+			const response = await patchWidgetSettings({
+				backendOrigin: widgetBackendOrigin,
+				wsId: kmWidgetTarget.wsId,
+				widgetId: kmWidgetTarget.widgetId,
+				settings: { groupVariable },
+			});
+			if (!response.ok) {
+				console.warn(`KM settings PATCH failed (status ${response.status}) for groupVariable ${groupVariable}`);
+				return;
+			}
+			lastPatchedGroupVariable = groupVariable;
+			if (pendingGroupVariablePatch === groupVariable) {
+				pendingGroupVariablePatch = null;
+			}
+		} catch (error) {
+			console.warn('KM settings PATCH error', error);
+		} finally {
+			isGroupVariablePatchInFlight = false;
+			if (pendingGroupVariablePatch && pendingGroupVariablePatch !== lastPatchedGroupVariable) {
+				void triggerGroupVariablePatchIfReady();
+			}
+		}
+	}
+
+	$effect(() => {
+		const dataset = selectedDataset;
+		if (!dataset) {
+			selectedKMPlotEndpointKey = null;
+			return;
+		}
+
+		const hasSelectedEndpoint = kmPlotEndpointsForSelectedDataset.some(
+			(endpoint) => getKMPlotEndpointKey(endpoint) === selectedKMPlotEndpointKey,
+		);
+		if (!hasSelectedEndpoint) {
+			selectedKMPlotEndpointKey = getDefaultEndpointKey(dataset);
+		}
+
+		queueWorkflowPatch(dataset.data_id);
+	});
+
+	$effect(() => {
+		const genes = candidateGenesForSelectedDataset;
+		if (genes.length === 0) {
+			selectedCandidateGene = null;
+			pendingGroupVariablePatch = null;
+			lastPatchedGroupVariable = null;
+			return;
+		}
+
+		if (!selectedCandidateGene || !genes.includes(selectedCandidateGene)) {
+			selectedCandidateGene = genes[0] ?? null;
+		}
+
+		queueGroupVariablePatch(selectedCandidateGene);
+
+		requestAnimationFrame(() => updateCandidateGenesScrollAffordance());
+	});
 </script>
 
-<svelte:window onresize={() => (isDesktop = window.innerWidth >= 1024)} />
+<svelte:window
+	onresize={() => {
+		isDesktop = window.innerWidth >= 1024;
+		updateEndpointsScrollAffordance();
+		openNotes.forEach((idx) => {
+			const notesEl = document.getElementById(`endpoint-notes-body-${idx}`) as HTMLDivElement | null;
+			updateNotesScrollAffordanceForIndex(idx, notesEl);
+		});
+		updateCandidateGenesScrollAffordance();
+	}}
+/>
 
 <div class="flex h-full flex-col">
 	<!-- Mobile Tab Bar -->
@@ -389,13 +863,36 @@
 							</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody
+						role="presentation"
+						onclick={(e) => {
+							const tr = (e.target as HTMLElement).closest('tr[data-dataset-id]');
+							if (tr) selectDataset((tr as HTMLElement).dataset.datasetId ?? '');
+						}}
+						onkeydown={(e) => {
+							if (e.key === 'Enter' || e.key === ' ') {
+								const tr = (e.target as HTMLElement).closest('tr[data-dataset-id]');
+								if (tr) {
+									e.preventDefault();
+									selectDataset((tr as HTMLElement).dataset.datasetId ?? '');
+								}
+							}
+						}}
+					>
 						{#each sortedDatasets as dataset, index (dataset.data_id)}
 							<tr
 								id="row-{dataset.data_id}"
+								data-dataset-id={dataset.data_id}
 								role="option"
 								aria-selected={selectedId === dataset.data_id}
+								tabindex={selectedId === dataset.data_id ? 0 : -1}
 								onclick={() => selectDataset(dataset.data_id)}
+								onkeydown={(e) => {
+									if (e.key === 'Enter' || e.key === ' ') {
+										e.preventDefault();
+										selectDataset(dataset.data_id);
+									}
+								}}
 								class="cursor-pointer border-b border-slate-100 border-l-4 transition-[background-color,border-color] duration-150
 									{selectedId === dataset.data_id
 									? 'border-l-blue-600 bg-blue-50'
@@ -520,19 +1017,64 @@
 							</a>
 							<div class="mt-4">
 								{#if selectedDataset.data_file_names && selectedDataset.data_file_names.length > 0}
-									<div class="flex flex-col gap-3 md:flex-row md:items-start md:gap-4">
-										<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm md:w-fit md:max-w-[70%] md:min-w-0">
+									<div class="flex flex-col gap-3 md:grid md:grid-cols-[minmax(0,1.75fr)_1px_minmax(0,1fr)] md:items-start md:gap-x-4 md:gap-y-0">
+										<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm md:min-w-0">
 											<dt class="font-medium text-slate-500">Experiment type:</dt>
 											<dd class="text-slate-900">{selectedDataset['Experiment type']}</dd>
 											<dt class="font-medium text-slate-500">NCBI data availability:</dt>
 											<dd class="text-slate-900">
 												{selectedDataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
 											</dd>
-											<dt class="font-medium text-slate-500">Data reproducibility:</dt>
-											<dd class="text-slate-900">
-												{getReproducibleFormatted(selectedDataset.Reproducible)}
-											</dd>
-										</dl>
+									<dt class="font-medium text-slate-500">Data reproducibility:</dt>
+									<dd class="text-slate-900">
+										{getReproducibleFormatted(selectedDataset.Reproducible)}
+									</dd>
+									<dt class="pt-0.5 font-medium text-slate-500">Related publications:</dt>
+									<dd class="min-w-0 pt-0.5 text-slate-900">
+										{#if selectedDataset.pmcids.length > 0}
+											<span class="flex max-w-full flex-wrap items-center gap-x-6 gap-y-0.5">
+												{#each selectedDataset.pmcids as pmcid (pmcid)}
+													<a
+														href="https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+														target="_blank"
+														rel="noopener noreferrer"
+														class="inline-flex items-center gap-0.5 text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+													>
+														<svg
+															class="h-4 w-4 shrink-0 text-slate-500"
+															fill="none"
+															stroke="currentColor"
+															viewBox="0 0 24 24"
+														>
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																stroke-width="2"
+																d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+															></path>
+														</svg>
+														<span>{pmcid}</span>
+														<svg
+															class="h-3 w-3 shrink-0 text-slate-400"
+															fill="none"
+															stroke="currentColor"
+															viewBox="0 0 24 24"
+														>
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																stroke-width="2"
+																d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+															></path>
+														</svg>
+													</a>
+												{/each}
+											</span>
+										{:else}
+											<span class="italic text-slate-400">No publications linked</span>
+										{/if}
+									</dd>
+								</dl>
 										<div class="hidden w-px self-stretch bg-slate-200 md:block"></div>
 										<div class="flex flex-col gap-2 md:min-w-0">
 											{#each selectedDataset.data_file_names as filename (filename)}
@@ -569,13 +1111,58 @@
 										<dd class="text-slate-900">
 											{selectedDataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
 										</dd>
-										<dt class="font-medium text-slate-500">Data reproducibility:</dt>
-										<dd class="text-slate-900">
-											{getReproducibleFormatted(selectedDataset.Reproducible)}
-										</dd>
-									</dl>
-								{/if}
-							</div>
+									<dt class="font-medium text-slate-500">Data reproducibility:</dt>
+									<dd class="text-slate-900">
+										{getReproducibleFormatted(selectedDataset.Reproducible)}
+									</dd>
+									<dt class="pt-0.5 font-medium text-slate-500">Related publications:</dt>
+									<dd class="min-w-0 pt-0.5 text-slate-900">
+										{#if selectedDataset.pmcids.length > 0}
+											<span class="flex max-w-full flex-wrap items-center gap-x-6 gap-y-0.5">
+												{#each selectedDataset.pmcids as pmcid (pmcid)}
+													<a
+														href="https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+														target="_blank"
+														rel="noopener noreferrer"
+														class="inline-flex items-center gap-0.5 text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+													>
+														<svg
+															class="h-4 w-4 shrink-0 text-slate-500"
+															fill="none"
+															stroke="currentColor"
+															viewBox="0 0 24 24"
+														>
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																stroke-width="2"
+																d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+															></path>
+														</svg>
+														<span>{pmcid}</span>
+														<svg
+															class="h-3 w-3 shrink-0 text-slate-400"
+															fill="none"
+															stroke="currentColor"
+															viewBox="0 0 24 24"
+														>
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																stroke-width="2"
+																d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+															></path>
+														</svg>
+													</a>
+												{/each}
+											</span>
+										{:else}
+											<span class="italic text-slate-400">No publications linked</span>
+										{/if}
+									</dd>
+								</dl>
+							{/if}
+						</div>
 							{#if selectedDataset.Notes}
 								<div
 									class="mt-4 flex gap-3 rounded-r-lg border border-slate-200 border-l-4 border-l-slate-400 bg-slate-50 p-3"
@@ -600,81 +1187,7 @@
 							{/if}
 						</header>
 
-						<!-- SECTION 2: Related Publications -->
-						<section>
-							<button
-								onclick={() => (isPublicationsOpen = !isPublicationsOpen)}
-								aria-expanded={isPublicationsOpen}
-								class="mb-3 flex w-full items-center gap-2 cursor-pointer text-left text-slate-600 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
-							>
-								<svg
-									class="h-4 w-4 text-slate-400 {isPublicationsOpen ? 'rotate-90' : ''}"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 5l7 7-7 7"
-									></path>
-								</svg>
-								<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">
-									Related Publications
-								</h3>
-							</button>
-							{#if isPublicationsOpen}
-								<div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-									{#if selectedDataset.pmcids.length > 0}
-										<div class="flex flex-wrap gap-2">
-											{#each selectedDataset.pmcids as pmcid (pmcid)}
-												<a
-													href="https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
-													target="_blank"
-													rel="noopener noreferrer"
-													class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-												>
-													<svg
-														class="h-4 w-4 text-slate-500"
-														fill="none"
-														stroke="currentColor"
-														viewBox="0 0 24 24"
-													>
-														<path
-															stroke-linecap="round"
-															stroke-linejoin="round"
-															stroke-width="2"
-															d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-														></path>
-													</svg>
-													<span>{pmcid}</span>
-													<svg
-														class="h-3 w-3 text-slate-400"
-														fill="none"
-														stroke="currentColor"
-														viewBox="0 0 24 24"
-													>
-														<path
-															stroke-linecap="round"
-															stroke-linejoin="round"
-															stroke-width="2"
-															d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-														></path>
-													</svg>
-												</a>
-											{/each}
-										</div>
-									{:else}
-										<p class="text-sm italic text-slate-400">
-											No publications linked
-										</p>
-									{/if}
-								</div>
-							{/if}
-						</section>
-
-					<!-- SECTION 3: Detected Survival Endpoints -->
+					<!-- SECTION 2: Detected Survival Endpoints -->
 					<section>
 						<button
 							onclick={() => (isEndpointsOpen = !isEndpointsOpen)}
@@ -699,17 +1212,47 @@
 							</h3>
 						</button>
 						{#if isEndpointsOpen}
-							<div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-								<div class="space-y-4">
+							<div class="relative">
+								<div
+									bind:this={endpointsScrollerEl}
+									onscroll={updateEndpointsScrollAffordance}
+									class="flex flex-col gap-3 md:flex-row md:flex-nowrap md:items-stretch md:overflow-x-auto md:overscroll-x-contain md:snap-x md:snap-mandatory md:pb-1 md:pr-4"
+								>
 									{#each selectedDataset['survival-endpoints'] as endpoint, epIndex (epIndex)}
+										{@const endpointKey = getKMPlotEndpointKey(endpoint)}
+										{@const isSelectableEndpoint = Boolean(endpoint.abbrv) && isCompleteKMPlotEndpoint(endpoint)}
+										<!-- Endpoint card: div with role="button" is focusable per ARIA; Svelte a11y linter does not recognize dynamic role. -->
+										<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions -->
 										<div
-											class="rounded-lg border bg-white shadow-sm {getEndpointCardBorderClass(
+											role={isSelectableEndpoint ? 'button' : undefined}
+											tabindex={isSelectableEndpoint ? 0 : undefined}
+											aria-pressed={isSelectableEndpoint
+												? selectedKMPlotEndpointKey === endpointKey
+												: undefined}
+											onclick={(event) => {
+												if (!isSelectableEndpoint) return;
+												const target = event.target as HTMLElement;
+												if (target.closest('[data-card-control="true"]')) return;
+												handleKMPlotEndpointSelect(endpointKey);
+											}}
+											onkeydown={(event) => {
+												if (!isSelectableEndpoint) return;
+												if (event.key !== 'Enter' && event.key !== ' ') return;
+												event.preventDefault();
+												handleKMPlotEndpointSelect(endpointKey);
+											}}
+											class="flex w-full flex-col overflow-hidden rounded-lg border-2 shadow-sm md:w-[46%] md:flex-none md:self-stretch md:snap-start {getEndpointCardBorderClass(
 												endpoint,
-											)}"
+											)} {isEndpointIncomplete(endpoint) ? 'bg-slate-50 opacity-75' : 'bg-white'} {isSelectableEndpoint
+												? 'cursor-pointer transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+												: ''} {selectedKMPlotEndpointKey === endpointKey
+												? 'border-slate-800'
+												: ''}"
 										>
-											<!-- Endpoint Card Header -->
-											<div class="border-b border-slate-100 px-4 py-3">
-												<div class="flex items-center gap-2">
+												<!-- Card Content -->
+												<div class="px-4 py-3">
+												<!-- Badge + Full Name -->
+												<div class="mb-3 flex items-center gap-2">
 													{#if endpoint.abbrv}
 														<span
 															class="inline-flex items-center rounded bg-slate-800 px-2 py-0.5 text-xs font-bold text-white"
@@ -720,110 +1263,81 @@
 														>{getEndpointFullName(endpoint.abbrv)}</span
 													>
 												</div>
-											</div>
 
-											<!-- Endpoint Card Body -->
-											<div
-												class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2"
-											>
-												<!-- Time Variable -->
-												<div>
-													<h4
-														class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500"
-													>
-														Time Variable
-													</h4>
-													<dl
-														class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm"
-													>
-														<dt class="font-medium text-slate-600">
-															Variable:
-														</dt>
-														<dd
-															class={endpoint.time_var.var_name ===
-															'unknown'
-																? 'italic text-slate-400'
-																: 'rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900'}
-														>
-															{endpoint.time_var.var_name === 'unknown'
-																? 'Not documented'
-																: endpoint.time_var.var_name}
-														</dd>
-														<dt class="font-medium text-slate-600">
-															Unit:
-														</dt>
-														<dd
-															class={endpoint.time_var.var_unit ===
-															'unknown'
-																? 'italic text-slate-400'
-																: 'text-slate-900'}
-														>
-															{endpoint.time_var.var_unit === 'unknown'
-																? 'Not documented'
-																: endpoint.time_var.var_unit}
-														</dd>
-													</dl>
+												<!-- Time Variable Section -->
+												<div class="mb-3">
+													<h4 class="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-600">Time Variable</h4>
+													{#if endpoint.time_var.var_name === 'unknown'}
+														<p class="text-sm italic text-slate-400">Not documented</p>
+													{:else}
+														<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-sm">
+															<dt class="font-medium text-slate-500">Variable:</dt>
+															<dd><span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900">{endpoint.time_var.var_name}</span></dd>
+															<dt class="font-medium text-slate-500">Unit:</dt>
+															<dd class={endpoint.time_var.var_unit === 'unknown' ? 'italic text-slate-400' : 'text-slate-900'}>{endpoint.time_var.var_unit === 'unknown' ? 'Not documented' : endpoint.time_var.var_unit}</dd>
+														</dl>
+													{/if}
 												</div>
-												<!-- Event Variable -->
+
+												<div class="my-3 h-px bg-slate-200/70"></div>
+
+												<!-- Event Variable Section -->
 												<div>
-													<h4
-														class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500"
-													>
-														Event Variable
-													</h4>
-													<dl
-														class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm"
-													>
-														<dt class="font-medium text-slate-600">
-															Variable:
-														</dt>
-														<dd
-															class={endpoint.event_var.var_name ===
-															'unknown'
-																? 'italic text-slate-400'
-																: 'rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900'}
-														>
-															{endpoint.event_var.var_name === 'unknown'
-																? 'Not documented'
-																: endpoint.event_var.var_name}
-														</dd>
-														<dt class="font-medium text-slate-600">
-															Values:
-														</dt>
-														<dd
-															class={endpoint.event_var.var_values ===
-															'unknown'
-																? 'italic text-slate-400'
-																: 'text-slate-900'}
-														>
-															{formatEventValues(
-																endpoint.event_var.var_values,
-															)}
-														</dd>
-														<dt class="font-medium text-slate-600">
-															Meaning:
-														</dt>
-														<dd
-															class={endpoint.event_var.var_meaning ===
-															'unknown'
-																? 'italic text-slate-400'
-																: 'text-slate-700'}
-														>
-															{endpoint.event_var.var_meaning === 'unknown'
-																? 'Not documented'
-																: endpoint.event_var.var_meaning}
-														</dd>
-													</dl>
+													<h4 class="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-600">Event Variable</h4>
+													{#if endpoint.event_var.var_name === 'unknown'}
+														<p class="text-sm italic text-slate-400">Not documented</p>
+													{:else}
+														<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-sm">
+															<dt class="font-medium text-slate-500">Variable:</dt>
+															<dd><span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900">{endpoint.event_var.var_name}</span></dd>
+															{#if endpoint.event_var.var_values !== 'unknown'}
+															<dt class="inline-flex items-center gap-1.5 font-medium text-slate-500">
+																{#if endpoint.event_var.var_meaning !== 'unknown'}
+																	<span class="group relative inline-flex">
+																<button
+																	type="button"
+																	data-card-control="true"
+																	class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-white"
+																	aria-label="Show meaning for event values"
+																	aria-describedby="event-meaning-{selectedDataset?.data_id ?? 'dataset'}-{epIndex}"
+																		>
+																			?
+																		</button>
+																		<span
+																			id="event-meaning-{selectedDataset?.data_id ?? 'dataset'}-{epIndex}"
+																			role="tooltip"
+																			class="pointer-events-none absolute bottom-full left-0 z-10 mb-2 w-56 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 sm:w-64 group-hover:opacity-100 group-focus-within:opacity-100"
+																		>
+																			{endpoint.event_var.var_meaning}
+																		</span>
+																	</span>
+																{/if}
+																<span>Values:</span>
+															</dt>
+															<dd class="text-slate-900">
+																{formatEventValues(endpoint.event_var.var_values)}
+															</dd>
+															{/if}
+														</dl>
+													{/if}
 												</div>
 											</div>
 
 											<!-- Collapsible Notes -->
 											{#if endpoint.notes?.length > 0}
-												<div class="border-t border-slate-100">
-													<button
-														onclick={() => toggleNotes(epIndex)}
-														class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
-													>
+																<div
+																	class="mt-auto border-t bg-white {selectedKMPlotEndpointKey === endpointKey
+																		? 'border-slate-800'
+																		: 'border-slate-100'}"
+																>
+																<button
+																	onclick={(event) => {
+																		event.stopPropagation();
+																		toggleNotes(epIndex);
+																	}}
+																	data-card-control="true"
+																	class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+																>
 														<span
 															class="flex items-center gap-2 text-slate-600"
 														>
@@ -840,7 +1354,7 @@
 																	d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
 																></path>
 															</svg>
-															<span>LLM Generated Notes</span>
+															<span>AI Generated Notes</span>
 															<span class="text-slate-400"
 																>({endpoint.notes.length})</span
 															>
@@ -862,16 +1376,25 @@
 																	d="M19 9l-7 7-7-7"
 																></path>
 															</svg>
-														</button>
-													{#if openNotes.has(epIndex)}
-														<div class="px-4 pb-4">
-															<ul
-																class="space-y-2 text-sm text-slate-600"
-															>
-																{#each endpoint.notes as note, noteIndex (noteIndex)}
-																	<li
-																		class="flex gap-2 leading-relaxed"
-																	>
+																	</button>
+																{#if openNotes.has(epIndex)}
+																	<div class="relative">
+																		<div
+																			id="endpoint-notes-body-{epIndex}"
+																			onscroll={(event) =>
+																				updateNotesScrollAffordanceForIndex(
+																					epIndex,
+																					event.currentTarget as HTMLDivElement,
+																				)}
+																			class="max-h-40 overflow-y-auto px-4 pb-4 pr-2 [scrollbar-gutter:stable] [scrollbar-width:thin] [scrollbar-color:rgb(100_116_139)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-500/55 [&::-webkit-scrollbar-thumb:hover]:bg-slate-500/70 [&::-webkit-scrollbar-track]:bg-transparent"
+																		>
+																			<ul
+																				class="space-y-2 text-sm text-slate-600"
+																			>
+																	{#each endpoint.notes as note, noteIndex (noteIndex)}
+																		<li
+																			class="flex gap-2 leading-relaxed"
+																		>
 																		<span
 																			class="flex-shrink-0 text-slate-400"
 																			>&#8226;</span
@@ -879,28 +1402,46 @@
 																		<span>{note}</span>
 																	</li>
 																{/each}
-															</ul>
-														</div>
-													{/if}
+																		</ul>
+																		</div>
+																{#if notesCanScrollUp.has(epIndex)}
+																	<div class="pointer-events-none absolute left-0 right-0 top-0 h-4 bg-gradient-to-b from-white/50 to-transparent"></div>
+																{/if}
+																{#if notesCanScrollDown.has(epIndex)}
+																	<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-white/60 to-transparent"></div>
+																	<div class="pointer-events-none absolute bottom-1 right-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100/95 text-slate-500 shadow-sm ring-1 ring-slate-200/70">
+																		<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+																			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10l5 5 5-5"></path>
+																		</svg>
+																	</div>
+																{/if}
+																	</div>
+																{/if}
 											</div>
 											{/if}
 										</div>
 									{/each}
 								</div>
+								{#if isDesktop && canScrollEndpointsLeft}
+									<div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-slate-100/55 to-transparent"></div>
+								{/if}
+								{#if isDesktop && canScrollEndpointsRight}
+									<div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-slate-100/55 to-transparent"></div>
+								{/if}
 							</div>
 						{/if}
 					</section>
 
-					<!-- SECTION: Embedded Content (Sample data) -->
-					{#if selectedDataset.iframe_urls?.table}
+					<!-- SECTION: Kaplan-Meier plot (collapsible) -->
+					{#if hasWidgetIframes}
 						<section>
 							<button
-								onclick={() => (isDataViewerOpen = !isDataViewerOpen)}
-								aria-expanded={isDataViewerOpen}
+								onclick={() => (isKmPlotOpen = !isKmPlotOpen)}
+								aria-expanded={isKmPlotOpen}
 								class="mb-3 flex w-full items-center gap-2 cursor-pointer text-left text-slate-600 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 							>
 								<svg
-									class="h-4 w-4 text-slate-400 {isDataViewerOpen ? 'rotate-90' : ''}"
+									class="h-4 w-4 text-slate-400 {isKmPlotOpen ? 'rotate-90' : ''}"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -913,77 +1454,139 @@
 									></path>
 								</svg>
 								<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">
-									Data viewer
+									Kaplan-Meier plot
 								</h3>
 							</button>
-						<div
-							class={isDataViewerOpen ? 'block' : 'hidden'}
-							aria-hidden={!isDataViewerOpen}
-						>
-							<div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
-								<div
-									role="tablist"
-									aria-label="Sample data view"
-									class="flex border-b border-slate-200 bg-slate-50"
-								>
-									<button
-										role="tab"
-										aria-selected={sampleDataTab === 'table'}
-										tabindex={sampleDataTab === 'table' ? 0 : -1}
-										onclick={() => (sampleDataTab = 'table')}
-										class="flex-1 cursor-pointer border-r border-slate-200 px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {sampleDataTab ===
-										'table'
-											? 'bg-white text-slate-900'
-											: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}"
-									>
-										Data Table
-									</button>
-									<button
-										role="tab"
-										aria-selected={sampleDataTab === 'plot'}
-										tabindex={sampleDataTab === 'plot' ? 0 : -1}
-										onclick={() => (sampleDataTab = 'plot')}
-										class="flex-1 cursor-pointer px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {sampleDataTab ===
-										'plot'
-											? 'bg-white text-slate-900'
-											: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}"
-									>
-										Kaplan Meier Plot
-									</button>
-								</div>
-								<div class="bg-white">
-									<div
-										role="tabpanel"
-										class={sampleDataTab === 'table' ? 'block' : 'hidden'}
-										aria-hidden={sampleDataTab !== 'table'}
-									>
+							<div
+								class={isKmPlotOpen ? 'block' : 'hidden'}
+								aria-hidden={!isKmPlotOpen}
+							>
+								<div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+									<!-- Data Set iframe kept in DOM but hidden for workflow PATCH handshake -->
+									<div class="sr-only absolute -left-[9999px] h-px w-px overflow-hidden">
 										<iframe
-											src={selectedDataset.iframe_urls.table}
-											class="w-full overflow-hidden border-0"
-											style="height: 800px; min-height: 800px;"
-											title="Data Table"
-											loading="lazy"
-											tabindex={sampleDataTab === 'table' ? 0 : -1}
+											bind:this={datasetIframeEl}
+											src={hiddenDatasetWidgetIframeSrc}
+											class="border-0"
+											style="height: 1px; min-height: 1px;"
+											title="Data Table (hidden)"
+											loading="eager"
 										></iframe>
 									</div>
-									<div
-										role="tabpanel"
-										class={sampleDataTab === 'plot' ? 'block' : 'hidden'}
-										aria-hidden={sampleDataTab !== 'plot'}
-									>
+									<div class="grid bg-white md:h-[800px] md:grid-cols-[280px_minmax(0,1fr)]">
+										<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
+											<div class="flex items-center gap-1.5">
+												<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+													Candidate genes
+												</p>
+												<span class="group relative inline-flex">
+													<button
+														type="button"
+														class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-50"
+														aria-label="How candidate genes are selected"
+														aria-describedby="candidate-genes-help"
+													>
+														i
+													</button>
+													<span
+														id="candidate-genes-help"
+														role="tooltip"
+														class="pointer-events-none absolute left-0 top-full z-10 mt-2 w-64 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+													>
+														Genes are selected by filtering with univariate Cox regression analysis. The plot shows two patient groups split by the median value of gene expression.
+													</span>
+												</span>
+											</div>
+											<div class="relative mt-2 min-h-0 flex-1 overflow-hidden bg-transparent">
+												{#if candidateGenesForSelectedDataset.length > 0}
+													<ul bind:this={candidateGenesListEl} onscroll={updateCandidateGenesScrollAffordance} role="listbox" aria-label="Candidate genes" class="h-full overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgb(148_163_184)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-400/60 [&::-webkit-scrollbar-thumb:hover]:bg-slate-500/70 [&::-webkit-scrollbar-track]:bg-transparent">
+														{#each candidateGenesForSelectedDataset as gene (gene)}
+															<li class="border-b border-slate-100 last:border-b-0">
+																<button
+																	type="button"
+																	role="option"
+																	aria-selected={selectedCandidateGene === gene}
+																	onclick={() => handleCandidateGeneSelect(gene)}
+																	class="block w-full px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {selectedCandidateGene === gene
+																		? 'bg-slate-800 text-white'
+																		: 'bg-transparent text-slate-700 hover:bg-slate-100/70'}"
+																	title={gene}
+																>
+																	<span class="block break-all leading-5">{gene}</span>
+																</button>
+															</li>
+														{/each}
+													</ul>
+													{#if canScrollCandidateGenesUp}
+														<div class="pointer-events-none absolute left-0 right-0 top-0 h-6 bg-gradient-to-b from-slate-100/85 via-slate-50/45 to-transparent"></div>
+													{/if}
+													{#if canScrollCandidateGenesDown}
+														<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-100/85 via-slate-50/45 to-transparent"></div>
+														<div class="pointer-events-none absolute bottom-1.5 right-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100/95 text-slate-500 shadow-sm ring-1 ring-slate-200/70">
+															<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+																<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10l5 5 5-5"></path>
+															</svg>
+														</div>
+													{/if}
+												{:else}
+													<p class="px-1 py-3 text-sm italic text-slate-400">
+														No candidate genes available for this dataset.
+													</p>
+												{/if}
+											</div>
+										</aside>
 										<iframe
-											src={selectedDataset.iframe_urls?.plot}
+											bind:this={kmIframeEl}
+											src={kmWidgetIframeSrc}
 											class="w-full overflow-hidden border-0"
 											style="height: 800px; min-height: 800px;"
 											title="Kaplan Meier Plot"
 											loading="lazy"
-											tabindex={sampleDataTab === 'plot' ? 0 : -1}
 										></iframe>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
+						</section>
+
+						<!-- SECTION: Sample data viewer (collapsible) -->
+						<section>
+							<button
+								onclick={() => (isSampleDataViewerOpen = !isSampleDataViewerOpen)}
+								aria-expanded={isSampleDataViewerOpen}
+								class="mb-3 flex w-full items-center gap-2 cursor-pointer text-left text-slate-600 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+							>
+								<svg
+									class="h-4 w-4 text-slate-400 {isSampleDataViewerOpen ? 'rotate-90' : ''}"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M9 5l7 7-7 7"
+									></path>
+								</svg>
+								<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+									Sample data viewer
+								</h3>
+							</button>
+							<div
+								class={isSampleDataViewerOpen ? 'block' : 'hidden'}
+								aria-hidden={!isSampleDataViewerOpen}
+							>
+								<div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+									<iframe
+										src={dataTableWidgetIframeSrc}
+										class="w-full overflow-hidden border-0"
+										style="height: 560px; min-height: 560px;"
+										title="Data Table Widget"
+										loading="lazy"
+									></iframe>
+								</div>
+							</div>
+						</section>
 					{/if}
 
 

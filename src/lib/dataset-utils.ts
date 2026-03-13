@@ -17,7 +17,7 @@ const ENDPOINT_FULL_NAMES = {
 	EFS: 'Event-Free Survival',
 	DSS: 'Disease-Specific Survival',
 	TTP: 'Time to Progression',
-	TTR: 'Time to Recurrence',
+	DOR: 'Duration of Response',
 } as const;
 
 // export type KnownExperimentType = keyof typeof EXPERIMENT_TYPE_ABBREVS;
@@ -55,9 +55,7 @@ export function hasEndpointWarnings(ep: SurvivalEndpoint): boolean {
 export function isEndpointIncomplete(ep: SurvivalEndpoint): boolean {
 	return (
 		ep.time_var.var_name === 'unknown' ||
-		ep.time_var.var_unit === 'unknown' ||
-		ep.event_var.var_name === 'unknown' ||
-		ep.event_var.var_meaning === 'unknown'
+		ep.event_var.var_name === 'unknown'
 	);
 }
 

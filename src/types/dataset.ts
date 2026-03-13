@@ -27,6 +27,7 @@ export interface Dataset {
 	data_url: string;
 	pmcids: string[];
 	'survival-endpoints': SurvivalEndpoint[];
+	candidate_genes?: string[];
 	data_summary: DatasetSummary;
 	data_file_names?: string[];
 	'Experiment type': string;
