@@ -1,4 +1,4 @@
-import type { Dataset, SurvivalEndpoint } from '../types/dataset';
+import type { Dataset, NcbiDataValue, ReproducibleValue, SurvivalEndpoint } from '../types/dataset';
 
 // ── Display Formatters ──────────────────────────────────────────────
 
@@ -20,24 +20,21 @@ const ENDPOINT_FULL_NAMES = {
 	DOR: 'Duration of Response',
 } as const;
 
-// export type KnownExperimentType = keyof typeof EXPERIMENT_TYPE_ABBREVS;
-// export type SurvivalEndpointAbbrv = keyof typeof ENDPOINT_FULL_NAMES;
-
 export function getExperimentTypeAbbrev(type: string): string {
-	return (EXPERIMENT_TYPE_ABBREVS as Record<string, string>)[type] ?? type;
+	return EXPERIMENT_TYPE_ABBREVS[type as keyof typeof EXPERIMENT_TYPE_ABBREVS] ?? type;
 }
 
-export function getNcbiDataFormatted(value: string): string {
+export function getNcbiDataFormatted(value: NcbiDataValue): string {
 	return value === 'Available' ? 'Yes' : 'No';
 }
 
-export function getReproducibleFormatted(value: string): string {
+export function getReproducibleFormatted(value: ReproducibleValue): string {
 	return value.charAt(0) + value.slice(1).toLowerCase();
 }
 
 export function getEndpointFullName(abbrv: string | undefined): string {
 	if (!abbrv) return '';
-	return (ENDPOINT_FULL_NAMES as Record<string, string>)[abbrv] ?? '';
+	return ENDPOINT_FULL_NAMES[abbrv as keyof typeof ENDPOINT_FULL_NAMES] ?? '';
 }
 
 export function formatEventValues(values: string[] | string): string {
@@ -67,8 +64,8 @@ export function getEndpointCardBorderClass(ep: SurvivalEndpoint): string {
 
 // ── Sort Helpers ────────────────────────────────────────────────────
 
-type SortColumn = 'experiment_type' | 'reproducible' | 'ncbi_data' | 'samples';
-type SortDirection = 'asc' | 'desc';
+export type SortColumn = 'experiment_type' | 'reproducible' | 'ncbi_data' | 'samples';
+export type SortDirection = 'asc' | 'desc';
 
 const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>([
 	'experiment_type',
@@ -82,24 +79,24 @@ export function isValidSortColumn(value: string): value is SortColumn {
 }
 
 export function sortIndicator(
-	sortColumn: string | null,
-	sortDirection: string | null,
-	col: string,
+	sortColumn: SortColumn | null,
+	sortDirection: SortDirection | null,
+	col: SortColumn,
 ): string {
 	if (sortColumn !== col) return '';
 	return sortDirection === 'asc' ? '↑' : '↓';
 }
 
 export function ariaSort(
-	sortColumn: string | null,
-	sortDirection: string | null,
-	col: string,
+	sortColumn: SortColumn | null,
+	sortDirection: SortDirection | null,
+	col: SortColumn,
 ): 'none' | 'ascending' | 'descending' {
 	if (sortColumn !== col) return 'none';
 	return sortDirection === 'asc' ? 'ascending' : 'descending';
 }
 
-function getSortValue(dataset: Dataset, column: string): string | number {
+function getSortValue(dataset: Dataset, column: SortColumn): string | number {
 	switch (column) {
 		case 'experiment_type':
 			return getExperimentTypeAbbrev(dataset['Experiment type']);
@@ -116,7 +113,7 @@ function getSortValue(dataset: Dataset, column: string): string | number {
 
 export function sortDatasets(
 	datasets: Dataset[],
-	column: string | null,
+	column: SortColumn | null,
 	direction: SortDirection | null,
 ): Dataset[] {
 	if (!column || !direction) return datasets;
@@ -136,8 +133,8 @@ export function sortDatasets(
 
 export interface UrlParams {
 	selected: string | null;
-	sort: string | null;
-	direction: 'asc' | 'desc' | null;
+	sort: SortColumn | null;
+	direction: SortDirection | null;
 }
 
 export function readUrlParams(): UrlParams {
@@ -153,8 +150,8 @@ export function readUrlParams(): UrlParams {
 
 export function updateUrlParams(
 	selectedId: string | null,
-	sortColumn: string | null,
-	sortDirection: string | null,
+	sortColumn: SortColumn | null,
+	sortDirection: SortDirection | null,
 ): void {
 	const params = new URLSearchParams();
 	if (selectedId) params.set('selected', selectedId);

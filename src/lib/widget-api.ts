@@ -21,10 +21,20 @@ export interface PatchWidgetSettingsParams {
 	settings: Record<string, unknown>;
 }
 
+/**
+ * Creates an empty widget target placeholder.
+ * @returns Object with null wsId and widgetId
+ */
 export function createWidgetTarget(): WidgetTarget {
 	return { wsId: null, widgetId: null };
 }
 
+/**
+ * Creates an embed session with the widget backend. Required before resolving masters or patching settings.
+ * @param backendOrigin - Base URL of the widget backend (e.g. from PUBLIC_WIDGET_BACKEND_ORIGIN)
+ * @returns Object containing session_id used for forking and iframe embed URLs
+ * @throws {Error} When the request fails or returns non-OK status
+ */
 export async function fetchEmbedSession(
 	backendOrigin: string,
 ): Promise<{ session_id: string }> {
@@ -42,6 +52,16 @@ export async function fetchEmbedSession(
 	return res.json();
 }
 
+/**
+ * Forks a master widget into a work session for the given embed session.
+ * Returns the forked workSessionId and widgetId needed for PATCH calls.
+ * @param backendOrigin - Base URL of the widget backend
+ * @param masterWs - Master workspace ID
+ * @param masterWidget - Master widget ID (UUID)
+ * @param sessionId - Session ID from fetchEmbedSession
+ * @returns Object with workSessionId and widgetId
+ * @throws {Error} When the request fails or returns non-OK status
+ */
 export async function resolveMasterToFork(
 	backendOrigin: string,
 	masterWs: string,
@@ -59,6 +79,13 @@ export async function resolveMasterToFork(
 	return res.json();
 }
 
+/**
+ * Patches the full workflow settings for a work session.
+ * Sets the ordered list of steps (widget IDs and their settings).
+ * Use when the selected dataset or KM endpoint changes.
+ * @param params - Backend origin, wsId, and steps array
+ * @returns Object with ok (boolean) and status (HTTP status code)
+ */
 export async function patchWorkflowSettings(
 	params: PatchWorkflowSettingsParams,
 ): Promise<{ ok: boolean; status: number }> {
@@ -76,6 +103,12 @@ export async function patchWorkflowSettings(
 	return { ok: response.ok, status: response.status };
 }
 
+/**
+ * Patches settings for a single widget within a work session.
+ * Use when only one widget needs updating (e.g. KM time/event variables, groupVariable).
+ * @param params - Backend origin, wsId, widgetId, and settings object
+ * @returns Object with ok (boolean) and status (HTTP status code)
+ */
 export async function patchWidgetSettings(
 	params: PatchWidgetSettingsParams,
 ): Promise<{ ok: boolean; status: number }> {

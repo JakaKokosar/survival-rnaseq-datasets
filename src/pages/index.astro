@@ -6,9 +6,9 @@ import DatasetBrowser from '../components/DatasetBrowser.svelte';
 
 // Data imports
 import rawData from '../data/data_summary.json';
-import type { Dataset } from '../types/dataset';
+import { parseDatasets } from '../lib/dataset-schema';
 
-const datasets = rawData as Dataset[];
+const datasets = parseDatasets(rawData);
 ---
 
 <Layout>
