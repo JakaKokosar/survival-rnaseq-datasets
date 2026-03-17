@@ -57,9 +57,9 @@ export function isEndpointIncomplete(ep: SurvivalEndpoint): boolean {
 }
 
 export function getEndpointCardBorderClass(ep: SurvivalEndpoint): string {
-	if (isEndpointIncomplete(ep)) return 'border-slate-300 border-dashed';
-	if (hasEndpointWarnings(ep)) return 'border-slate-300';
-	return 'border-slate-200';
+	if (isEndpointIncomplete(ep)) return 'border-slate-400 border-dashed';
+	if (hasEndpointWarnings(ep)) return 'border-slate-400';
+	return 'border-slate-300';
 }
 
 // ── Sort Helpers ────────────────────────────────────────────────────

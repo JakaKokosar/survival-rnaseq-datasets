@@ -150,7 +150,7 @@
 			<div
 				bind:this={endpointsScrollerEl}
 				onscroll={updateEndpointsScrollAffordance}
-				class="flex flex-col gap-3 md:flex-row md:flex-nowrap md:items-stretch md:overflow-x-auto md:overscroll-x-contain md:snap-x md:snap-mandatory md:pb-1 md:pr-4"
+				class="flex flex-col gap-2 md:flex-row md:flex-nowrap md:items-stretch md:overflow-x-auto md:overflow-y-visible md:overscroll-x-contain md:snap-x md:snap-mandatory md:pb-1 md:pr-4"
 			>
 				{#each endpoints as endpoint, epIndex (`${getEndpointKey(endpoint)}-${epIndex}`)}
 					{@const endpointKey = getEndpointKey(endpoint)}
@@ -160,11 +160,13 @@
 						role={isSelectableEndpoint ? 'button' : undefined}
 						tabindex={isSelectableEndpoint ? 0 : undefined}
 						aria-pressed={isSelectableEndpoint ? selectedEndpointKey === endpointKey : undefined}
-						class="flex w-full flex-col overflow-hidden rounded-lg border-2 shadow-sm md:w-[46%] md:flex-none md:self-stretch md:snap-start {getEndpointCardBorderClass(
+						class="flex w-full flex-col rounded-md md:w-[46%] md:flex-none md:self-stretch md:snap-start {selectedEndpointKey === endpointKey
+							? 'border-2 border-neutral-800'
+							: 'border'} {getEndpointCardBorderClass(
 							endpoint,
 						)} {isEndpointIncomplete(endpoint) ? 'bg-slate-50 opacity-75' : 'bg-white'} {isSelectableEndpoint
-							? 'cursor-pointer transition-shadow hover:shadow-md'
-							: ''} {selectedEndpointKey === endpointKey ? 'border-neutral-800' : ''}"
+							? 'cursor-pointer transition-colors'
+							: ''}"
 						onclick={() => {
 							if (!isSelectableEndpoint) return;
 							onSelectEndpoint(endpointKey);
@@ -176,8 +178,8 @@
 							onSelectEndpoint(endpointKey);
 						}}
 					>
-						<div class="px-4 py-3">
-							<div class="mb-3 flex items-center gap-2">
+						<div class="px-3 py-2">
+							<div class="mb-1.5 flex items-center gap-2">
 								{#if endpoint.abbrv}
 									<span class="inline-flex items-center rounded bg-neutral-800 px-2 py-0.5 text-xs font-bold text-white"
 										>{endpoint.abbrv}</span
@@ -199,59 +201,38 @@
 								{/if}
 							</div>
 
-							<div class="mb-3">
-								<h4 class="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-600">Time Variable</h4>
+							<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-sm">
 								{#if endpoint.time_var.var_name === 'unknown'}
-									<p class="text-sm italic text-slate-400">Not documented</p>
+									<dt class="text-slate-600">Time:</dt>
+									<dd class="italic text-slate-400">Not documented</dd>
 								{:else}
-									<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-sm">
-										<dt class="font-medium text-slate-500">Variable:</dt>
-										<dd><span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900">{endpoint.time_var.var_name}</span></dd>
-										<dt class="font-medium text-slate-500">Unit:</dt>
-										<dd class={endpoint.time_var.var_unit === 'unknown' ? 'italic text-slate-400' : 'text-slate-900'}>{endpoint.time_var.var_unit === 'unknown' ? 'Not documented' : endpoint.time_var.var_unit}</dd>
-									</dl>
+									<dt class="text-slate-600">Time:</dt>
+									<dd>
+										<span class="font-mono text-xs text-slate-900">{endpoint.time_var.var_name}</span>{#if endpoint.time_var.var_unit !== 'unknown'}{' '}<span class="text-slate-600">({endpoint.time_var.var_unit})</span>{/if}
+									</dd>
 								{/if}
-							</div>
 
-							<div class="my-3 h-px bg-slate-200/70"></div>
-
-							<div>
-								<h4 class="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-600">Event Variable</h4>
 								{#if endpoint.event_var.var_name === 'unknown'}
-									<p class="text-sm italic text-slate-400">Not documented</p>
+									<dt class="text-slate-600">Event:</dt>
+									<dd class="italic text-slate-400">Not documented</dd>
 								{:else}
-									<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-sm">
-										<dt class="font-medium text-slate-500">Variable:</dt>
-										<dd><span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-900">{endpoint.event_var.var_name}</span></dd>
-										{#if endpoint.event_var.var_values !== 'unknown'}
-											<dt class="inline-flex items-center gap-1.5 font-medium text-slate-500">
-												{#if endpoint.event_var.var_meaning !== 'unknown'}
-													<span class="group relative inline-flex">
-														<button
-															type="button"
-															data-card-control="true"
-															class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-white"
-															aria-label="Show meaning for event values"
-															aria-describedby="event-meaning-{datasetId}-{epIndex}"
-														>
-															?
-														</button>
-														<span
-															id="event-meaning-{datasetId}-{epIndex}"
-															role="tooltip"
-															class="pointer-events-none absolute bottom-full left-0 z-10 mb-2 w-56 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 sm:w-64 group-hover:opacity-100 group-focus-within:opacity-100"
-														>
-															{endpoint.event_var.var_meaning}
-														</span>
-													</span>
-												{/if}
-												<span>Values:</span>
-											</dt>
-											<dd class="text-slate-900">{formatEventValues(endpoint.event_var.var_values)}</dd>
+									<dt class="text-slate-600">Event:</dt>
+									<dd class="inline-flex items-center gap-1.5">
+										<span class="font-mono text-xs text-slate-900">{endpoint.event_var.var_name}</span>{#if endpoint.event_var.var_values !== 'unknown'}{' '}<span class="text-slate-600">({formatEventValues(endpoint.event_var.var_values)})</span>{/if}
+										{#if endpoint.event_var.var_meaning !== 'unknown'}
+											<button
+												type="button"
+												data-card-control="true"
+												class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-400 text-[10px] font-semibold leading-none text-slate-600 transition-colors hover:border-slate-500 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-white"
+												aria-label="Show meaning for event values"
+												title={endpoint.event_var.var_meaning}
+											>
+												?
+											</button>
 										{/if}
-									</dl>
+									</dd>
 								{/if}
-							</div>
+							</dl>
 						</div>
 
 						{#if endpoint.notes?.length > 0}
@@ -261,17 +242,17 @@
 										event.stopPropagation();
 										toggleNotes(epIndex);
 									}}
-									class="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+									class="flex w-full items-center justify-between px-3 py-1.5 text-left text-xs transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 								>
-									<span class="flex items-center gap-2 text-slate-600">
-										<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<span class="flex items-center gap-1.5 text-slate-600">
+										<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 										</svg>
-										<span>AI Generated Notes</span>
+										<span>Notes (AI generated)</span>
 										<span class="text-slate-400">({endpoint.notes.length})</span>
 									</span>
 									<svg
-										class="h-4 w-4 text-slate-400 transition-transform duration-200 {openNotes.has(epIndex) ? 'rotate-180' : ''}"
+										class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200 {openNotes.has(epIndex) ? 'rotate-180' : ''}"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -288,7 +269,7 @@
 													epIndex,
 													event.currentTarget as HTMLDivElement,
 												)}
-											class="max-h-40 overflow-y-auto px-4 pb-4 pr-2 [scrollbar-gutter:stable] [scrollbar-width:thin] [scrollbar-color:rgb(100_116_139)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-500/55 [&::-webkit-scrollbar-thumb:hover]:bg-slate-500/70 [&::-webkit-scrollbar-track]:bg-transparent"
+											class="max-h-40 overflow-y-auto px-3 pb-3 pr-2 [scrollbar-gutter:stable] [scrollbar-width:thin] [scrollbar-color:rgb(100_116_139)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-500/55 [&::-webkit-scrollbar-thumb:hover]:bg-slate-500/70 [&::-webkit-scrollbar-track]:bg-transparent"
 										>
 											<ul class="space-y-2 text-sm text-slate-600">
 												{#each endpoint.notes as note, noteIndex (noteIndex)}
