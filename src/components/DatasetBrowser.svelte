@@ -1,5 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import {
+		PUBLIC_WIDGET_FRONTEND_ORIGIN,
+		PUBLIC_WIDGET_BACKEND_ORIGIN,
+		PUBLIC_WIDGET_MASTER_WS,
+		PUBLIC_WIDGET_MASTER_DATASET_WIDGET,
+		PUBLIC_WIDGET_MASTER_KM_WIDGET,
+		PUBLIC_WIDGET_MASTER_DATA_TABLE_WIDGET,
+		PUBLIC_DATA_FILES_ORIGIN,
+		PUBLIC_ACCESS_CODE,
+	} from 'astro:env/client';
 	import type { Dataset } from '../types/dataset';
 	import {
 		clampSplitRatio,
@@ -18,6 +28,7 @@
 		getKMPlotEndpointKey,
 		isCompleteKMPlotEndpoint,
 	} from '../lib/dataset-selection';
+	import { ensureOrangeAuth, resetOrangeAuth } from '../lib/orange-auth';
 	import DatasetTable from './dataset-browser/DatasetTable.svelte';
 	import DatasetDetailHeader from './dataset-browser/DatasetDetailHeader.svelte';
 	import EndpointsPanel from './dataset-browser/EndpointsPanel.svelte';
@@ -49,21 +60,19 @@
 	let selectedCandidateGeneOverride: string | null = $state(null);
 
 	const WIDGET_CONFIG = {
-		masterWs: 'test',
-		masterDatasetWidget: '49d22084-f7ef-40f5-b1fe-a58ca15dad5f',
-		masterKmWidget: '1701721a-dced-4aae-a8ed-a8287296dc8d',
-		masterDataTableWidget: '3168062a-7617-4509-9f38-aa6272169762',
-	} as const;
+		masterWs: PUBLIC_WIDGET_MASTER_WS,
+		masterDatasetWidget: PUBLIC_WIDGET_MASTER_DATASET_WIDGET,
+		masterKmWidget: PUBLIC_WIDGET_MASTER_KM_WIDGET,
+		masterDataTableWidget: PUBLIC_WIDGET_MASTER_DATA_TABLE_WIDGET,
+	};
 	const SYNC_DEBOUNCE_MS = 150;
 	let sessionId = $state<string | null>(null);
 	let sessionLoading = $state(true);
 	let sessionError = $state<string | null>(null);
-	const widgetFrontendOrigin =
-		import.meta.env.PUBLIC_WIDGET_FRONTEND_ORIGIN ?? 'http://localhost:3000';
-	const widgetBackendOrigin =
-		import.meta.env.PUBLIC_WIDGET_BACKEND_ORIGIN ?? 'http://localhost:4000';
+	const widgetFrontendOrigin = PUBLIC_WIDGET_FRONTEND_ORIGIN;
+	const widgetBackendOrigin = PUBLIC_WIDGET_BACKEND_ORIGIN;
+	const dataFilesOrigin = PUBLIC_DATA_FILES_ORIGIN ?? widgetBackendOrigin;
 	const SESSION_STORAGE_KEY = `orange4_embed_session_${encodeURIComponent(widgetBackendOrigin)}`;
-	const dataFilesOrigin = import.meta.env.PUBLIC_DATA_FILES_ORIGIN ?? widgetBackendOrigin;
 	const hasWidgetIframes = true;
 
 	function buildDataFileDownloadUrl(filename: string): string {
@@ -118,11 +127,11 @@
 	});
 
 	onMount(() => {
-		syncController = new DatasetBrowserSyncController(widgetBackendOrigin, datasets);
 		splitRatio = readSplitRatio();
 		isDesktop = window.innerWidth >= 1024;
 
 		const urlParams = readUrlParams();
+		syncController = new DatasetBrowserSyncController(widgetBackendOrigin, datasets);
 		if (urlParams.sort) {
 			sortColumn = urlParams.sort;
 			sortDirection = urlParams.direction;
@@ -140,6 +149,12 @@
 			try {
 				if (!syncController) return;
 				sessionError = null;
+
+				await ensureOrangeAuth({
+					backendOrigin: widgetBackendOrigin,
+					accessCode: PUBLIC_ACCESS_CODE,
+				});
+
 				const storedSessionId = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(SESSION_STORAGE_KEY) : null;
 				const config = {
 					masterWs: WIDGET_CONFIG.masterWs,
@@ -151,7 +166,6 @@
 					try {
 						sessionId = await syncController.initWithSessionId(storedSessionId, config);
 					} catch {
-						// Stale session: clear and create new one
 						if (typeof sessionStorage !== 'undefined') {
 							sessionStorage.removeItem(SESSION_STORAGE_KEY);
 						}
@@ -169,7 +183,11 @@
 					}
 				}
 			} catch (error) {
-				sessionError = (error as Error).message;
+				const message = (error as Error).message;
+				if (/\bHTTP (401|403)\b/.test(message)) {
+					resetOrangeAuth(widgetBackendOrigin);
+				}
+				sessionError = message;
 				console.warn('[Widget] Init error:', error);
 			} finally {
 				sessionLoading = false;

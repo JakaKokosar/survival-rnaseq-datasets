@@ -61,7 +61,7 @@ npm run deploy
 
 ## Environment variables
 
-The app reads the following public env vars:
+The app reads the following public env vars (all build-time; see `.env.example` for a template):
 
 - `PUBLIC_WIDGET_FRONTEND_ORIGIN`
   - Widget frontend base URL used for iframe embed src values.
@@ -72,15 +72,38 @@ The app reads the following public env vars:
 - `PUBLIC_DATA_FILES_ORIGIN`
   - Base origin for dataset file download links.
   - Falls back to `PUBLIC_WIDGET_BACKEND_ORIGIN` when not set.
+- `PUBLIC_ACCESS_CODE`
+  - Optional. Used only for a one-time auth bootstrap redirect on app load.
+  - Not appended to widget backend API request URLs.
+- `PUBLIC_WIDGET_MASTER_WS`, `PUBLIC_WIDGET_MASTER_DATASET_WIDGET`, `PUBLIC_WIDGET_MASTER_KM_WIDGET`, `PUBLIC_WIDGET_MASTER_DATA_TABLE_WIDGET`
+  - Master workspace and widget IDs for the embedded widgets.
+  - Optional; defaults match the in-repo test config.
+
+**Dev vs production:** Vite loads env files by mode:
+- `astro dev` → `.env.development`
+- `astro build` → `.env.production`
+
+Create both from `.env.example`. Required vars are enforced by Astro's env schema; the build fails if any are missing.
 
 ## Widget backend API
 
 The app integrates with a widget backend to embed Kaplan-Meier and data table widgets. All requests use `credentials: 'include'` for cookies.
 
+### Authentication bootstrap
+
+On first load, if `PUBLIC_ACCESS_CODE` is set, the app performs a one-time redirect to establish an Orange4 cookie session:
+
+1. Redirect to `${PUBLIC_WIDGET_BACKEND_ORIGIN}/auth/code/login/{access_code}?next=<current-path>`
+2. Orange4 redirects back to the app path.
+3. The app resumes widget initialization and all API calls rely on cookie auth.
+
+The app prevents redirect loops using sessionStorage-based bootstrap state.
+
 ### Flow
 
-1. **Init:** On mount, create an embed session and fork master widgets (dataset + KM) into a work session.
-2. **Sync:** When the user selects a dataset, endpoint, or candidate gene, PATCH the backend so embedded iframes display the right data.
+1. **Auth bootstrap:** On mount, optionally perform one-time auth redirect to set cookie session.
+2. **Init:** Create an embed session and fork master widgets (dataset + KM) into a work session.
+3. **Sync:** When the user selects a dataset, endpoint, or candidate gene, PATCH the backend so embedded iframes display the right data.
 
 ### Endpoints
 

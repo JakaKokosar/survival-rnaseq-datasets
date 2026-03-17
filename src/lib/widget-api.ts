@@ -35,9 +35,7 @@ export function createWidgetTarget(): WidgetTarget {
  * @returns Object containing session_id used for forking and iframe embed URLs
  * @throws {Error} When the request fails or returns non-OK status
  */
-export async function fetchEmbedSession(
-	backendOrigin: string,
-): Promise<{ session_id: string }> {
+export async function fetchEmbedSession(backendOrigin: string): Promise<{ session_id: string }> {
 	const url = `${backendOrigin}/api/workflows/embed_session`;
 	const res = await fetch(url, {
 		method: 'GET',
