@@ -164,7 +164,7 @@
 							endpoint,
 						)} {isEndpointIncomplete(endpoint) ? 'bg-slate-50 opacity-75' : 'bg-white'} {isSelectableEndpoint
 							? 'cursor-pointer transition-shadow hover:shadow-md'
-							: ''} {selectedEndpointKey === endpointKey ? 'border-slate-800' : ''}"
+							: ''} {selectedEndpointKey === endpointKey ? 'border-neutral-800' : ''}"
 						onclick={() => {
 							if (!isSelectableEndpoint) return;
 							onSelectEndpoint(endpointKey);
@@ -179,7 +179,7 @@
 						<div class="px-4 py-3">
 							<div class="mb-3 flex items-center gap-2">
 								{#if endpoint.abbrv}
-									<span class="inline-flex items-center rounded bg-slate-800 px-2 py-0.5 text-xs font-bold text-white"
+									<span class="inline-flex items-center rounded bg-neutral-800 px-2 py-0.5 text-xs font-bold text-white"
 										>{endpoint.abbrv}</span
 									>
 								{/if}
@@ -255,7 +255,7 @@
 						</div>
 
 						{#if endpoint.notes?.length > 0}
-							<div class="mt-auto border-t bg-white {selectedEndpointKey === endpointKey ? 'border-slate-800' : 'border-slate-100'}">
+							<div class="mt-auto border-t bg-white {selectedEndpointKey === endpointKey ? 'border-neutral-800' : 'border-slate-100'}">
 								<button
 									onclick={(event) => {
 										event.stopPropagation();

@@ -64,15 +64,10 @@ export function getEndpointCardBorderClass(ep: SurvivalEndpoint): string {
 
 // ── Sort Helpers ────────────────────────────────────────────────────
 
-export type SortColumn = 'experiment_type' | 'reproducible' | 'ncbi_data' | 'samples';
+export type SortColumn = 'samples';
 export type SortDirection = 'asc' | 'desc';
 
-const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>([
-	'experiment_type',
-	'reproducible',
-	'ncbi_data',
-	'samples',
-]);
+const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>(['samples']);
 
 export function isValidSortColumn(value: string): value is SortColumn {
 	return VALID_SORT_COLUMNS.has(value);
@@ -96,19 +91,8 @@ export function ariaSort(
 	return sortDirection === 'asc' ? 'ascending' : 'descending';
 }
 
-function getSortValue(dataset: Dataset, column: SortColumn): string | number {
-	switch (column) {
-		case 'experiment_type':
-			return getExperimentTypeAbbrev(dataset['Experiment type']);
-		case 'reproducible':
-			return getReproducibleFormatted(dataset.Reproducible);
-		case 'ncbi_data':
-			return getNcbiDataFormatted(dataset['NCBI-generated data']);
-		case 'samples':
-			return dataset.data_summary.samples;
-		default:
-			return dataset.data_id;
-	}
+function getSortValue(dataset: Dataset): number {
+	return dataset.data_summary.samples;
 }
 
 export function sortDatasets(
@@ -118,14 +102,11 @@ export function sortDatasets(
 ): Dataset[] {
 	if (!column || !direction) return datasets;
 	return [...datasets].sort((a, b) => {
-		const aVal = getSortValue(a, column);
-		const bVal = getSortValue(b, column);
-		if (typeof aVal === 'string' && typeof bVal === 'string') {
-			return direction === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-		}
+		const aVal = getSortValue(a);
+		const bVal = getSortValue(b);
 		return direction === 'asc'
-			? (aVal as number) - (bVal as number)
-			: (bVal as number) - (aVal as number);
+			? aVal - bVal
+			: bVal - aVal;
 	});
 }
 
