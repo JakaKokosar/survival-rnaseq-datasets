@@ -7,7 +7,7 @@
 		type SortColumn,
 		type SortDirection,
 	} from '../../lib/dataset-utils';
-	import { isCompleteKMPlotEndpoint } from '../../lib/dataset-selection';
+	import { getCompleteKMPlotEndpoints } from '../../lib/dataset-selection';
 
 	interface Props {
 		panelElement?: HTMLDivElement | null;
@@ -108,6 +108,7 @@
 			</thead>
 			<tbody role="presentation">
 				{#each sortedDatasets as dataset, index (dataset.data_id)}
+					{@const completeEndpoints = getCompleteKMPlotEndpoints(dataset)}
 					<tr
 						id="row-{dataset.data_id}"
 						aria-rowindex={index + 1}
@@ -115,9 +116,11 @@
 						data-dataset-id={dataset.data_id}
 						onclick={() => onSelectDataset(dataset.data_id)}
 						class="group cursor-pointer border-b border-slate-100 border-l-4 transition-[background-color,border-color] duration-150
-							{(selectedId === dataset.data_id || (focusedIndex === index && isTbodyFocused))
+							{selectedId === dataset.data_id
 							? 'border-l-slate-400 bg-slate-100'
-							: 'border-l-transparent hover:bg-slate-100'}
+							: focusedIndex === index && isTbodyFocused
+								? 'border-l-slate-300 bg-slate-50'
+								: 'border-l-transparent hover:bg-slate-100'}
 							{!(selectedId === dataset.data_id || (focusedIndex === index && isTbodyFocused))
 								? 'even:bg-gray-50/50'
 								: ''}
@@ -136,21 +139,30 @@
 						style="white-space: nowrap;"
 					>
 							<div class="flex flex-nowrap gap-1">
-								{#each dataset['survival-endpoints'].filter((endpoint) => Boolean(endpoint.abbrv) && isCompleteKMPlotEndpoint(endpoint)) as endpoint, endpointIndex (dataset.data_id + '-' + endpointIndex)}
-									{@const fullEndpointLabel = getEndpointFullName(endpoint.abbrv)}
-									{@const endpointLabel =
-										fullEndpointLabel && fullEndpointLabel.trim().length > 0
-											? fullEndpointLabel
-											: endpoint.abbrv ?? 'Unknown endpoint'}
+								{#if completeEndpoints.length === 0}
 									<span
-										class="inline-flex items-center rounded bg-neutral-800 px-2 py-0.5 text-xs font-bold text-white"
-										role="note"
-										aria-label={endpointLabel}
-										title={endpointLabel}
+										class="inline-flex items-center rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
+										aria-label="No complete endpoints"
+										title="No complete endpoints"
 									>
-										{endpoint.abbrv}
+										—
 									</span>
-								{/each}
+								{:else}
+									{#each completeEndpoints as endpoint, endpointIndex (dataset.data_id + '-' + endpointIndex)}
+										{@const fullEndpointLabel = getEndpointFullName(endpoint.abbrv)}
+										{@const endpointLabel =
+											fullEndpointLabel && fullEndpointLabel.trim().length > 0
+												? fullEndpointLabel
+												: endpoint.abbrv ?? 'Unknown endpoint'}
+										<span
+											class="inline-flex items-center rounded bg-neutral-800 px-2 py-0.5 text-xs font-bold text-white"
+											aria-label={endpointLabel}
+											title={endpointLabel}
+										>
+											{endpoint.abbrv}
+										</span>
+									{/each}
+								{/if}
 							</div>
 						</td>
 					</tr>
