@@ -59,6 +59,48 @@ Deploy (Cloudflare Pages):
 npm run deploy
 ```
 
+Run tests:
+
+```bash
+npm test
+```
+
+## Testing
+
+The project uses `vitest` with a `jsdom` environment for component tests. The config lives in `vitest.config.ts` and currently discovers:
+
+- colocated component/unit tests under `src/**/*.test.ts`
+- top-level integration/e2e/supporting tests under `tests/**/*.test.ts`
+
+### Test structure
+
+Use this convention for future work:
+
+- Component and unit tests live next to the component or module they verify.
+- Shared test helpers, fixtures, global setup, and broader integration tests live under `tests/`.
+
+Examples:
+
+```text
+src/components/dataset-browser/KmPlotPanel.svelte
+src/components/dataset-browser/KmPlotPanel.test.ts
+
+src/lib/dataset-selection.ts
+src/lib/dataset-selection.test.ts
+
+tests/setup.ts
+tests/helpers/
+tests/fixtures/
+tests/integration/
+```
+
+### Guidance for future agents
+
+- Prefer small colocated tests when verifying a single component or utility.
+- Put reusable render helpers, fixtures, and mock setup in `tests/` instead of duplicating them beside components.
+- Keep integration-style tests out of `src/` when they span multiple components or app flows.
+- When adding global test setup later, register `tests/setup.ts` from `vitest.config.ts` rather than repeating setup inside each test file.
+
 ## Environment variables
 
 The app reads the following public env vars (all build-time; see `.env.example` for a template):
