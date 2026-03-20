@@ -12,11 +12,12 @@
 	interface Props {
 		datasetId: string;
 		endpoints: Endpoint[];
-		isOpen: boolean;
-		isDesktop: boolean;
-		selectedEndpointKey: string | null;
-		onToggleOpen: () => void;
-		onSelectEndpoint: (endpointKey: string) => void;
+		expanded?: boolean;
+		isOpen?: boolean;
+		isDesktop?: boolean;
+		selectedEndpointKey?: string | null;
+		onToggleOpen?: () => void;
+		onSelectEndpoint?: (endpointKey: string) => void;
 		getEndpointKey: (endpoint: Endpoint) => string;
 		isCompleteEndpoint: (endpoint: Endpoint) => boolean;
 	}
@@ -24,9 +25,10 @@
 	let {
 		datasetId,
 		endpoints,
-		isOpen,
-		isDesktop,
-		selectedEndpointKey,
+		expanded = false,
+		isOpen = true,
+		isDesktop = true,
+		selectedEndpointKey = null,
 		onToggleOpen,
 		onSelectEndpoint,
 		getEndpointKey,
@@ -133,6 +135,72 @@
 	}}
 />
 
+{#if expanded}
+<section>
+	<div class="space-y-4">
+		{#each endpoints as endpoint, epIndex (`${getEndpointKey(endpoint)}-${epIndex}`)}
+			<div class="rounded-lg border {getEndpointCardBorderClass(endpoint)} {isEndpointIncomplete(endpoint) ? 'bg-slate-50 opacity-60' : 'bg-white'} p-4 shadow-sm">
+				<div class="mb-3 flex items-center gap-2">
+					{#if endpoint.abbrv}
+						<span class="inline-flex items-center rounded bg-neutral-800 px-2 py-0.5 text-xs font-bold text-white">{endpoint.abbrv}</span>
+					{/if}
+					<span class="text-base font-medium text-slate-900">{getEndpointFullName(endpoint.abbrv)}</span>
+					{#if isEndpointIncomplete(endpoint)}
+						<span class="ml-auto text-xs italic text-slate-400">Incomplete</span>
+					{/if}
+				</div>
+
+				<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-2 text-sm">
+					{#if endpoint.time_var.var_name === 'unknown'}
+						<dt class="text-slate-600">Time:</dt>
+						<dd class="italic text-slate-400">Not documented</dd>
+					{:else}
+						<dt class="text-slate-600">Time:</dt>
+						<dd>
+							<span class="font-mono text-xs text-slate-900">{endpoint.time_var.var_name}</span>{#if endpoint.time_var.var_unit !== 'unknown'}{' '}<span class="text-slate-600">({endpoint.time_var.var_unit})</span>{/if}
+						</dd>
+					{/if}
+
+					{#if endpoint.event_var.var_name === 'unknown'}
+						<dt class="text-slate-600">Event:</dt>
+						<dd class="italic text-slate-400">Not documented</dd>
+					{:else}
+						<dt class="text-slate-600">Event:</dt>
+						<dd>
+							<span class="font-mono text-xs text-slate-900">{endpoint.event_var.var_name}</span>{#if endpoint.event_var.var_values !== 'unknown'}{' '}<span class="text-slate-600">({formatEventValues(endpoint.event_var.var_values)})</span>{/if}
+						</dd>
+					{/if}
+
+					{#if endpoint.event_var.var_meaning !== 'unknown'}
+						<dt class="text-slate-600">Event meaning:</dt>
+						<dd class="text-slate-700">{endpoint.event_var.var_meaning}</dd>
+					{/if}
+				</dl>
+
+				{#if endpoint.notes?.length > 0}
+					<div class="mt-3 border-t border-slate-100 pt-3">
+						<p class="mb-1.5 flex items-center gap-1.5 text-xs text-slate-500">
+							<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+							</svg>
+							<span>Notes (AI generated)</span>
+							<span class="text-slate-400">({endpoint.notes.length})</span>
+						</p>
+						<ul class="space-y-1.5 text-sm text-slate-600">
+							{#each endpoint.notes as note, noteIndex (noteIndex)}
+								<li class="flex gap-2 leading-relaxed">
+									<span class="flex-shrink-0 text-slate-400">&#8226;</span>
+									<span>{note}</span>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+			</div>
+		{/each}
+	</div>
+</section>
+{:else}
 <section>
 	<button
 		onclick={onToggleOpen}
@@ -169,13 +237,13 @@
 							: ''}"
 						onclick={() => {
 							if (!isSelectableEndpoint) return;
-							onSelectEndpoint(endpointKey);
+							if (onSelectEndpoint) onSelectEndpoint(endpointKey);
 						}}
 						onkeydown={(event) => {
 							if (!isSelectableEndpoint) return;
 							if (event.key !== 'Enter' && event.key !== ' ') return;
 							event.preventDefault();
-							onSelectEndpoint(endpointKey);
+							if (onSelectEndpoint) onSelectEndpoint(endpointKey);
 						}}
 					>
 						<div class="px-3 py-2">
@@ -192,7 +260,7 @@
 										aria-pressed={selectedEndpointKey === endpointKey}
 										onclick={(event) => {
 											event.stopPropagation();
-											onSelectEndpoint(endpointKey);
+											if (onSelectEndpoint) onSelectEndpoint(endpointKey);
 										}}
 										class="ml-auto rounded border border-slate-300 px-2 py-0.5 text-xs font-medium text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1"
 									>
@@ -307,3 +375,4 @@
 		</div>
 	{/if}
 </section>
+{/if}

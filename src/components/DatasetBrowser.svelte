@@ -53,7 +53,7 @@
 	let mobileTab: 'list' | 'details' = $state('list');
 	let isDesktop = $state(true);
 
-	let isEndpointsOpen = $state(true);
+	let detailTab: 'summary' | 'endpoints' = $state('summary');
 	let isKmPlotOpen = $state(true);
 	let isSampleDataViewerOpen = $state(true);
 	let selectedKMPlotEndpointKeyOverride: string | null = $state(null);
@@ -95,12 +95,18 @@
 	let mainEl: HTMLElement;
 	let listTabEl: HTMLButtonElement;
 	let detailsTabEl: HTMLButtonElement;
+	let summaryTabEl: HTMLButtonElement;
+	let endpointsTabEl: HTMLButtonElement;
 	let listPanelEl = $state<HTMLDivElement | null>(null);
 	let detailsPanelEl = $state<HTMLDivElement | null>(null);
 	const mobileListTabId = 'dataset-browser-tab-list';
 	const mobileDetailsTabId = 'dataset-browser-tab-details';
 	const listPanelId = 'dataset-browser-panel-list';
 	const detailsPanelId = 'dataset-browser-panel-details';
+	const detailSummaryTabId = 'detail-tab-summary';
+	const detailEndpointsTabId = 'detail-tab-endpoints';
+	const detailSummaryPanelId = 'detail-panel-summary';
+	const detailEndpointsPanelId = 'detail-panel-endpoints';
 
 	let sortedDatasets = $derived.by(() => sortDatasets(datasets, sortColumn, sortDirection));
 	let selectedDataset = $derived(
@@ -347,6 +353,26 @@
 		}
 	}
 
+	function handleDetailTabKeydown(event: KeyboardEvent): void {
+		if (event.key === 'ArrowLeft') {
+			event.preventDefault();
+			detailTab = 'summary';
+			requestAnimationFrame(() => summaryTabEl?.focus());
+		} else if (event.key === 'ArrowRight') {
+			event.preventDefault();
+			detailTab = 'endpoints';
+			requestAnimationFrame(() => endpointsTabEl?.focus());
+		} else if (event.key === 'Home') {
+			event.preventDefault();
+			detailTab = 'summary';
+			requestAnimationFrame(() => summaryTabEl?.focus());
+		} else if (event.key === 'End') {
+			event.preventDefault();
+			detailTab = 'endpoints';
+			requestAnimationFrame(() => endpointsTabEl?.focus());
+		}
+	}
+
 	$effect(() => {
 		if (isDesktop) return;
 		const activePanel = mobileTab === 'list' ? listPanelEl : detailsPanelEl;
@@ -509,22 +535,53 @@
 			hidden={!isDesktop && mobileTab !== 'details'}
 			class="overflow-y-auto bg-slate-50"
 		>
-			<div class="p-6">
-				{#if selectedDataset}
+			{#if selectedDataset}
+				<div role="tablist" aria-label="Dataset details" class="sticky top-0 z-10 flex border-b border-slate-200 bg-white">
+					<button
+						bind:this={summaryTabEl}
+						id={detailSummaryTabId}
+						role="tab"
+						aria-selected={detailTab === 'summary'}
+						aria-controls={detailSummaryPanelId}
+						aria-posinset={1}
+						aria-setsize={2}
+						tabindex={detailTab === 'summary' ? 0 : -1}
+						onclick={() => (detailTab = 'summary')}
+						onkeydown={handleDetailTabKeydown}
+						class="border-b-2 px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'summary'
+							? 'border-slate-600 text-slate-900'
+							: 'border-transparent text-slate-400 hover:text-slate-700'}"
+					>
+						Data Summary
+					</button>
+					<button
+						bind:this={endpointsTabEl}
+						id={detailEndpointsTabId}
+						role="tab"
+						aria-selected={detailTab === 'endpoints'}
+						aria-controls={detailEndpointsPanelId}
+						aria-posinset={2}
+						aria-setsize={2}
+						tabindex={detailTab === 'endpoints' ? 0 : -1}
+						onclick={() => (detailTab = 'endpoints')}
+						onkeydown={handleDetailTabKeydown}
+						class="border-b-2 px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'endpoints'
+							? 'border-slate-600 text-slate-900'
+							: 'border-transparent text-slate-400 hover:text-slate-700'}"
+					>
+						Survival Endpoints
+					</button>
+				</div>
+
+				<div
+					id={detailSummaryPanelId}
+					role="tabpanel"
+					aria-labelledby={detailSummaryTabId}
+					hidden={detailTab !== 'summary'}
+					class="p-6"
+				>
 					<div class="space-y-6">
 						<DatasetDetailHeader dataset={selectedDataset} {buildDataFileDownloadUrl} />
-
-						<EndpointsPanel
-							datasetId={selectedDataset.data_id}
-							endpoints={selectedDataset['survival-endpoints']}
-							isOpen={isEndpointsOpen}
-							{isDesktop}
-							selectedEndpointKey={activeKMPlotEndpointKey}
-							onToggleOpen={() => (isEndpointsOpen = !isEndpointsOpen)}
-							onSelectEndpoint={handleKMPlotEndpointSelect}
-							getEndpointKey={getKMPlotEndpointKey}
-							isCompleteEndpoint={isCompleteKMPlotEndpoint}
-						/>
 
 						{#if hasWidgetIframes}
 							{#if sessionLoading}
@@ -537,23 +594,45 @@
 								</p>
 							{:else if sessionId}
 								<KmPlotPanel
-								isOpen={isKmPlotOpen}
-								kmWidgetIframeSrc={kmWidgetIframeSrc}
-								candidateGenes={candidateGenesForSelectedDataset}
-								selectedCandidateGene={activeCandidateGene}
-								onToggleOpen={() => (isKmPlotOpen = !isKmPlotOpen)}
-								onSelectGene={handleCandidateGeneSelect}
-							/>
+									isOpen={isKmPlotOpen}
+									kmWidgetIframeSrc={kmWidgetIframeSrc}
+									candidateGenes={candidateGenesForSelectedDataset}
+									selectedCandidateGene={activeCandidateGene}
+									onToggleOpen={() => (isKmPlotOpen = !isKmPlotOpen)}
+									onSelectGene={handleCandidateGeneSelect}
+									endpoints={kmPlotEndpointsForSelectedDataset}
+									activeEndpointKey={activeKMPlotEndpointKey}
+									onSelectEndpoint={handleKMPlotEndpointSelect}
+									getEndpointKey={getKMPlotEndpointKey}
+								/>
 
-							<SampleDataPanel
-								isOpen={isSampleDataViewerOpen}
-								iframeSrc={dataTableWidgetIframeSrc}
-								onToggle={() => (isSampleDataViewerOpen = !isSampleDataViewerOpen)}
-							/>
+								<SampleDataPanel
+									isOpen={isSampleDataViewerOpen}
+									iframeSrc={dataTableWidgetIframeSrc}
+									onToggle={() => (isSampleDataViewerOpen = !isSampleDataViewerOpen)}
+								/>
 							{/if}
 						{/if}
 					</div>
-				{:else}
+				</div>
+
+				<div
+					id={detailEndpointsPanelId}
+					role="tabpanel"
+					aria-labelledby={detailEndpointsTabId}
+					hidden={detailTab !== 'endpoints'}
+					class="p-6"
+				>
+					<EndpointsPanel
+						datasetId={selectedDataset.data_id}
+						endpoints={selectedDataset['survival-endpoints']}
+						expanded={true}
+						getEndpointKey={getKMPlotEndpointKey}
+						isCompleteEndpoint={isCompleteKMPlotEndpoint}
+					/>
+				</div>
+			{:else}
+				<div class="p-6">
 					<div class="mt-24 flex flex-col items-center justify-center text-center text-slate-400">
 						<svg aria-hidden="true" class="mb-4 h-16 w-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -566,8 +645,8 @@
 						<p class="text-lg font-medium text-slate-500">Select a dataset to view details</p>
 						<p class="mt-1 text-sm text-slate-400">Click on any row in the table or use arrow keys</p>
 					</div>
-				{/if}
-			</div>
+				</div>
+			{/if}
 		</div>
 	</main>
 </div>

@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { getEndpointFullName } from '../../lib/dataset-utils';
+	import type { SurvivalEndpoint } from '../../types/dataset';
+
 	interface Props {
 		isOpen: boolean;
 		kmWidgetIframeSrc: string;
@@ -6,6 +9,10 @@
 		selectedCandidateGene: string | null;
 		onToggleOpen: () => void;
 		onSelectGene: (gene: string) => void;
+		endpoints?: SurvivalEndpoint[];
+		activeEndpointKey?: string | null;
+		onSelectEndpoint?: (endpointKey: string) => void;
+		getEndpointKey?: (endpoint: SurvivalEndpoint) => string;
 	}
 
 	let {
@@ -15,6 +22,10 @@
 		selectedCandidateGene,
 		onToggleOpen,
 		onSelectGene,
+		endpoints = [],
+		activeEndpointKey = null,
+		onSelectEndpoint,
+		getEndpointKey,
 	}: Props = $props();
 
 	let candidateGenesListEl = $state<HTMLUListElement | null>(null);
@@ -78,6 +89,26 @@
 		<div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
 			<div class="relative grid bg-white md:h-[800px] md:grid-cols-[280px_minmax(0,1fr)]">
 				<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
+					{#if endpoints.length > 0 && getEndpointKey && onSelectEndpoint}
+						<div class="mb-2 pb-2 border-b border-slate-200">
+							<p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">Endpoint</p>
+							<div class="flex flex-col">
+								{#each endpoints as endpoint (getEndpointKey(endpoint))}
+									{@const key = getEndpointKey(endpoint)}
+									<button
+										type="button"
+										aria-pressed={activeEndpointKey === key}
+										onclick={() => onSelectEndpoint(key)}
+										class="w-full rounded-r border-l-2 px-2.5 py-1 text-left text-sm outline-none transition-colors focus-visible:ring-1 focus-visible:ring-slate-400 focus-visible:ring-offset-1 {activeEndpointKey === key
+											? 'border-l-slate-600 bg-slate-100 font-medium text-slate-900'
+											: 'border-l-transparent text-slate-500 hover:bg-slate-100/70 hover:text-slate-700'}"
+									>
+										{getEndpointFullName(endpoint.abbrv)} ({endpoint.abbrv})
+									</button>
+								{/each}
+							</div>
+						</div>
+					{/if}
 					<div class="flex items-center gap-1.5">
 						<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Candidate genes</p>
 						<span class="group relative inline-flex">
