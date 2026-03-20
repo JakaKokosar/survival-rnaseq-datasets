@@ -162,8 +162,8 @@
 			<div class="relative grid bg-white md:h-[800px] md:grid-cols-[280px_minmax(0,1fr)]">
 				<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
 					{#if endpoints.length > 0 && getEndpointKey && onSelectEndpoint}
-						<div class="mb-2 pb-2 border-b border-slate-200">
-							<p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">Survival Endpoint</p>
+						<div class="mb-3 pb-3 border-b border-slate-200/80">
+							<p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Survival Endpoint</p>
 							<div class="flex flex-col">
 								{#each endpoints as endpoint (getEndpointKey(endpoint))}
 									{@const key = getEndpointKey(endpoint)}
@@ -172,8 +172,8 @@
 										aria-pressed={activeEndpointKey === key}
 										onclick={() => onSelectEndpoint(key)}
 										class="w-full rounded-r-md border-l-[3px] px-2.5 py-1.5 text-left text-[13px] outline-none transition-all duration-150 focus-visible:ring-1 focus-visible:ring-slate-400 focus-visible:ring-offset-1 {activeEndpointKey === key
-											? 'border-l-slate-600 bg-slate-100 font-medium text-slate-900'
-											: 'border-l-transparent text-slate-500 hover:border-l-slate-300 hover:bg-slate-100/60 hover:text-slate-700'}"
+											? 'border-l-slate-700 bg-white font-semibold text-slate-900 shadow-sm'
+											: 'border-l-transparent text-slate-500 hover:border-l-slate-300 hover:bg-white/60 hover:text-slate-700'}"
 									>
 										{getEndpointFullName(endpoint.abbrv)} ({endpoint.abbrv})
 									</button>
@@ -182,7 +182,7 @@
 						</div>
 					{/if}
 					<div class="flex items-center gap-1.5">
-						<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Candidate genes</p>
+						<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Candidate genes</p>
 						<span class="group relative inline-flex">
 							<button
 								type="button"
