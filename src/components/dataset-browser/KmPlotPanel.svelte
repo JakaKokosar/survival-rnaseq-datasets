@@ -91,17 +91,17 @@
 				<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
 					{#if endpoints.length > 0 && getEndpointKey && onSelectEndpoint}
 						<div class="mb-2 pb-2 border-b border-slate-200">
-							<p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">Endpoint</p>
-							<div class="flex flex-col">
+							<p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Endpoint</p>
+							<div class="ml-0.5 flex flex-col gap-0.5">
 								{#each endpoints as endpoint (getEndpointKey(endpoint))}
 									{@const key = getEndpointKey(endpoint)}
 									<button
 										type="button"
 										aria-pressed={activeEndpointKey === key}
 										onclick={() => onSelectEndpoint(key)}
-										class="w-full rounded-r border-l-2 px-2.5 py-1 text-left text-sm outline-none transition-colors focus-visible:ring-1 focus-visible:ring-slate-400 focus-visible:ring-offset-1 {activeEndpointKey === key
+										class="w-full rounded-r-md border-l-[3px] px-2.5 py-1.5 text-left text-[13px] outline-none transition-all duration-150 focus-visible:ring-1 focus-visible:ring-slate-400 focus-visible:ring-offset-1 {activeEndpointKey === key
 											? 'border-l-slate-600 bg-slate-100 font-medium text-slate-900'
-											: 'border-l-transparent text-slate-500 hover:bg-slate-100/70 hover:text-slate-700'}"
+											: 'border-l-transparent text-slate-500 hover:border-l-slate-300 hover:bg-slate-100/60 hover:text-slate-700'}"
 									>
 										{getEndpointFullName(endpoint.abbrv)} ({endpoint.abbrv})
 									</button>
