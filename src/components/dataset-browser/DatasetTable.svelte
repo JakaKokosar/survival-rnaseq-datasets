@@ -74,17 +74,17 @@
 				<col style="width: 105px;" />
 				<col />
 			</colgroup>
-			<thead class="sticky top-0 z-10 border-b-2 border-slate-200 bg-slate-50 shadow-sm">
+			<thead class="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 shadow-sm">
 				<tr>
 					<th
-						class="py-2 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
+						class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
 						style="white-space: nowrap;"
 					>
 						GSE ID
 					</th>
 					<th
 						aria-sort={ariaSort(sortColumn, sortDirection, 'samples')}
-						class="py-2 pl-2 pr-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-700"
+						class="py-3 pl-2 pr-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-700"
 						style="white-space: nowrap;"
 					>
 						<button
@@ -99,7 +99,7 @@
 						</button>
 					</th>
 					<th
-						class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
+						class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
 						style="white-space: nowrap;"
 					>
 						ENDPOINTS

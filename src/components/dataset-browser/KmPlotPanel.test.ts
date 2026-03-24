@@ -29,17 +29,17 @@ describe('KmPlotPanel gene chooser focus management', () => {
 		vi.useFakeTimers();
 		renderPanel();
 
-		const input = screen.getByLabelText('Search candidate genes');
+		const input = screen.getByLabelText('Search genes');
 		input.focus();
 
-		const geneButton = await screen.findByRole('button', { name: 'TP53' });
+		const geneButton = await screen.findByRole('button', { name: /^TP53/ });
 		input.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: geneButton }));
 		geneButton.dispatchEvent(new FocusEvent('focusin', { bubbles: true, relatedTarget: input }));
 		geneButton.focus();
 
 		vi.advanceTimersByTime(151);
 
-		expect(screen.getByRole('button', { name: 'TP53' })).toBe(geneButton);
+		expect(screen.getByRole('button', { name: /^TP53/ })).toBe(geneButton);
 		expect(document.activeElement).toBe(geneButton);
 	});
 
@@ -47,7 +47,7 @@ describe('KmPlotPanel gene chooser focus management', () => {
 		vi.useFakeTimers();
 		renderPanel();
 
-		const input = screen.getByLabelText('Search candidate genes');
+		const input = screen.getByLabelText('Search genes');
 		input.focus();
 
 		const outsideButton = document.createElement('button');
@@ -60,7 +60,7 @@ describe('KmPlotPanel gene chooser focus management', () => {
 
 		vi.advanceTimersByTime(151);
 
-		expect(screen.queryByRole('button', { name: 'TP53' })).toBeNull();
+		expect(screen.queryByRole('button', { name: /^TP53/ })).toBeNull();
 		outsideButton.remove();
 	});
 });
