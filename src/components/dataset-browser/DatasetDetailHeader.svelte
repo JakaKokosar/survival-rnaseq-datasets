@@ -1,39 +1,68 @@
 <script lang="ts">
-	import type { Dataset } from '../../types/dataset';
+	import type { Dataset, GeoSeriesSummary } from '../../types/dataset';
 	import { getReproducibleFormatted } from '../../lib/dataset-utils';
 
 	interface Props {
 		dataset: Dataset;
 		buildDataFileDownloadUrl: (filename: string) => string;
+		summariesMap: Map<string, GeoSeriesSummary>;
 	}
 
-	let { dataset, buildDataFileDownloadUrl }: Props = $props();
+	let { dataset, buildDataFileDownloadUrl, summariesMap }: Props = $props();
+
+	let seriesSummary = $derived(summariesMap.get(dataset.data_id));
 </script>
 
 <header class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-	<h2 class="text-2xl font-bold text-slate-900">{dataset.data_id}</h2>
-	<a
-		href={dataset.data_url}
-		target="_blank"
-		rel="noopener noreferrer"
-		class="mt-1 inline-flex items-center gap-1 rounded text-sm text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-	>
-		<span>View on NCBI GEO</span>
-		<svg aria-hidden="true" class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-			></path>
-		</svg>
-	</a>
-	<div class="mt-4">
+	<!-- Title row with GEO link -->
+	<div class="flex items-start justify-between gap-3">
+		<h2 class="text-lg font-bold leading-snug text-slate-900">
+			{seriesSummary?.title ?? dataset.data_id}
+		</h2>
+		<a
+			href={dataset.data_url}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded text-sm text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+		>
+			<span>View on NCBI GEO</span>
+			<svg aria-hidden="true" class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+				></path>
+			</svg>
+		</a>
+	</div>
+
+	<!-- Subtitle: cancer type · samples · experiment type -->
+	<p class="mt-1.5 text-sm text-slate-500">
+		<span class="font-medium text-slate-600">{dataset.data_id}</span>
+		{#if seriesSummary}
+			<span class="mx-1.5 text-slate-300">&middot;</span>
+			<span class="capitalize">{seriesSummary.cancer_type_exact}</span>
+		{/if}
+		<span class="mx-1.5 text-slate-300">&middot;</span>
+		<span>{dataset.data_summary.samples.toLocaleString()} samples</span>
+		<span class="mx-1.5 text-slate-300">&middot;</span>
+		<span>{dataset['Experiment type']}</span>
+	</p>
+
+	<!-- Summary paragraph -->
+	{#if seriesSummary}
+		<div class="mt-3 border-l-2 border-slate-200 pl-3">
+			<p class="text-sm leading-relaxed text-slate-600">{seriesSummary.summary}</p>
+			<p class="mt-1 text-xs italic text-slate-400">— AI-generated summary</p>
+		</div>
+	{/if}
+
+	<!-- Metadata -->
+	<div class="mt-4 border-t border-slate-100 pt-4">
 		{#if dataset.data_file_names && dataset.data_file_names.length > 0}
 			<div class="flex flex-col gap-3 md:grid md:grid-cols-[minmax(0,1.75fr)_1px_minmax(0,1fr)] md:items-start md:gap-x-4 md:gap-y-0">
 				<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm md:min-w-0">
-					<dt class="font-medium text-slate-500">Experiment type:</dt>
-					<dd class="text-slate-900">{dataset['Experiment type']}</dd>
 					<dt class="font-medium text-slate-500">NCBI data availability:</dt>
 					<dd class="text-slate-900">
 						{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
@@ -99,8 +128,6 @@
 			</div>
 		{:else}
 			<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm">
-				<dt class="font-medium text-slate-500">Experiment type:</dt>
-				<dd class="text-slate-900">{dataset['Experiment type']}</dd>
 				<dt class="font-medium text-slate-500">NCBI data availability:</dt>
 				<dd class="text-slate-900">
 					{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}

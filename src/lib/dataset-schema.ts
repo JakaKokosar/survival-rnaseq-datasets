@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Dataset } from '../types/dataset';
+import type { Dataset, GeoSeriesSummary } from '../types/dataset';
 
 const reproducibleValueSchema = z.enum(['YES', 'NO', 'PARTIALLY']);
 const ncbiDataValueSchema = z.enum(['Available', 'Not available']);
@@ -52,6 +52,34 @@ type VerifyDatasetCompatibility = ParsedDataset extends Dataset
 	: never;
 const _datasetTypeCompatibilityCheck: VerifyDatasetCompatibility = true;
 void _datasetTypeCompatibilityCheck;
+
+const geoSeriesSummarySchema = z.object({
+	data_id: z.string(),
+	summary: z.string(),
+	title: z.string(),
+	cancer_type_exact: z.string(),
+	cancer_group: z.string(),
+});
+
+const geoSeriesSummariesSchema = z.array(geoSeriesSummarySchema);
+
+export function parseGeoSeriesSummaries(rawData: unknown): Map<string, GeoSeriesSummary> {
+	const result = geoSeriesSummariesSchema.safeParse(rawData);
+	if (!result.success) {
+		const issuePreview = result.error.issues
+			.slice(0, 8)
+			.map((issue) => `${issue.path.join('.')} - ${issue.message}`)
+			.join('; ');
+		throw new Error(
+			`Invalid geo_series_summaries.json. ${issuePreview}${result.error.issues.length > 8 ? '; ...' : ''}`,
+		);
+	}
+	const map = new Map<string, GeoSeriesSummary>();
+	for (const entry of result.data) {
+		map.set(entry.data_id, entry);
+	}
+	return map;
+}
 
 export function parseDatasets(rawData: unknown): Dataset[] {
 	const result = datasetsSchema.safeParse(rawData);

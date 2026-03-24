@@ -10,7 +10,7 @@
 		PUBLIC_DATA_FILES_ORIGIN,
 		PUBLIC_ACCESS_CODE,
 	} from 'astro:env/client';
-	import type { Dataset } from '../types/dataset';
+	import type { Dataset, GeoSeriesSummary } from '../types/dataset';
 	import {
 		clampSplitRatio,
 		readSplitRatio,
@@ -37,9 +37,10 @@
 
 	interface Props {
 		datasets: Dataset[];
+		summariesMap: Map<string, GeoSeriesSummary>;
 	}
 
-	let { datasets }: Props = $props();
+	let { datasets, summariesMap }: Props = $props();
 
 	let selectedId: string | null = $state(null);
 	let sortColumn: SortColumn | null = $state('samples');
@@ -490,6 +491,7 @@
 			{sortDirection}
 			{mobileTab}
 			{isDesktop}
+			{summariesMap}
 			onSort={sortBy}
 			onSelectDataset={selectDataset}
 			onListboxKeydown={handleListboxKeydown}
@@ -581,7 +583,7 @@
 					class="p-6"
 				>
 					<div class="space-y-6">
-						<DatasetDetailHeader dataset={selectedDataset} {buildDataFileDownloadUrl} />
+						<DatasetDetailHeader dataset={selectedDataset} {buildDataFileDownloadUrl} {summariesMap} />
 
 						{#if hasWidgetIframes}
 							{#if sessionLoading}

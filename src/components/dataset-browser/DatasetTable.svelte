@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Dataset } from '../../types/dataset';
+	import type { Dataset, GeoSeriesSummary } from '../../types/dataset';
 	import {
 		ariaSort,
 		getEndpointFullName,
@@ -21,6 +21,7 @@
 		sortDirection: SortDirection | null;
 		mobileTab: 'list' | 'details';
 		isDesktop: boolean;
+		summariesMap: Map<string, GeoSeriesSummary>;
 		onSort: (column: SortColumn) => void;
 		onSelectDataset: (id: string) => void;
 		onListboxKeydown: (event: KeyboardEvent) => void;
@@ -40,6 +41,7 @@
 		sortDirection,
 		mobileTab,
 		isDesktop,
+		summariesMap,
 		onSort,
 		onSelectDataset,
 		onListboxKeydown,
@@ -70,21 +72,15 @@
 	>
 		<table class="w-full" style="table-layout: fixed;">
 			<colgroup>
-				<col style="width: 110px;" />
 				<col style="width: 105px;" />
+				<col style="width: 180px;" />
 				<col />
 			</colgroup>
 			<thead class="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 shadow-sm">
 				<tr>
 					<th
-						class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
-						style="white-space: nowrap;"
-					>
-						GSE ID
-					</th>
-					<th
 						aria-sort={ariaSort(sortColumn, sortDirection, 'samples')}
-						class="py-3 pl-2 pr-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-700"
+						class="py-3 pl-4 pr-2 text-right text-xs font-semibold uppercase tracking-wider text-slate-700"
 						style="white-space: nowrap;"
 					>
 						<button
@@ -99,6 +95,12 @@
 						</button>
 					</th>
 					<th
+						class="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
+						style="white-space: nowrap;"
+					>
+						Cancer
+					</th>
+					<th
 						class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
 						style="white-space: nowrap;"
 					>
@@ -109,6 +111,7 @@
 			<tbody role="presentation">
 				{#each sortedDatasets as dataset, index (dataset.data_id)}
 					{@const completeEndpoints = getCompleteKMPlotEndpoints(dataset)}
+					{@const seriesSummary = summariesMap.get(dataset.data_id)}
 					<tr
 						id="row-{dataset.data_id}"
 						aria-rowindex={index + 1}
@@ -128,12 +131,17 @@
 							? 'ring-2 ring-inset ring-slate-400'
 							: ''}"
 					>
-						<td class="py-2 pl-4 pr-3 text-sm font-medium text-slate-900" style="white-space: nowrap;"
-							>{dataset.data_id}</td
-						>
-						<td class="py-2 pl-2 pr-4 text-right font-mono text-sm tabular-nums text-slate-900" style="white-space: nowrap;"
+						<td class="py-2 pl-4 pr-2 text-right font-mono text-sm tabular-nums text-slate-900" style="white-space: nowrap;"
 							>{dataset.data_summary.samples.toLocaleString()}</td
 						>
+						<td class="py-2 px-3 text-sm" style="white-space: nowrap;">
+							{#if seriesSummary}
+								<div class="font-medium capitalize text-slate-900">{seriesSummary.cancer_group}</div>
+								<div class="text-xs text-slate-400">{dataset.data_id}</div>
+							{:else}
+								<div class="font-medium text-slate-900">{dataset.data_id}</div>
+							{/if}
+						</td>
 					<td
 						class="px-3 py-2 text-sm"
 						style="white-space: nowrap;"

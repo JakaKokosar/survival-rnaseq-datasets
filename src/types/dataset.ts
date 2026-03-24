@@ -25,6 +25,14 @@ export interface SurvivalEndpoint {
 	notes: string[];
 }
 
+export interface GeoSeriesSummary {
+	data_id: string;
+	summary: string;
+	title: string;
+	cancer_type_exact: string;
+	cancer_group: string;
+}
+
 export interface Dataset {
 	data_id: string;
 	data_url: string;
