@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
 	import { getEndpointFullName } from '../../lib/dataset-utils';
 	import type { SurvivalEndpoint } from '../../types/dataset';
 	import geneDescriptions from '../../data/gene_symbol_descriptions.json';
@@ -33,9 +32,8 @@
 	}: Props = $props();
 
 	let geneFilter = $state('');
-	let isListOpen = $state(false);
 	let filteredGenes = $derived(
-		geneFilter.trim() === '' || geneFilter.trim() === selectedCandidateGene
+		geneFilter.trim() === ''
 			? candidateGenes
 			: candidateGenes.filter((g) => {
 					const q = geneFilter.trim().toLowerCase();
@@ -44,62 +42,8 @@
 				})
 	);
 
-	let inputEl = $state<HTMLInputElement | null>(null);
-	let geneChooserEl = $state<HTMLDivElement | null>(null);
-	let blurCloseTimeoutId: ReturnType<typeof setTimeout> | null = null;
-
-	function clearBlurCloseTimeout(): void {
-		if (blurCloseTimeoutId !== null) {
-			clearTimeout(blurCloseTimeoutId);
-			blurCloseTimeoutId = null;
-		}
-	}
-
-	function handleFilterFocus(): void {
-		clearBlurCloseTimeout();
-		if (selectedCandidateGene) {
-			geneFilter = selectedCandidateGene;
-			requestAnimationFrame(() => inputEl?.select());
-		} else {
-			geneFilter = '';
-		}
-		isListOpen = true;
-	}
-
-	function handleChooserFocusIn(): void {
-		clearBlurCloseTimeout();
-		isListOpen = true;
-	}
-
-	function scheduleChooserClose(): void {
-		clearBlurCloseTimeout();
-		blurCloseTimeoutId = setTimeout(() => {
-			blurCloseTimeoutId = null;
-			isListOpen = false;
-			geneFilter = '';
-		}, 150);
-	}
-
-	function isFocusInsideChooser(nextFocusTarget: EventTarget | null): boolean {
-		return nextFocusTarget instanceof Node && geneChooserEl?.contains(nextFocusTarget) === true;
-	}
-
-	function handleChooserFocusOut(event: FocusEvent): void {
-		if (isFocusInsideChooser(event.relatedTarget)) {
-			clearBlurCloseTimeout();
-			isListOpen = true;
-			return;
-		}
-
-		scheduleChooserClose();
-	}
-
 	function handleGeneSelect(gene: string): void {
-		clearBlurCloseTimeout();
 		onSelectGene(gene);
-		geneFilter = '';
-		isListOpen = false;
-		inputEl?.blur();
 	}
 
 	let candidateGenesListEl = $state<HTMLUListElement | null>(null);
@@ -120,6 +64,29 @@
 		canScrollCandidateGenesUp = scrollTop > 2;
 		canScrollCandidateGenesDown = maxScrollTop - scrollTop > 2;
 	}
+
+	function scrollToSelectedGene(): void {
+		if (!candidateGenesListEl || !selectedCandidateGene) return;
+		const selected = candidateGenesListEl.querySelector('[aria-pressed="true"]');
+		if (selected) {
+			selected.scrollIntoView({ block: 'center' });
+		}
+	}
+
+	let prevGeneFilter = '';
+	$effect(() => {
+		const current = geneFilter.trim();
+		const wasFiltering = prevGeneFilter !== '';
+		const isNowEmpty = current === '';
+		prevGeneFilter = current;
+
+		if (wasFiltering && isNowEmpty) {
+			requestAnimationFrame(() => {
+				scrollToSelectedGene();
+				updateCandidateGenesScrollAffordance();
+			});
+		}
+	});
 
 	$effect(() => {
 		candidateGenes.length;
@@ -148,8 +115,6 @@
 		kmWidgetHasLoaded = false;
 		kmWidgetLoadError = 'The Kaplan-Meier plot failed to load. Try selecting another dataset or reloading the page.';
 	}
-
-	onDestroy(() => clearBlurCloseTimeout());
 </script>
 
 <svelte:window onresize={updateCandidateGenesScrollAffordance} />
@@ -211,76 +176,66 @@
 							</span>
 						</span>
 					</div>
-					<div
-						bind:this={geneChooserEl}
-						class="mt-2"
-						onfocusin={handleChooserFocusIn}
-						onfocusout={handleChooserFocusOut}
-					>
+					<div class="mt-2 flex min-h-0 max-h-60 flex-col md:max-h-none md:flex-1">
 						<div class="relative">
+							<svg class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+							</svg>
 							<input
-								bind:this={inputEl}
 								type="text"
 								bind:value={geneFilter}
-								placeholder={selectedCandidateGene ?? 'Search genes…'}
-								onfocus={handleFilterFocus}
-								class="w-full rounded border border-slate-300 bg-white py-1.5 pl-2.5 pr-7 text-sm text-slate-700 placeholder:font-medium placeholder:text-slate-800 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:placeholder:text-slate-400 focus:placeholder:font-normal"
+								placeholder="Search genes…"
+								class="w-full rounded border border-slate-300 bg-white py-1.5 pl-8 pr-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
 								aria-label="Search genes"
 							/>
-							<svg class="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10l5 5 5-5"></path>
-							</svg>
 						</div>
-						{#if isListOpen || geneFilter.trim() !== ''}
-							<div class="relative mt-1 min-h-0 max-h-72 overflow-hidden rounded border border-slate-200 bg-white shadow-sm">
-								{#if candidateGenes.length > 0}
-									{#if filteredGenes.length > 0}
-										<ul
-											bind:this={candidateGenesListEl}
-											onscroll={updateCandidateGenesScrollAffordance}
-											role="list"
-											aria-label="Genes"
-											class="max-h-72 overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgb(148_163_184)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-400/60 [&::-webkit-scrollbar-thumb:hover]:bg-slate-500/70 [&::-webkit-scrollbar-track]:bg-transparent"
-										>
-											{#each filteredGenes as gene (gene)}
-												<li class="border-b border-slate-100 last:border-b-0">
-													<button
-														type="button"
-														aria-pressed={selectedCandidateGene === gene}
-														onclick={() => handleGeneSelect(gene)}
-														class="block w-full px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {selectedCandidateGene === gene
-															? 'bg-neutral-800 text-white'
-															: 'bg-transparent text-slate-700 hover:bg-slate-100/70'}"
-														title="{gene}{geneDescriptionMap[gene] ? ` — ${geneDescriptionMap[gene]}` : ''}"
+						<div class="relative mt-1 min-h-0 flex-1 overflow-hidden rounded border border-slate-200 bg-white shadow-sm">
+							{#if candidateGenes.length > 0}
+								{#if filteredGenes.length > 0}
+									<ul
+										bind:this={candidateGenesListEl}
+										onscroll={updateCandidateGenesScrollAffordance}
+										role="list"
+										aria-label="Genes"
+										class="h-full overflow-y-auto"
+									>
+										{#each filteredGenes as gene (gene)}
+											<li class="border-b border-slate-100 last:border-b-0">
+												<button
+													type="button"
+													aria-pressed={selectedCandidateGene === gene}
+													onclick={() => handleGeneSelect(gene)}
+													class="block w-full px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {selectedCandidateGene === gene
+														? 'bg-neutral-800 text-white'
+														: 'bg-transparent text-slate-700 hover:bg-slate-100/70'}"
+													title="{gene}{geneDescriptionMap[gene] ? ` — ${geneDescriptionMap[gene]}` : ''}"
+												>
+													<span class="block break-all text-sm font-medium leading-5">{gene}</span>
+												{#if geneDescriptionMap[gene]}
+													<span class="block text-xs leading-4 {selectedCandidateGene === gene
+														? 'text-neutral-300'
+														: 'text-slate-400'}"
 													>
-														<span class="block break-all text-sm font-medium leading-5">{gene}</span>
-													{#if geneDescriptionMap[gene]}
-														<span class="block text-xs leading-4 {selectedCandidateGene === gene
-															? 'text-neutral-300'
-															: 'text-slate-400'}"
-														>
-															{geneDescriptionMap[gene]}
-														</span>
-													{/if}
-													</button>
-												</li>
-											{/each}
-										</ul>
-										{#if canScrollCandidateGenesUp}
-											<div class="pointer-events-none absolute left-0 right-0 top-0 h-6 bg-gradient-to-b from-white/85 via-white/45 to-transparent"></div>
-										{/if}
-										{#if canScrollCandidateGenesDown}
-											<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/85 via-white/45 to-transparent"></div>
-										{/if}
-									{:else}
-										<p class="px-3 py-3 text-sm italic text-slate-400">No genes matching "{geneFilter}"</p>
+														{geneDescriptionMap[gene]}
+													</span>
+												{/if}
+												</button>
+											</li>
+										{/each}
+									</ul>
+									{#if canScrollCandidateGenesUp}
+										<div class="pointer-events-none absolute left-0 right-0 top-0 h-6 bg-gradient-to-b from-white/85 via-white/45 to-transparent"></div>
 									{/if}
+									{#if canScrollCandidateGenesDown}
+										<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/85 via-white/45 to-transparent"></div>
+									{/if}
+								{:else}
+									<p class="px-3 py-3 text-sm italic text-slate-400">No genes matching "{geneFilter}"</p>
 								{/if}
-								{#if candidateGenes.length === 0}
-									<p class="px-3 py-3 text-sm italic text-slate-400">No genes available for this dataset.</p>
-								{/if}
-							</div>
-						{/if}
+							{:else}
+								<p class="px-3 py-3 text-sm italic text-slate-400">No genes available for this dataset.</p>
+							{/if}
+						</div>
 					</div>
 				</aside>
 				<iframe
@@ -311,3 +266,4 @@
 		</div>
 	{/if}
 </section>
+
