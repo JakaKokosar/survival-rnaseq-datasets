@@ -86,12 +86,12 @@
 						<button
 							type="button"
 							onclick={() => onSort('samples')}
-							class="ml-auto flex cursor-pointer select-none items-center justify-end gap-1.5 rounded px-1 py-0.5 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+							class="ml-auto flex cursor-pointer select-none items-center justify-end gap-1 rounded px-1 py-0.5 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 						>
-							<span># SAMPLES</span>
 							<span class="inline-flex h-4 w-3 items-center justify-center text-sm font-bold text-neutral-800"
 								>{sortIndicator(sortColumn, sortDirection, 'samples')}</span
 							>
+							<span># SAMPLES</span>
 						</button>
 					</th>
 					<th
