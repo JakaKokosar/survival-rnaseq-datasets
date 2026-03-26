@@ -22,6 +22,7 @@
 		mobileTab: 'list' | 'details';
 		isDesktop: boolean;
 		summariesMap: Map<string, GeoSeriesSummary>;
+		sampleOriginMap: Map<string, string[]>;
 		onSort: (column: SortColumn) => void;
 		onSelectDataset: (id: string) => void;
 		onListboxKeydown: (event: KeyboardEvent) => void;
@@ -42,6 +43,7 @@
 		mobileTab,
 		isDesktop,
 		summariesMap,
+		sampleOriginMap,
 		onSort,
 		onSelectDataset,
 		onListboxKeydown,
@@ -70,10 +72,11 @@
 		onblur={onListboxBlur}
 		class="focus-visible:outline-none"
 	>
-		<table class="w-full" style="table-layout: fixed;">
+		<table class="w-full">
 			<colgroup>
 				<col style="width: 105px;" />
-				<col style="width: 180px;" />
+				<col />
+				<col />
 				<col />
 			</colgroup>
 			<thead class="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 shadow-sm">
@@ -88,11 +91,17 @@
 							onclick={() => onSort('samples')}
 							class="ml-auto flex cursor-pointer select-none items-center justify-end gap-1 rounded px-1 py-0.5 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 						>
+							<span># SAMPLES</span>
 							<span class="inline-flex h-4 w-3 items-center justify-center text-sm font-bold text-neutral-800"
 								>{sortIndicator(sortColumn, sortDirection, 'samples')}</span
 							>
-							<span># SAMPLES</span>
 						</button>
+					</th>
+					<th
+						class="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
+						style="white-space: nowrap;"
+					>
+						SAMPLE ORIGIN
 					</th>
 					<th
 						class="py-3 px-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700"
@@ -134,6 +143,13 @@
 						<td class="py-2 pl-4 pr-2 text-right font-mono text-sm tabular-nums text-slate-900" style="white-space: nowrap;"
 							>{dataset.data_summary.samples.toLocaleString()}</td
 						>
+						<td class="py-2 px-3 text-sm text-slate-700" style="white-space: nowrap;">
+							{#each sampleOriginMap.get(dataset.data_id) ?? [] as country, i}
+								{#if i > 0}<br />{/if}{country}
+							{:else}
+								—
+							{/each}
+						</td>
 						<td class="py-2 px-3 text-sm" style="white-space: nowrap;">
 							{#if seriesSummary}
 								<div class="font-medium capitalize text-slate-900">{seriesSummary.cancer_group}</div>

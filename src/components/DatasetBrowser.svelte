@@ -38,9 +38,10 @@
 	interface Props {
 		datasets: Dataset[];
 		summariesMap: Map<string, GeoSeriesSummary>;
+		sampleOriginMap: Map<string, string[]>;
 	}
 
-	let { datasets, summariesMap }: Props = $props();
+	let { datasets, summariesMap, sampleOriginMap }: Props = $props();
 
 	let selectedId: string | null = $state(null);
 	let sortColumn: SortColumn | null = $state('samples');
@@ -49,6 +50,7 @@
 	let isTbodyFocused = $state(false);
 
 	let splitRatio = $state(45);
+	let hasUserResized = $state(false);
 	let isDragging = $state(false);
 
 	let mobileTab: 'list' | 'details' = $state('list');
@@ -134,7 +136,11 @@
 	});
 
 	onMount(() => {
-		splitRatio = readSplitRatio();
+		const savedRatio = localStorage.getItem('datasetBrowserSplitRatio');
+		if (savedRatio !== null) {
+			splitRatio = readSplitRatio();
+			hasUserResized = true;
+		}
 		isDesktop = window.innerWidth >= 1024;
 
 		const urlParams = readUrlParams();
@@ -268,6 +274,15 @@
 	}
 
 	function startDrag(): void {
+		if (!hasUserResized && mainEl) {
+			// First drag: initialize splitRatio from current rendered width
+			const rect = mainEl.getBoundingClientRect();
+			const tableEl = mainEl.firstElementChild as HTMLElement;
+			if (tableEl) {
+				splitRatio = clampSplitRatio((tableEl.offsetWidth / rect.width) * 100);
+			}
+			hasUserResized = true;
+		}
 		isDragging = true;
 		document.body.style.cursor = 'col-resize';
 		document.body.style.userSelect = 'none';
@@ -292,6 +307,14 @@
 	}
 
 	function adjustSplit(delta: number): void {
+		if (!hasUserResized && mainEl) {
+			const rect = mainEl.getBoundingClientRect();
+			const tableEl = mainEl.firstElementChild as HTMLElement;
+			if (tableEl) {
+				splitRatio = clampSplitRatio((tableEl.offsetWidth / rect.width) * 100);
+			}
+			hasUserResized = true;
+		}
 		splitRatio = clampSplitRatio(splitRatio + delta);
 		saveSplitRatio(splitRatio);
 	}
@@ -477,7 +500,7 @@
 		id="main-content"
 		bind:this={mainEl}
 		class="grid flex-1 grid-cols-1 overflow-hidden lg:grid-cols-[var(--split-left)_6px_1fr] focus:outline-none"
-		style="--split-left: {splitRatio}%"
+		style="--split-left: {hasUserResized ? `${splitRatio}%` : 'max-content'}"
 	>
 		<DatasetTable
 			bind:panelElement={listPanelEl}
@@ -492,6 +515,7 @@
 			{mobileTab}
 			{isDesktop}
 			{summariesMap}
+			{sampleOriginMap}
 			onSort={sortBy}
 			onSelectDataset={selectDataset}
 			onListboxKeydown={handleListboxKeydown}

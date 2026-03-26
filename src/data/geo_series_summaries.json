@@ -1,232 +1,232 @@
 [
     {
         "data_id": "GSE133713",
-        "summary": "This GEO series contains whole-transcriptome RNA-seq data from 23 FFPE tumor samples obtained from patients with recurrent resectable stage III and IV melanoma in a pilot hu14.18-IL2 immunotherapy trial. Patients were randomized to receive the first of three monthly courses of hu14.18-IL2 either before surgical resection (Group A, n=13) or after resection (Group B, n=10, including two never-treated cases). RNA was extracted from FFPE tumor blocks, libraries were prepared with Illumina TruSeq RNA Exome capture, and sequencing was performed on an Illumina NextSeq 500. The deposited data support comparison of tumor expression profiles by treatment timing relative to surgery in advanced melanoma at high risk for recurrence. Sample-level annotations include study group, treatment status, death status, overall survival time, event status, and recurrence-free survival time.",
-        "title": "Whole-transcriptome RNA-seq of 23 FFPE tumors from recurrent resectable stage III-IV melanoma in a hu14.18-IL2 trial",
+        "summary": "This dataset contains whole-transcriptome RNA-seq profiles from 23 human FFPE tumor samples from patients with recurrent resectable stage III or IV melanoma. Samples are annotated by study group and treatment status in a pilot hu14.18-IL2 immunotherapy trial, including tumors resected before or after the first treatment course and two never-treated cases. The study was designed to evaluate tumor and immune biomarkers in resected melanoma tumors in relation to hu14.18-IL2 exposure and clinical follow-up.",
+        "title": "RNA-seq of recurrent resectable stage III-IV melanoma tumors in a hu14.18-IL2 trial",
         "cancer_type_exact": "recurrent resectable stage III and IV melanoma",
         "cancer_group": "melanoma"
     },
     {
         "data_id": "GSE78220",
-        "summary": "This GEO series contains paired-end poly(A) RNA-seq expression profiles from 28 melanoma tumor biopsies. The dataset was generated to study response to anti-PD-1 checkpoint inhibition in patients treated with pembrolizumab, and the deposited biopsies are predominantly pre-treatment, with one on-treatment sample indicated in the sample metadata. Samples span complete response, partial response, and progressive disease groups, supporting comparison of responders and non-responders. The biopsies were collected from multiple anatomical sites, and one patient contributes two pretreatment biopsies from different sites. Available annotations include anti-PD-1 response, biopsy time, prior MAPK inhibitor exposure, disease status, overall survival, vital status, age, sex, study site, anatomical location, and selected BRAF, NRAS, or NF1 mutation information.",
-        "title": "RNA-seq of 28 melanoma biopsies for anti-PD-1 response profiling",
+        "summary": "This GEO series contains RNA-seq profiles from 28 melanoma biopsy samples collected from patients receiving pembrolizumab, with anti-PD-1 response and clinical annotations. The cohort is predominantly composed of pre-treatment biopsies, and includes one on-treatment biopsy as well as two pretreatment biopsies from one patient. The dataset was generated to study transcriptomic features associated with response and non-response to anti-PD-1 checkpoint blockade in melanoma.",
+        "title": "RNA-seq melanoma biopsies for anti-PD-1 response",
         "cancer_type_exact": "melanoma",
         "cancer_group": "melanoma"
     },
     {
         "data_id": "GSE150043",
-        "summary": "This dataset contains RNA-seq profiles from 19 human pancreatic tumor samples from patients with pancreatic ductal adenocarcinoma. The deposited cohort is divided into 10 short-term survivor samples and 9 long-term survivor samples, enabling transcriptomic comparison between survival groups. Libraries were prepared from total RNA using a probe-captured coding-transcript workflow and sequenced on an Illumina NextSeq 500, with gene-level read count files provided. The study was designed to examine PDAC survival heterogeneity through group-level differential expression and integrative network-based analyses. GEO sample annotations include survival status, pancreas tissue origin, and tumor specimen type, while broader clinical-feature context is described at the series level.",
-        "title": "RNA-seq of 19 pancreatic ductal adenocarcinoma tumors from short- and long-term survivors",
+        "summary": "This dataset contains RNA-seq profiles from 19 human pancreatic tumor samples from patients with pancreatic ductal adenocarcinoma, including 10 short-term and 9 long-term survivors. Libraries were prepared from total RNA from tumor tissue and sequenced for transcriptome-wide expression profiling of coding transcripts. The study was designed to compare transcriptomic differences between PDAC survival groups and support integrative group- and individual-level network analyses.",
+        "title": "RNA-seq of pancreatic ductal adenocarcinoma tumors by survival group",
         "cancer_type_exact": "pancreatic ductal adenocarcinoma",
         "cancer_group": "pancreatic cancer"
     },
     {
         "data_id": "GSE201868",
-        "summary": "This GEO series contains RNA-seq expression profiles from 30 human hepatocellular carcinoma tumor samples. All specimens are tumor tissues collected at Tongji Hospital from patients who underwent one-stage radical resection between May and November 2015 and had not received prior anticancer treatment. The deposited data are bulk transcriptomic profiles generated from total RNA by high-throughput sequencing, representing a pretreatment surgical tumor cohort without matched normal samples in the series metadata provided here. The dataset was generated in the context of studying the hypoxic tumor microenvironment in hepatocellular carcinoma and evaluating hypoxia-related transcriptional patterns. Sample-level metadata indicate disease state, tumor tissue source, and untreated status, and a supplementary cohort metadata file is provided for additional annotations.",
-        "title": "RNA-seq of 30 untreated hepatocellular carcinoma tumor resections",
+        "summary": "This dataset contains RNA-seq profiles from 30 human hepatocellular carcinoma tumor samples collected at Tongji Hospital. All samples are untreated tumor specimens obtained at radical resection and analyzed by high-throughput transcriptome sequencing. The cohort was generated to study the hypoxic microenvironment in hepatocellular carcinoma and support hypoxia-related prognostic and tumor microenvironment analyses.",
+        "title": "RNA-seq of hepatocellular carcinoma tumors from the Tongji cohort",
         "cancer_type_exact": "hepatocellular carcinoma",
         "cancer_group": "liver cancer"
     },
     {
         "data_id": "GSE184941",
-        "summary": "This GEO series contains bulk RNA-seq profiles from 180 human glioma tissue samples spanning low-grade glioma and high-grade glioma states in the context of malignant progression. The cohort includes low-grade tumors, high-grade tumors that progressed from earlier low-grade disease, and some longitudinally represented matched pairs with both the original and progressed specimens from the same patient. RNA was isolated from FFPE glioma tissue and sequenced to generate gene-level mRNA expression data for transcriptomic analysis. The deposited samples are clinically annotated for downstream analysis, including variables such as tumor grade, initial and progressed pathology, diagnosis and progression timing, survival, age, and sex. When available, additional molecular and pathological annotations such as IDH status prediction, 1p/19q deletion, and histological subtype are included.",
-        "title": "Bulk RNA-seq of 180 low- and high-grade human glioma progression samples",
+        "summary": "This series contains bulk RNA-seq profiles from FFPE human glioma specimens spanning low-grade and high-grade disease, including tumors collected at diagnosis and after malignant progression. Some cases include matched pairs of the original low-grade tumor and the subsequent high-grade tumor. The deposited dataset was generated to study malignant progression in glioma and includes clinical and molecular annotations.",
+        "title": "Bulk RNA-seq of malignant progression in glioma",
         "cancer_type_exact": "glioma",
         "cancer_group": "glioma"
     },
     {
         "data_id": "GSE120622",
-        "summary": "This RNA-seq dataset contains 104 human profiles: 81 primary non-small cell lung cancer tumors, 19 adjacent lung tissues, and 4 lung cancer cell line samples from A549 and CL1-0 cells with FUT4 overexpression or vector control. The deposited data were generated by transcriptome sequencing of total RNA to characterize gene expression patterns associated with FUT4 in lung cancer. The tissue cohort includes both adenocarcinoma and squamous cell carcinoma cases, and the cell-line component provides an experimental model for FUT4 perturbation. Clinical tumor annotations include histology, sex, TNM variables, stage, and follow-up fields for death and relapse events with times. Adjacent lung tissues provide non-tumor comparators for differential expression and clinicopathologic analyses.",
-        "title": "RNA-seq of primary NSCLC tumors, adjacent lung tissues, and FUT4-overexpressing lung cancer cell lines",
+        "summary": "This series contains bulk RNA-seq profiles from 81 primary non-small cell lung cancer tumors, 19 adjacent lung tissues, and 4 lung cancer cell line samples (A549 and CL1-0) with FUT4 overexpression or vector control. The tumor cohort includes adenocarcinoma and squamous cell carcinoma cases with clinical annotations. The dataset was generated to study transcriptomic changes associated with FUT4 and its relation to prognosis and signaling in lung cancer.",
+        "title": "RNA-seq of non-small cell lung cancer tissues and FUT4-overexpressing lung cancer cell lines",
         "cancer_type_exact": "non-small cell lung cancer",
         "cancer_group": "lung cancer"
     },
     {
         "data_id": "GSE148355",
-        "summary": "This series contains bulk RNA-seq profiles from 128 liver tissue samples from 98 patients in a Korean hepatocellular carcinoma cohort, including 62 malignant tumors, 47 adjacent premalignant or nontumor lesions, 15 normal liver samples, and 4 replicate profiles. The nonmalignant set spans fibrosis, cirrhosis, and low- and high-grade dysplastic nodules, enabling comparison of transcriptomic and immune-related features across liver disease stages and tumor-adjacent tissue states. Tumor specimens were collected in the context of either total hepatectomy for transplantation or partial hepatectomy, and some tumor samples have paired adjacent nontumor or premalignant samples. The deposited data are bulk transcriptome profiles generated from snap-frozen liver tissue for analysis of the preoperative immune landscape in hepatocellular carcinoma. Available annotations include tissue category, lesion or tumor stage/grade labels, hepatectomy type, pairing information, and basic patient demographic fields.",
-        "title": "Bulk RNA-seq of hepatocellular carcinoma, premalignant liver lesions, and normal liver from a Korean cohort",
+        "summary": "This bulk RNA-seq series comprises 62 malignant liver tumor samples from a Korean hepatocellular carcinoma cohort, together with 47 premalignant liver lesions and 15 normal liver samples; replicate libraries are also included in the deposited series. The dataset was generated by high-throughput RNA sequencing to profile the preoperative immune landscape across premalignant and malignant liver stages in patients undergoing total or partial hepatectomy.",
+        "title": "Bulk RNA-seq of hepatocellular carcinoma and premalignant liver lesions",
         "cancer_type_exact": "hepatocellular carcinoma",
         "cancer_group": "liver cancer"
     },
     {
         "data_id": "GSE167573",
-        "summary": "This GEO series contains bulk RNA-seq transcriptomes from 77 human renal tissue samples, including 63 TFE3-translocation renal cell carcinoma tumors and 14 adjacent normal tissues. Total RNA was extracted from formalin-fixed paraffin-embedded specimens and sequenced as strand-specific paired-end RNA-seq for gene expression profiling. The dataset was generated to characterize the transcriptomic features of TFE3-translocation renal cell carcinoma in comparison with adjacent normal kidney tissue. Tumor samples include sample-level clinical annotations such as age group, sex, tumor size category, T stage, nodal status, metastatic status, and overall survival fields. Processed expression values are provided, and the RNA-seq processing workflow also included fusion detection from the sequencing reads.",
-        "title": "RNA-seq of 63 TFE3-translocation renal cell carcinoma tumors and 14 adjacent normal tissues",
+        "summary": "This dataset comprises RNA-seq profiles from 63 TFE3-translocation renal cell carcinoma tumor samples and 14 adjacent normal tissue samples. Libraries were generated from FFPE total RNA and sequenced as stranded paired-end transcriptomes. The study was designed to characterize the transcriptomic features of TFE3-translocation renal cell carcinoma, with sample-level clinical annotations including stage and survival variables.",
+        "title": "RNA-seq of TFE3-translocation renal cell carcinoma and adjacent normal tissue",
         "cancer_type_exact": "TFE3-translocation renal cell carcinoma",
         "cancer_group": "kidney cancer"
     },
     {
         "data_id": "GSE96058",
-        "summary": "This series contains bulk poly(A) RNA-seq expression profiles from 3,273 primary breast tumors collected in the prospective, population-based multicenter SCAN-B study in Sweden, with 136 additional technical replicate libraries included in the deposition. The deposited data represent the validation cohort used to assess RNA-seq-based single-gene and multigene classifiers for conventional breast cancer biomarkers. Gene- and transcript-level expression estimates were generated from Illumina paired-end sequencing, and PAM50 molecular subtyping was also performed. Sample-level annotations include age at diagnosis, tumor size, lymph node status, ER, PgR, HER2, Ki67, Nottingham histologic grade, RNA-seq-based biomarker predictions, treatment variables, and overall survival follow-up. The study context is early breast cancer, with the RNA-seq data used as a molecular readout to compare against routine histopathologic biomarker assessment.",
-        "title": "Bulk RNA-seq of 3,273 primary early breast cancers from SCAN-B",
-        "cancer_type_exact": "early breast cancer",
+        "summary": "This series contains poly(A) RNA-seq expression profiles for 3,273 primary breast tumors from the population-based multicenter SCAN-B cohort, together with 136 technical replicates. The deposited data provide gene- and transcript-level expression estimates, PAM50 subtype assignments, and RNA-seq-based predictions for ER, PgR, HER2, Ki67, and Nottingham histologic grade in the validation cohort. The dataset was generated to support evaluation of RNA-seq classifiers for conventional breast cancer biomarkers in a prospective clinical study setting.",
+        "title": "RNA-seq of 3273 SCAN-B breast tumors",
+        "cancer_type_exact": "primary breast cancer",
         "cancer_group": "breast cancer"
     },
     {
         "data_id": "GSE165808",
-        "summary": "This dataset contains bulk poly(A)+ RNA-seq profiles from 51 primary high-grade serous ovarian carcinoma tumor samples. RNA was extracted from fresh snap-frozen tissue and sequenced on an Illumina HiSeq 2500, with processed gene-level expression provided as raw counts and TPM values. The cohort includes patients with stage I-IV disease who underwent surgery and platinum-based conventional therapy, and the dataset was generated to study transcriptomic features associated with prognosis in high-grade serous ovarian carcinoma. Sample-level annotations include age, stage, response to platinum therapy categories such as no recurrence, platinum-sensitive, or platinum-resistant, along with some not-available entries. Recurrence status, progression-free survival, overall survival, and vital status are also available for downstream outcome-oriented analyses.",
-        "title": "RNA-seq of 51 primary high-grade serous ovarian carcinomas with outcome annotations",
+        "summary": "This GEO Series contains RNA-seq mRNA expression profiles from 51 primary high-grade serous ovarian carcinoma tumor samples from human patients. The cohort includes samples across stages I-IV with sample-level clinical annotations such as platinum therapy response, recurrence status, and survival. The dataset was generated to characterize the transcriptome of HGSC in the context of prognosis and conventional treatment response.",
+        "title": "RNA-seq of high-grade serous ovarian carcinoma with clinical outcome annotations",
         "cancer_type_exact": "high-grade serous ovarian carcinoma",
         "cancer_group": "ovarian cancer"
     },
     {
         "data_id": "GSE181582",
-        "summary": "This dataset provides RNA-seq profiling for primary human neuroblastoma tumors. The samples were collected to investigate the oncogenic role of insulin-like growth factor 2 mRNA-binding protein 1 (IGF2BP1) and its feedforward regulation with MYCN in driving high-risk disease. Expression data were generated to identify downstream targets and prognostic gene signatures associated with chromosome 17q gains and MYCN amplification. Available sample-level annotations include the International Neuroblastoma Staging System (INSS) tumor stage and MYCN amplification status. Additional data types, such as shallow whole-genome sequencing (sWGS), along with model system data from mice and cell lines, are available in the broader SuperSeries but are not described here.",
-        "title": "RNA-seq and genome variation profiling of human neuroblastoma and IGF2BP1/MYCN mouse models",
+        "summary": "This dataset comprises bulk RNA-seq profiles from 97 human primary neuroblastoma tumors. Samples span tumor stages 1, 2, 3, 4, and 4S and include MYCN amplification status annotations. The expression data were generated to characterize neuroblastoma transcriptional programs in the context of IGF2BP1 and MYCN-associated disease biology.",
+        "title": "RNA-seq of primary neuroblastoma tumors",
         "cancer_type_exact": "neuroblastoma",
         "cancer_group": "neuroblastoma"
     },
     {
         "data_id": "GSE218527",
-        "summary": "This GEO series contains RNA-seq data from 47 deposited tumor tissue samples from children aged 18 months or older with INSS stage 3, MYCN-non-amplified neuroblastoma with unfavorable histology. The cohort was assembled from Children\u2019s Oncology Group protocols A3973, ANBL0532, and/or the biology study ANBL00B1 to examine associations between tumor transcriptomic features, clinical variables, and patient outcome in this rare subgroup. Samples are annotated as neuroblastoma or ganglioneuroblastoma, nodular (composite), and the entry provides gene expression sequencing data with a series-level raw count matrix. Available sample-level annotations include histology or tissue label, age at diagnosis, ethnicity, time to first event or censor, overall survival follow-up time, and event or censor indicators. The associated study also evaluated whole-exome sequencing in a subset, but this GEO entry represents the RNA-seq component.",
-        "title": "RNA-seq of 47 INSS stage 3 MYCN-non-amplified unfavorable histology neuroblastoma tumors",
-        "cancer_type_exact": "INSS stage 3 MYCN-non-amplified neuroblastoma with unfavorable histology",
+        "summary": "This GEO series contains RNA-seq profiles from human tumors from children aged \u226518 months with INSS stage 3, MYCN-non-amplified, unfavorable-histology neuroblastoma, including neuroblastoma and ganglioneuroblastoma, nodular specimens. The deposited data are transcriptome sequencing counts generated from tumor RNA, with sample-level clinical outcome annotations. The dataset was generated to evaluate associations between tumor gene expression patterns and clinical outcome in this clinically defined neuroblastoma cohort.",
+        "title": "RNA-seq of stage 3 MYCN-non-amplified unfavorable-histology neuroblastoma",
+        "cancer_type_exact": "INSS stage 3 MYCN-non-amplified unfavorable histology neuroblastoma",
         "cancer_group": "neuroblastoma"
     },
     {
         "data_id": "GSE100797",
-        "summary": "This GEO series contains processed RNA-seq gene expression profiles for 25 melanoma tumor samples collected before adoptive T-cell therapy in a clinical phase I/II study. The profiled specimens are from patients with stage IV melanoma who had previously received other immunotherapies. Samples are annotated with collection timing relative to TIL therapy, including baseline pre-TIL biopsies and a small number obtained after ipilimumab or before/during vemurafenib. Available sample-level metadata include AJCC stage, lesion type, primary tumor type, RECIST response, progression-free survival, and overall survival. The submission represents processed expression data from an Illumina HiSeq 2000 run, while raw sequencing reads were not deposited.",
-        "title": "RNA-seq of pretreatment stage IV melanoma before adoptive T-cell therapy (25 samples)",
+        "summary": "This GEO series contains RNA-seq gene expression profiles from 25 stage IV melanoma tumor biopsies collected before tumor-infiltrating lymphocyte-based adoptive T-cell therapy in a clinical phase I/II trial. The cohort consists of patients previously treated with other immunotherapies, with clinical response and survival annotations available. The deposited data are processed transcriptomic profiles generated on an Illumina HiSeq 2000 to study tumor expression features associated with clinical benefit from ACT.",
+        "title": "RNA-seq stage IV melanoma before adoptive T-cell therapy",
         "cancer_type_exact": "stage IV melanoma",
         "cancer_group": "melanoma"
     },
     {
         "data_id": "GSE144561",
-        "summary": "This dataset contains RNA-seq gene expression profiles from primary purified circulating tumor cell-enriched fractions isolated from whole blood. The deposited samples comprise 81 profiles, including 42 from patients with localized pancreatic ductal adenocarcinoma, 18 from patients with metastatic pancreatic ductal adenocarcinoma, and 21 healthy donor controls. Samples were purified using the CTC-iChip workflow and sequenced for transcriptomic expression analysis. The study was designed to compare circulating tumor cell-associated transcriptional programs across localized and metastatic pancreatic cancer relative to non-cancer controls. Sample-level annotations indicate diagnosis group, enabling case-control and disease-state stratified analyses of circulating tumor cell gene expression.",
-        "title": "RNA-seq of purified circulating tumor cell-enriched fractions from localized and metastatic pancreatic ductal adenocarcinoma and healthy donors",
+        "summary": "This GEO series contains bulk RNA-seq profiles of 81 primary purified circulating tumor cell-enriched blood samples, including 42 samples from patients with localized PDAC, 18 from patients with metastatic PDAC, and 21 healthy donor controls. Sequencing was performed on CTC-iChip-purified samples to generate transcriptome-wide expression profiles. The dataset was generated to characterize circulating tumor cell-associated transcriptional programs in pancreatic cancer in the context of metastasis-related biology.",
+        "title": "RNA-seq of PDAC circulating tumor cells",
         "cancer_type_exact": "pancreatic ductal adenocarcinoma",
         "cancer_group": "pancreatic cancer"
     },
     {
         "data_id": "GSE164150",
-        "summary": "This GEO series contains RNA-seq profiles from 47 resected brain metastatic tissue samples from patients with solid tumors. Samples were collected in a single-institution retrospective study of patients undergoing craniotomy for brain metastasis, including cases arising from lung, breast, and other primary tumors. The main deposited molecular data are transcriptome profiles generated from total RNA, and the series also provides supplementary proteomic and metabolomic matrices from the same study. The study was designed to investigate molecular subtypes associated with outcomes after definitive local therapy, particularly distant brain failure and survival following craniotomy and radiation to the surgical bed. Sample-level annotations include age, sex, survival time, survival status, and transcriptome-derived prognostic subtype labels.",
-        "title": "RNA-seq of 47 resected brain metastases following craniotomy",
-        "cancer_type_exact": "brain metastasis from solid tumors",
+        "summary": "This GEO series provides bulk RNA-seq profiles for 47 human brain metastatic tissue samples resected from patients with solid tumors. The deposited assay is RNA sequencing, with gene-level expression files and sample annotations including age, sex, survival, and prognostic subtype. The dataset was generated to investigate transcriptomic subtypes and clinical outcomes of brain metastasis following craniotomy and associated local therapies.",
+        "title": "RNA-seq of brain metastases from solid tumors",
+        "cancer_type_exact": "brain metastases from solid tumors",
         "cancer_group": "multiple cancer types"
     },
     {
         "data_id": "GSE113863",
-        "summary": "This dataset contains targeted RNA-seq expression profiles from 483 FFPE breast cancer solid tumor samples collected at two centers, with 225 samples from Shanghai and 258 from the University of North Carolina at Chapel Hill. Sequencing was performed for a targeted 72-gene panel designed for breast cancer subtype classification and prognostic assessment of immunity-related and proliferation-related markers. The deposited data were generated in the context of evaluating immunity markers and the iRDM risk model for distant metastasis in breast cancer. Sample-level annotations include iRDM subtype, PAM50 subtype, immunity group, proliferation group, and RNA-based ER and PR status. Distant metastasis-free survival time and event annotations are available for a subset of the profiled samples, including 303 samples with survival data described in the series metadata.",
-        "title": "Targeted RNA-seq of a 72-gene panel in 483 breast cancer FFPE tumors",
+        "summary": "This GEO series contains targeted RNA-seq expression profiles for a 72-gene panel generated from 483 FFPE breast cancer solid tumor samples collected at Shanghai Cancer Hospital and UNC-Chapel Hill. Sample metadata include RNA-based ER/PR status and iRDM/PAM50 subtype, immunity, and proliferation group annotations, and a subset of 303 samples has distant metastasis-free survival data. The dataset was generated to assess prognostic immunity markers and to support breast cancer subtype classification and risk stratification using the iRDM model.",
+        "title": "72-gene targeted RNA-seq of breast cancer FFPE tumors",
         "cancer_type_exact": "breast cancer",
         "cancer_group": "breast cancer"
     },
     {
         "data_id": "GSE274975",
-        "summary": "This GEO series contains bulk RNA-seq data from 61 human lung cancer tissue samples collected from FFPE tumor blocks. The deposited data are raw gene-level counts generated from single-end 50 bp sequencing on the Illumina HiSeq 3000 platform after pathologic review confirming tumor origin and greater than 50% tumor cell content. Sample annotations indicate a mix of lung cancer histologies, with many samples labeled adenocarcinoma or squamous cell carcinoma and additional mixed or other lung cancer subtypes present in the series. The dataset was generated to provide transcriptomic profiles for molecular study of lung cancer rather than a matched multi-omics deposit. Sample-level metadata may support downstream stratification by histology and, for at least some samples, collection timepoint, specimen site, sex, and age.",
-        "title": "RNA-seq of 61 FFPE lung cancer tissue samples",
+        "summary": "This GEO series contains RNA-seq profiles from 61 human FFPE lung tumor tissue samples. Sample annotations indicate a mixed lung cancer cohort composed mainly of adenocarcinoma and squamous cell carcinoma, with additional mixed-histology and neuroendocrine cases. The dataset was generated to provide transcriptomic profiling of lung cancer tissues.",
+        "title": "RNA-seq of lung cancer FFPE tissue samples",
         "cancer_type_exact": "lung cancer",
         "cancer_group": "lung cancer"
     },
     {
         "data_id": "GSE188715",
-        "summary": "This dataset contains bulk RNA-seq expression profiles from 70 human bladder specimens collected at Xiangya hospital, including 57 bladder cancer tissues and 13 normal bladder tissues. The deposited data were generated from total RNA using high-throughput sequencing on the DNBSEQ-G400 platform and processed against the GRCh38 reference genome for gene-level expression quantification. The study design is a case-control comparison of tumor and normal bladder tissue intended to support transcriptomic analyses of bladder cancer. Sample-level metadata in the repository mainly distinguish normal bladder from bladder cancer samples, with limited additional clinical annotation provided in the GEO entry.",
-        "title": "RNA-seq of 57 bladder cancer and 13 normal bladder tissues",
+        "summary": "This dataset contains RNA-seq expression profiles from 57 bladder cancer tissues and 13 normal bladder tissues collected at Xiangya Hospital. Libraries were prepared from total RNA and sequenced for transcriptome-wide expression profiling, with reads aligned to GRCh38 and quantified for gene-level expression. The deposited cohort supports comparative transcriptomic analysis of bladder cancer versus normal bladder tissue.",
+        "title": "RNA-seq of bladder cancer and normal bladder tissues",
         "cancer_type_exact": "bladder cancer",
         "cancer_group": "bladder cancer"
     },
     {
         "data_id": "GSE192667",
-        "summary": "This dataset contains bulk RNA-seq transcriptome profiles from 89 formalin-fixed paraffin-embedded colorectal cancer specimens obtained from 89 patients. The cohort includes a large proportion of advanced disease, with 66 patients annotated as AJCC/UICC stage IV. Sequencing was performed on an Illumina HiSeq 4000 platform, and the deposited files provide gene-level count and TPM expression data. The study context is transcriptome profiling of colorectal cancer with emphasis on advanced cases represented in the cohort. Sample-level annotations include age, sex, source tissue name, T stage, N stage, AJCC/UICC TNM stage, overall survival time, and vital status.",
-        "title": "RNA-seq of 89 FFPE colorectal cancer samples",
+        "summary": "This dataset contains RNA-seq profiles for 89 samples from 89 patients with colorectal cancer, including 66 cases annotated as stage IV. mRNA purified from formalin-fixed paraffin-embedded blocks was sequenced on the Illumina HiSeq 4000, with gene-level count and TPM files provided for each sample. The cohort was generated for transcriptome profiling of colorectal cancer with a focus on advanced disease and related clinical outcome annotations.",
+        "title": "RNA-seq colorectal cancer FFPE cohort",
         "cancer_type_exact": "colorectal cancer",
         "cancer_group": "colorectal cancer"
     },
     {
         "data_id": "GSE162682",
-        "summary": "This GEO SuperSeries contains high-throughput expression profiling data from melanoma tumors, including 105 bulk RNA-seq tumor samples and 4 single-cell RNA-seq acral melanoma specimens. The bulk RNA-seq component includes both acral and sun-exposed melanomas collected at Yale and Central South University, with samples derived from primary and metastatic tumor resections. Deposited data include processed gene expression matrices such as TPM and ComBat-adjusted values for tumor RNA sequencing. Sample-level annotations available across the bulk cohort include melanoma subtype, mutation category, AJCC stage, sampling site, primary tumor location, ethnicity, lymph node status, survival variables, and estimated tumor purity. The single-cell specimens are annotated by 22q11.21 amplification status, enabling comparison of molecular features across melanoma subtypes and clinical contexts.",
-        "title": "Bulk and single-cell RNA-seq of acral and sun-exposed melanoma tumors",
-        "cancer_type_exact": "melanoma",
+        "summary": "This bulk RNA-seq dataset comprises 105 human melanoma tumor samples, including acral and sun-exposed melanomas from the Yale and CSU cohorts. The cohort contains primary and metastatic tumors with subtype and clinical annotations. The dataset was generated to characterize transcriptomic features of acral melanoma in comparison with sun-exposed melanoma.",
+        "title": "RNA-seq acral and sun-exposed melanoma tumors",
+        "cancer_type_exact": "acral and sun-exposed melanoma",
         "cancer_group": "melanoma"
     },
     {
         "data_id": "GSE136961",
-        "summary": "This dataset contains targeted RNA expression profiles from 21 pretreatment formalin-fixed paraffin-embedded lung tumor specimens from patients with non-small cell lung cancer who were treated with single-agent anti-PD-1 immunotherapy. Gene expression was measured by high-throughput sequencing using the Oncomine Immune Response Research Assay, producing expression data for approximately 395 immune-related genes. The cohort includes multiple NSCLC histologies, including adenocarcinoma, squamous cell carcinoma, adenosquamous carcinoma, and large cell neuroendocrine carcinoma. The profiled samples comprise 9 patients with durable clinical benefit and 12 with non-durable benefit, enabling baseline comparisons of pretreatment immune gene expression in relation to therapy response. Available sample annotations include histologic tumor type, sex, recurrence status, progression-free survival, overall survival, and vital status.",
-        "title": "Targeted immune RNA-seq of 21 pretreatment FFPE NSCLC tumors before anti-PD-1 therapy",
+        "summary": "This GEO series contains targeted RNA expression profiles from 21 pretreatment tumor samples from patients with non-small cell lung cancer who received single-agent anti-PD-1 immunotherapy. Expression was measured using the Oncomine Immune Response Research Assay, a targeted panel of immune-related genes. The cohort includes cases with durable clinical benefit and non-durable benefit, enabling analysis of tumor immune signatures associated with response to PD-1 blockade.",
+        "title": "Targeted RNA-seq of NSCLC before anti-PD-1 therapy",
         "cancer_type_exact": "non-small cell lung cancer",
         "cancer_group": "lung cancer"
     },
     {
         "data_id": "GSE241876",
-        "summary": "This GEO series contains bulk poly(A) RNA-seq profiles from 19 tumor biopsy samples obtained in a single-arm phase II trial of carboplatin, nab-paclitaxel, and pembrolizumab in women with stage IV metastatic triple-negative breast cancer. Samples are predominantly pretreatment biopsies, with a smaller set of post-treatment biopsies also included; source material comprises frozen core biopsies from primary breast tumors and metastatic sites. The deposited data are expression profiling by high-throughput sequencing, with raw and DESeq2-normalized count matrices provided for downstream transcriptomic analysis. The study context is evaluation of clinical and transcriptomic correlates of response to chemo-immunotherapy in metastatic triple-negative breast cancer. Sample-level annotations include treatment, biopsy site, disease stage, overall radiographic response category, age, race, sex, collection date, and survival variables such as OS, PFS, and event status.",
-        "title": "Bulk RNA-seq of 19 stage IV TNBC tumor biopsies from a phase II carboplatin/nab-paclitaxel/pembrolizumab trial",
+        "summary": "This GEO series contains bulk polyA RNA-seq profiles from 19 tumor biopsy samples from patients with stage IV/metastatic triple-negative breast cancer enrolled in a single-arm phase II trial of carboplatin, nab-paclitaxel, and pembrolizumab. The samples include pretreatment biopsies from primary breast and metastatic sites, with four additional post-treatment metastatic biopsies. The dataset was generated to examine transcriptomic patterns in relation to radiographic response and clinical outcomes in this treated cohort.",
+        "title": "RNA-seq of metastatic triple-negative breast cancer biopsies from a carboplatin/nab-paclitaxel/pembrolizumab phase II trial",
         "cancer_type_exact": "metastatic triple-negative breast cancer",
         "cancer_group": "breast cancer"
     },
     {
         "data_id": "GSE165656",
-        "summary": "This dataset contains bulk RNA-seq profiles from 81 pretreatment bone marrow samples from patients with newly diagnosed acute myeloid leukemia. Bone marrow aspirates were collected at the time of AML diagnosis before treatment, and RNA was isolated from bone marrow mononuclear cells. Libraries were prepared using Illumina TruSeq RNA Access and sequenced as paired-end reads, with gene-level raw read counts provided as the deposited expression data. The study was designed to assess transcriptomic variation in AML, including expression patterns after decoupling lineage-associated signals from other biological signatures. Supplementary files include clinical metadata that may support downstream analyses using diagnosis-time and sample-level annotations.",
-        "title": "Bulk RNA-seq of 81 pretreatment bone marrow samples from newly diagnosed acute myeloid leukemia",
+        "summary": "This dataset comprises RNA-seq profiles from 81 pretreatment bone marrow samples from patients with newly diagnosed acute myeloid leukemia. Total RNA from bone marrow mononuclear cells was sequenced to generate gene-level expression counts for assessment of AML transcriptomic patterns and lineage-independent inflammatory and metabolic signatures associated with outcomes.",
+        "title": "RNA-seq of pretreatment acute myeloid leukemia bone marrow",
         "cancer_type_exact": "acute myeloid leukemia",
         "cancer_group": "leukemia"
     },
     {
         "data_id": "GSE131521",
-        "summary": "This GEO series contains bulk RNA-seq data from 17 human metastatic brain tumor tissue samples annotated as metastatic melanoma. RNA was extracted from FFPE specimens and profiled by transcriptome capture RNA-seq on the Illumina HiSeq 2500, with gene-level count data provided. The dataset was generated for differential expression analysis between two treatment-timing groups defined by immunotherapy use relative to radiation therapy: immunotherapy after radiation only versus immunotherapy before and after radiation. These samples represent treated brain metastatic lesions rather than primary tumors, which is important for interpretation in the metastatic disease setting. Sample-level annotations include treatment-timing group, survival status, and months to death or last follow-up.",
-        "title": "RNA-seq of 17 FFPE melanoma brain metastases by immunotherapy timing relative to radiation",
+        "summary": "This GEO series contains bulk RNA-seq profiles from 17 metastatic brain tumor tissue samples annotated as metastatic melanoma. Libraries were generated from total RNA using transcriptome capture and sequenced on the Illumina HiSeq 2500 for expression profiling. The dataset was generated to compare gene expression between groups defined by the timing of immunotherapy relative to radiation therapy, with survival status and follow-up time provided in the sample metadata.",
+        "title": "RNA-seq of melanoma brain metastases by RT/immunotherapy timing",
         "cancer_type_exact": "melanoma brain metastasis",
         "cancer_group": "melanoma"
     },
     {
         "data_id": "GSE183924",
-        "summary": "This GEO series contains bulk RNA-seq profiles from 37 FFPE tumor samples from patients with locally advanced esophageal and gastroesophageal junction adenocarcinoma. The samples are tumor specimens from participants treated with adjuvant durvalumab in a phase II study after trimodality therapy. Total RNA was extracted from FFPE tumor blocks, libraries were prepared with the Illumina TruSeq RNA Exome kit, and sequencing was performed on an Illumina NovaSeq 6000, with processed gene-level FPKM values provided. According to the repository metadata, the dataset was generated for correlative immune deconvolution analysis using CIBERSORTx to estimate the relative proportions of 22 immune cell types in each sample. Supplementary files include an expression matrix and a clinical data table with CIBERSORT results, supporting analyses of tumor transcriptomes, immune composition, and associations with relapse-free survival.",
-        "title": "Bulk RNA-seq of 37 FFPE tumors from a phase II adjuvant durvalumab trial in locally advanced esophageal and GEJ adenocarcinoma",
+        "summary": "This GEO series contains bulk RNA-seq profiles from 37 tumor samples from patients with locally advanced esophageal and gastroesophageal junction adenocarcinoma treated with adjuvant durvalumab in a phase II study. RNA was extracted from FFPE tumor blocks and profiled by RNA-seq, with supplementary gene-level FPKM values and clinical data including CIBERSORTx immune deconvolution output. The dataset was generated for correlative analysis of the tumor immune microenvironment in the setting of adjuvant durvalumab following trimodality therapy.",
+        "title": "RNA-seq of locally advanced esophageal and GEJ adenocarcinoma in an adjuvant durvalumab trial",
         "cancer_type_exact": "locally advanced esophageal and gastroesophageal junction adenocarcinoma",
-        "cancer_group": "esophageal cancer"
+        "cancer_group": "esophagogastric cancer"
     },
     {
         "data_id": "GSE87340",
-        "summary": "This GEO series contains bulk RNA-seq expression profiles from 54 lung tissue samples representing 27 paired primary lung adenocarcinoma tumors and matched normal lung tissues from patients who were never-smokers. Although the associated study also included exome sequencing, this repository entry deposits the RNA-seq assay only. The paired design enables within-patient tumor-versus-normal expression comparisons in a never-smoker lung adenocarcinoma cohort. Sample-level annotations include sex, age, stage (IA/IB), histologic or cell-type label, differentiation, grade, survival status, and time to last follow-up. Supplementary files provide raw and normalized expression matrices for downstream analyses of transcriptomic changes and clinical associations.",
-        "title": "RNA-seq of 27 paired lung adenocarcinoma and matched normal lung tissues from never-smokers",
-        "cancer_type_exact": "lung adenocarcinoma in never-smokers",
+        "summary": "This dataset contains RNA-seq expression profiles from 54 frozen lung tissue samples comprising 27 paired lung adenocarcinoma tumors and matched normal lung tissues from never-smokers. Samples include clinical annotations such as stage, histologic differentiation, survival status, and follow-up time. The series is the RNA-seq component of a paired tumor-normal study examining pathway deregulation and clinical outcomes in never-smoker lung adenocarcinoma.",
+        "title": "RNA-seq of never-smoker lung adenocarcinoma tumors and matched normal lung",
+        "cancer_type_exact": "never-smoker lung adenocarcinoma",
         "cancer_group": "lung cancer"
     },
     {
         "data_id": "GSE229706",
-        "summary": "This dataset provides bulk RNA-sequencing data from 246 matched tumor and tumor-adjacent normal lung tissue samples. Specimens were prospectively collected from treatment-naive patients with stage I lung adenocarcinoma who underwent surgical resection. The study was designed to investigate whether the transcriptomic profile of histologically normal adjacent tissue could better predict progression-free survival and disease recurrence than the primary tumor itself. Available sample-level annotations include tissue type, recurrence status, and specific progression categories such as systemic, locoregional, or second primary. Additional single-nucleus RNA-sequencing data generated from a subset of these samples are part of the broader SuperSeries but are not described here.",
-        "title": "Bulk RNA-seq and snRNA-seq of tumor and tumor-adjacent lung in stage I lung adenocarcinoma",
+        "summary": "This dataset comprises RNA-seq profiles from 246 samples representing 123 paired lung adenocarcinoma tumors and tumor-adjacent normal lung tissues. Sample metadata include clinical outcome annotations such as no progression, locoregional recurrence, systemic recurrence, second primary, and short follow-up. The dataset was generated to compare tumor and adjacent normal lung transcriptomes in relation to clinical outcome in lung adenocarcinoma.",
+        "title": "Paired RNA-seq of lung adenocarcinoma tumors and adjacent normal lung",
         "cancer_type_exact": "lung adenocarcinoma",
         "cancer_group": "lung cancer"
     },
     {
         "data_id": "GSE60052",
-        "summary": "This GEO series contains bulk RNA-seq expression profiles from 86 human lung specimens, including 79 small cell lung cancer tumors and 7 normal lung controls. The deposited data represent transcriptomic sequencing of total RNA, with normalized expression values provided for downstream analysis. According to the series metadata, these samples were generated as part of a broader genomic study of primary small cell lung cancer in Chinese patients. The design is primarily a tumor-versus-normal comparison to support differential expression and related transcriptome analyses in small cell lung cancer, including investigation of SRSF1-associated biology. Available sample annotations in GEO mainly distinguish small cell lung cancer and healthy control specimens, while detailed clinical or treatment annotations are not clearly provided for all RNA-seq samples.",
-        "title": "RNA-seq of 79 small cell lung cancer tumors and 7 normal lung controls",
+        "summary": "This dataset contains RNA-seq profiles from 79 human small cell lung cancer tumor samples and 7 normal lung control samples. Total RNA libraries were sequenced for expression profiling on an Illumina HiSeq 2000, and normalized expression data are provided. The study was deposited to support transcriptomic characterization of small cell lung cancer and differential expression analysis in the context of SRSF1-associated biology.",
+        "title": "RNA-seq of small cell lung cancer tumors and normal lung controls",
         "cancer_type_exact": "small cell lung cancer",
         "cancer_group": "lung cancer"
     },
     {
         "data_id": "GSE216490",
-        "summary": "This GEO series contains RNA-seq data from FFPE prostate tumor specimens collected at radical prostatectomy from Hispanic/Latino patients with prostate cancer who had no previous treatment. The series summary states that 78 tumor RNA samples were used to compare ERG-high and ERG-low groups, with gene-expression counts provided for downstream transcriptomic analysis. The study context is molecular subtyping by ERG status and assessment of transcriptomic differences related to biochemical recurrence after surgery. Available sample annotations include ERG status, biochemical recurrence within 5 years, time to recurrence, Gleason grade group, clinical stage, age, BMI, treatment, and previous-treatment status. These data are suitable for analyses of prostate tumor expression patterns across ERG-defined subgroups with associated clinical metadata.",
-        "title": "RNA-seq of FFPE prostate tumors by ERG status in Hispanic/Latino patients",
+        "summary": "This GEO series contains RNA-seq profiles from FFPE prostate tumor specimens from Hispanic/Latino patients, predominantly radical prostatectomy cases, with ERG-status and clinical annotations including biochemical recurrence, Gleason grade, and clinical stage. The deposited transcriptomic data were generated to compare ERG-high and ERG-low tumors in prostate cancer and to study their relationship to biochemical recurrence.",
+        "title": "Prostate cancer FFPE RNA-seq by ERG status",
         "cancer_type_exact": "prostate cancer",
         "cancer_group": "prostate cancer"
     },
     {
         "data_id": "GSE102073",
-        "summary": "This GEO series is the RNA-seq component of a multi-center molecular study of previously untreated pelvic high-grade serous carcinoma. It contains bulk transcriptomic profiles from 85 frozen primary tumor samples, including 43 tumors with associated serous tubal intraepithelial carcinoma (STIC) lesions and 42 without STIC. Libraries were prepared from total RNA and sequenced on the Illumina HiSeq 2500, with gene-level count files provided for downstream expression analysis. The study design enables comparison of tumor transcriptomes by STIC status, and sample annotations include ovarian, fallopian tube, or primary peritoneal diagnoses in some cases after pathology review. Available metadata include STIC status, age, pathologic stage, surgical outcome, recurrence, progression-free and overall survival, vital status, platinum response or interval where available, race, and TCGA subtype correlation scores.",
-        "title": "RNA-seq of 85 pelvic high-grade serous carcinomas with and without STIC",
+        "summary": "This dataset contains RNA-seq profiles from 85 primary tumor samples from previously untreated high-grade serous carcinoma cases, including tumors with and without associated serous tubal intra-epithelial carcinoma (STIC) lesions. Samples are annotated for STIC status and clinical features. The study was designed to compare tumor transcriptomic profiles by STIC association in a multicenter pelvic HGSC cohort.",
+        "title": "RNA-seq pelvic high-grade serous carcinoma with and without STIC",
         "cancer_type_exact": "pelvic high-grade serous carcinoma",
-        "cancer_group": "ovarian cancer"
+        "cancer_group": "multiple cancer types"
     },
     {
         "data_id": "GSE224564",
-        "summary": "This dataset contains bulk RNA-seq profiles from 175 human pancreatic ductal adenocarcinoma tumor samples. Expression profiling was generated from total RNA isolated from patient tumors and sequenced on an Illumina NovaSeq platform. The study context is the characterization of molecular signatures associated with SERPINB3 and the aggressive basal-like/squamous subtype of PDAC. Sample-level annotations include molecular subtype assignment (classical, basal, or unclassified), TNM classification, overall stage, tumor grade, cohort source, and high/low SERPINB3 expression status. Survival-related variables, including cancer death and follow-up time in months, are also provided for downstream subtype, expression, and outcome analyses.",
-        "title": "Bulk RNA-seq of 175 pancreatic ductal adenocarcinoma tumors with subtype and SERPINB3 annotations",
+        "summary": "This dataset contains bulk RNA-seq profiles from 175 human pancreatic ductal adenocarcinoma patient tumors collected across UMD and German cohorts. Samples are annotated for molecular subtype, including classical, basal, and unclassified groups, with SERPINB3 high/low status and clinical outcome variables. The transcriptome data were generated by high-throughput sequencing to study molecular signatures associated with the aggressive basal-like/squamous PDAC context and SERPINB3 expression.",
+        "title": "RNA-seq of pancreatic ductal adenocarcinoma tumors by molecular subtype",
         "cancer_type_exact": "pancreatic ductal adenocarcinoma",
         "cancer_group": "pancreatic cancer"
     },
     {
         "data_id": "GSE227378",
-        "summary": "This GEO series contains small RNA sequencing data from 64 liver tissue samples collected from 32 patients with hepatocellular carcinoma, including tumor tissue and matched adjacent tissue. The deposited assay is miRNA-seq performed on total RNA with size selection for small RNAs and sequencing on the BGISEQ-500 platform. The study was designed as a paired tumor-versus-adjacent tissue comparison in hepatocellular carcinoma, with a focus on identifying miRNA features relevant to disease prognosis in a Chinese patient cohort. The paired design supports within-patient differential expression analyses between tumor and adjacent liver tissue. The dataset is suitable for analyses of miRNA expression, tumor versus adjacent tissue status, and biomarker discovery in hepatocellular carcinoma.",
-        "title": "miRNA-seq of paired hepatocellular carcinoma and adjacent liver tissues from 32 patients",
+        "summary": "This dataset contains miRNA-seq profiles from 64 liver tissue samples comprising tumors and matched adjacent tissue from 32 patients with hepatocellular carcinoma. Libraries were prepared from total RNA and sequenced on the BGISEQ-500 platform for small RNA profiling. The study was designed to characterize miRNA expression differences in hepatocellular carcinoma and support evaluation of candidate prognostic biomarkers.",
+        "title": "miRNA-seq of hepatocellular carcinoma tumors and matched adjacent liver tissue",
         "cancer_type_exact": "hepatocellular carcinoma",
         "cancer_group": "liver cancer"
     },
     {
         "data_id": "GSE216037",
-        "summary": "This GEO series contains bulk RNA-seq profiles from 52 human bladder cancer tissue samples. The deposited data were generated from total RNA libraries sequenced on an Illumina NextSeq 500 platform and include processed expression values for each sample. The study context is evaluation of a TP53 activity-related gene signature in bladder cancer, with samples stratified into high and low TP53 signature score groups for analyses related to prognosis and tumor microenvironment characteristics. Sample-level annotations include TP53 signature score and group, TP53 mutation status, overall survival and survival state, sex, and selected clinicopathologic variables such as age category, tumor size, grade, smoking history, and lymph node metastasis, with some entries marked unknown. Although the associated study references additional multi-omics analyses, this repository entry specifically represents the RNA-seq component.",
-        "title": "RNA-seq of 52 bladder cancer tissues for TP53 signature analysis",
+        "summary": "This dataset comprises bulk RNA-seq profiles from 52 human bladder cancer tissue samples. Samples are annotated with TP53 signature score and group, TP53 mutation status, survival, and other clinical variables. The deposited expression data were generated to support analysis of TP53-related signatures in bladder cancer prognosis and tumor microenvironment characteristics.",
+        "title": "RNA-seq bladder cancer cohort with TP53 signature annotations",
         "cancer_type_exact": "bladder cancer",
         "cancer_group": "bladder cancer"
     }

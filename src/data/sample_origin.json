@@ -1,0 +1,237 @@
+[
+    {
+        "data_id": "GSE133713",
+        "justification": "The directly described cohort consisted of 23 melanoma patients enrolled in UWCCC Protocol CO05601, and their surgical resection specimens were processed by the UWHC Surgical Pathology Unit, indicating collection/recruitment at the University of Wisconsin clinical site. These institutions are in the United States, while NCI/Bethesda appears only as a processing/contact location.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE78220",
+        "justification": "The GEO sample records describe the melanoma biopsies as collected at study sites \"UCLA\" and \"VIC\" for this anti-PD-1 cohort; UCLA is a U.S. collection site, and the provided metadata do not explicitly indicate any non-U.S. country for the sampled cohort. Therefore the reliably supported sample origin is the United States.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE150043",
+        "justification": "The study states that PDAC patients were recruited from Liege University Hospital/CHU Li\u00e8ge, and that tissues were obtained from the University of Li\u00e8ge Biobank, Belgium. Therefore, the directly described patient cohort and tumor samples originated in Belgium.",
+        "sample_geo_location": [
+            "Belgium"
+        ]
+    },
+    {
+        "data_id": "GSE201868",
+        "justification": "The directly described samples in GSE201868 were tumor specimens from 30 HCC patients who underwent radical resection at Tongji Hospital; Tongji Hospital is identified in Wuhan, China in the metadata. Therefore, the sample cohort origin is China.",
+        "sample_geo_location": [
+            "China"
+        ]
+    },
+    {
+        "data_id": "GSE184941",
+        "justification": "The human cohort is described only as \u2018resected secondary HGG were banked with IRB approval,\u2019 and the GEO record provides a USA contact institution but does not explicitly state where patients were recruited or samples were collected. The public TCGA and scRNA-seq datasets mentioned also do not specify participant country of origin in the provided text.",
+        "sample_geo_location": [
+            "Not specified"
+        ]
+    },
+    {
+        "data_id": "GSE120622",
+        "justification": "The directly described human tissue cohort consisted of surgically resected lung tumors and adjacent uninvolved lung tissues obtained from patients at National Taiwan University Hospital in Taipei, Taiwan. Although TCGA was used for validation, the text does not explicitly state participant countries for that public cohort.",
+        "sample_geo_location": [
+            "Taiwan"
+        ]
+    },
+    {
+        "data_id": "GSE148355",
+        "justification": "The study repeatedly describes the specimens as coming from a \"Korean HCC cohort\" and states that HCC and nontumor samples were collected from patients who underwent surgical resection at Seoul National University Hospital in Seoul. Therefore, the directly described sample cohort origin is South Korea.",
+        "sample_geo_location": [
+            "South Korea"
+        ]
+    },
+    {
+        "data_id": "GSE167573",
+        "justification": "The cohort was explicitly collected at West China Hospital of Sichuan University: patients who \"underwent surgery for the kidney at our center\" were reviewed, and \"untreated primary tumor tissues and adjacent normal samples were collected\" in this single-center study. West China Hospital of Sichuan University is in China, so the sample origin is China.",
+        "sample_geo_location": [
+            "China"
+        ]
+    },
+    {
+        "data_id": "GSE96058",
+        "justification": "The directly described cohorts are SCAN-B and Cohort270, both recruiting breast cancer patients in Southern/South Sweden; examples include \"all newly diagnosed breast cancer patients in the South Swedish Health Care Region were asked to participate\" and \"patients operated at Sk\u00e5ne University Hospital in Malm\u00f6\". The GEO series metadata also labels GSE96058 as a \"population-based multicenter Sweden Cancerome Analysis Network\u2014Breast\" cohort.",
+        "sample_geo_location": [
+            "Sweden"
+        ]
+    },
+    {
+        "data_id": "GSE165808",
+        "justification": "The directly described tumor cohort consisted of fresh snap-frozen high-grade serous ovarian carcinoma samples archived at the CHA Bundang Medical Center Biobank in Seongnam, Korea, and the follow-up study explicitly reused the same 51 HGSOC patients from GSE165808. No explicit participant-origin country is provided for the external TCGA or other public validation datasets.",
+        "sample_geo_location": [
+            "South Korea"
+        ]
+    },
+    {
+        "data_id": "GSE181582",
+        "justification": "The directly described human neuroblastoma cohort is stated to consist of tumors granted after patient consent through the Cologne tumor bank and Universit\u00e4tsklinikum Essen, Germany, indicating German patient sample origin. The accompanying mouse tumors/organs were also generated and handled under German institutional oversight, so all explicitly described sample cohorts point to Germany.",
+        "sample_geo_location": [
+            "Germany"
+        ]
+    },
+    {
+        "data_id": "GSE218527",
+        "justification": "The samples are described as coming from patients enrolled on Children\u2019s Oncology Group protocols A3973, ANBL0532, and ANBL00B1, but the text and GEO sample metadata do not explicitly state the country or countries where patients were recruited or samples were collected. The only explicit location given is a U.S. GEO contact address, which is a repository/contact site rather than sample origin.",
+        "sample_geo_location": [
+            "Not specified"
+        ]
+    },
+    {
+        "data_id": "GSE100797",
+        "justification": "The text describes pre-treatment melanoma samples from 27 patients enrolled in clinical trial NCT00937625, but it does not explicitly state the country where patients were recruited or where biopsies were collected. The GEO note about \"Swedish law\" and the Sweden-based contact refer to data governance/contact information, not a clearly stated sample collection origin.",
+        "sample_geo_location": [
+            "Not specified"
+        ]
+    },
+    {
+        "data_id": "GSE144561",
+        "justification": "The study states that human blood for CTC analysis was obtained under DFHCC protocols at Massachusetts General Hospital (MGH), which is the explicit patient/sample collection site; MGH is in Boston, Massachusetts, United States. No other participant collection country is explicitly described for the primary cohorts.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE164150",
+        "justification": "The study states that samples were obtained from the Wake Forest Brain Tumor Tissue bank in a single-institution retrospective collection, with patient recruitment and IRB approval at Wake Forest School of Medicine. Wake Forest is in the United States, so the cohort origin is the United States.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE113863",
+        "justification": "The directly described TARGETSEQ cohort consisted of 225 breast tumor FFPE samples from Shanghai Cancer Hospital in Shanghai and 258 breast cancer FFPE samples from UNC at Chapel Hill; the Methods further specify 225 patients from Shanghai Cancer Hospital and 250 patients from UNC Hospital. These recruitment/collection sites correspond to China and the United States.",
+        "sample_geo_location": [
+            "China",
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE274975",
+        "justification": "The directly described experimental cohort was handled under approval from the ethical committee of Vitamed Clinic in Moscow, and the study/GEO metadata list the responsible study contact in Russia; sequencing at UCLA/Sechenov is described separately as processing, not collection. No explicit participant-origin country is given for the external validation datasets, so only the main cohort is assigned.",
+        "sample_geo_location": [
+            "Russia"
+        ]
+    },
+    {
+        "data_id": "GSE188715",
+        "justification": "The directly described cohort is GSE188715/Xiangya cohort, identified as \"RNAseq of bladder cancer samples from Xiangya hospital\"; the papers state the Xiangya cohort was collected in Xiangya Hospital, and the GEO series metadata lists Xiangya Hospital, Central South University, Changsha, with contact country China. No other cohorts have explicitly stated participant/sample collection countries in the provided text.",
+        "sample_geo_location": [
+            "China"
+        ]
+    },
+    {
+        "data_id": "GSE192667",
+        "justification": "The directly studied colorectal cancer tissues were explicitly collected at Tokyo Medical and Dental University Medical Hospital (TMDUMH), and the GEO metadata lists the study contact location in Tokyo, Japan. Therefore, the sample cohort origin is Japan.",
+        "sample_geo_location": [
+            "Japan"
+        ]
+    },
+    {
+        "data_id": "GSE162682",
+        "justification": "The study explicitly states that it characterized acral melanomas from 104 patients treated in the United States (Yale cohort) or China (CSU cohort). The Methods further specify CSU sample collection from multiple hospitals in China, while GEO sample metadata labels samples as coming from Yale or CSU cohorts.",
+        "sample_geo_location": [
+            "United States",
+            "China"
+        ]
+    },
+    {
+        "data_id": "GSE136961",
+        "justification": "The study describes newly collected pretreatment tumor samples from 34 NSCLC patients and states that the study was approved by the institutional review board of CHA Bundang Medical Center, where patients provided consent prior to surgery, indicating this was the patient/sample collection site. CHA Bundang Medical Center is in South Korea, and no other collection-country is described for the cohort.",
+        "sample_geo_location": [
+            "South Korea"
+        ]
+    },
+    {
+        "data_id": "GSE241876",
+        "justification": "The directly described cohort consists of pretreatment and post-treatment tumor biopsies from the phase II mTNBC trial, and all listed GEO samples have \"geo loc_name: Cleveland, OH, USA\". The trial was conducted through University Hospitals/Seidman Cancer Center and Cleveland Clinic/Taussig Cancer Institute, indicating sample collection/recruitment in the United States.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE165656",
+        "justification": "Across the directly described cohorts, samples were collected from AML patients evaluated/seen at The University of Texas MD Anderson Cancer Center, with bone marrow aspirates/biopsies obtained there before treatment; MD Anderson is in the United States. Public validation datasets (TCGA, BEAT-AML, Valk et al.) are mentioned but participant origin is not explicitly stated in the provided text, so they are not added.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE131521",
+        "justification": "The 17 melanoma brain metastasis tissues were described as being obtained from the authors\u2019 institutional pathology database and from surgical resections under institutional IRB protocols; the associated GEO metadata identifies the institution as the University of Cincinnati, USA. No other patient sample collection country is explicitly stated, and the Broad Institute sequencing location is not treated as sample origin.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE183924",
+        "justification": "The paper states that 37 patients were enrolled 'across three academic sites in the United States,' and the tumor samples used for RNA-seq came from these trial participants. No other participant collection countries are explicitly described for this cohort.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE87340",
+        "justification": "The directly described discovery cohort consisted of 27 never-smoker lung adenocarcinoma patients from the authors\u2019 institution, and the study was conducted under Mayo Clinic Institutional Review Board approval, indicating the samples were collected through Mayo Clinic in the United States. The TCGA validation cohort is mentioned, but participant origin is not explicitly stated and therefore is not included.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE229706",
+        "justification": "The study states that all participants were stage I lung adenocarcinoma patients from NYU Langone Health, and that snap-frozen tumor and matching adjacent lung specimens were prospectively collected under an NYULH protocol. NYU Langone Health is in New York, so the directly described cohort originates from the United States.",
+        "sample_geo_location": [
+            "United States"
+        ]
+    },
+    {
+        "data_id": "GSE60052",
+        "justification": "The directly described study cohort consisted of 99 Chinese patients with primary SCLC who were prospectively recruited at Jiangsu Cancer Hospital or Shanghai Chest Hospital, and the GEO summary also states the sequencing was from 99 Chinese patients. Although a separate Caucasian cohort is mentioned, its specimens were commercially purchased and no participant country of collection is explicitly stated.",
+        "sample_geo_location": [
+            "China"
+        ]
+    },
+    {
+        "data_id": "GSE216490",
+        "justification": "The study states that localized/regionally advanced prostate cancer patients were diagnosed at the Instituto Nacional de Cancerolog\u00eda (INC) in Colombia, and FFPE tissues from their radical prostatectomies were used for RNA-seq. Although an external GEO dataset (GSE70770) was used for validation, no participant country of origin for that dataset is explicitly given here.",
+        "sample_geo_location": [
+            "Colombia"
+        ]
+    },
+    {
+        "data_id": "GSE102073",
+        "justification": "The directly studied biospecimens were collected from patients at three contributing study sites: Memorial Sloan Kettering Cancer Center and The Johns Hopkins Hospital (both in the United States), and University Health Network (in Canada). The Methods state that qualifying cases were obtained from these sites and that biospecimens were collected at diagnosis there.",
+        "sample_geo_location": [
+            "United States",
+            "Canada"
+        ]
+    },
+    {
+        "data_id": "GSE224564",
+        "justification": "The human PDAC tumor samples were explicitly stated to be collected at the University of Maryland Medical System in Baltimore and at the University Medical Center G\u00f6ttingen, Germany. The GEO sample metadata also includes UMD cohorts and multiple German cohorts, supporting sample collection from the United States and Germany.",
+        "sample_geo_location": [
+            "United States",
+            "Germany"
+        ]
+    },
+    {
+        "data_id": "GSE227378",
+        "justification": "The study states that it analyzed liver cancer and adjacent normal tissues from 32 primary HCC cases \"among northern Chinese patients,\" and the patients were \"diagnosed with HCC and treated at the Beijing YouAn Hospital.\" This indicates the sample cohort was collected in China.",
+        "sample_geo_location": [
+            "China"
+        ]
+    },
+    {
+        "data_id": "GSE216037",
+        "justification": "The directly described cohort consists of tumor tissue samples from 52 patients with muscle-invasive bladder cancer collected at the First Affiliated Hospital of Guangxi Medical University; this hospital is in Guangxi, China. No explicit participant-origin country is given for the external public datasets, so only the primary collection country is included.",
+        "sample_geo_location": [
+            "China"
+        ]
+    }
+]

@@ -7,15 +7,19 @@ import DatasetBrowser from '../components/DatasetBrowser.svelte';
 // Data imports
 import rawData from '../data/data_summary.json';
 import rawSummaries from '../data/geo_series_summaries.json';
+import rawSampleOrigin from '../data/sample_origin.json';
 import { parseDatasets, parseGeoSeriesSummaries } from '../lib/dataset-schema';
 
 const datasets = parseDatasets(rawData);
 const summariesMap = parseGeoSeriesSummaries(rawSummaries);
+const sampleOriginMap = new Map<string, string[]>(
+	rawSampleOrigin.map((entry) => [entry.data_id, entry.sample_geo_location])
+);
 ---
 
 <Layout>
 	<AppHeader title="Survival Analysis Datasets" />
 	<div class="flex-1 overflow-hidden">
-		<DatasetBrowser datasets={datasets} {summariesMap} client:only="svelte" />
+		<DatasetBrowser datasets={datasets} {summariesMap} {sampleOriginMap} client:only="svelte" />
 	</div>
 </Layout>
