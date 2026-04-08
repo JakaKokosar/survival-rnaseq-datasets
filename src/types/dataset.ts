@@ -33,7 +33,13 @@ export interface GeoSeriesSummary {
 	cancer_group: string;
 }
 
-export interface Dataset {
+export interface RelatedPublication {
+	pmcid: string;
+	citation: string;
+	url: string;
+}
+
+export interface RawDataset {
 	data_id: string;
 	data_url: string;
 	pmcids: string[];
@@ -45,4 +51,8 @@ export interface Dataset {
 	Reproducible: ReproducibleValue;
 	'NCBI-generated data': NcbiDataValue;
 	Notes?: string;
+}
+
+export interface Dataset extends RawDataset {
+	related_publications: RelatedPublication[];
 }

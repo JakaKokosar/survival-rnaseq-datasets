@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Dataset, GeoSeriesSummary } from '../types/dataset';
+import type { GeoSeriesSummary, RawDataset } from '../types/dataset';
 
 const reproducibleValueSchema = z.enum(['YES', 'NO', 'PARTIALLY']);
 const ncbiDataValueSchema = z.enum(['Available', 'Not available']);
@@ -45,8 +45,8 @@ export const datasetSchema = z.object({
 const datasetsSchema = z.array(datasetSchema);
 
 type ParsedDataset = z.infer<typeof datasetSchema>;
-type VerifyDatasetCompatibility = ParsedDataset extends Dataset
-	? Dataset extends ParsedDataset
+type VerifyDatasetCompatibility = ParsedDataset extends RawDataset
+	? RawDataset extends ParsedDataset
 		? true
 		: never
 	: never;
@@ -62,6 +62,13 @@ const geoSeriesSummarySchema = z.object({
 });
 
 const geoSeriesSummariesSchema = z.array(geoSeriesSummarySchema);
+
+const pmcidCitationSchema = z.object({
+	pmcid: z.string(),
+	citation: z.string(),
+});
+
+const pmcidCitationsSchema = z.array(pmcidCitationSchema);
 
 export function parseGeoSeriesSummaries(rawData: unknown): Map<string, GeoSeriesSummary> {
 	const result = geoSeriesSummariesSchema.safeParse(rawData);
@@ -81,7 +88,26 @@ export function parseGeoSeriesSummaries(rawData: unknown): Map<string, GeoSeries
 	return map;
 }
 
-export function parseDatasets(rawData: unknown): Dataset[] {
+export function parsePmcidCitations(rawData: unknown): Map<string, string> {
+	const result = pmcidCitationsSchema.safeParse(rawData);
+	if (!result.success) {
+		const issuePreview = result.error.issues
+			.slice(0, 8)
+			.map((issue) => `${issue.path.join('.')} - ${issue.message}`)
+			.join('; ');
+		throw new Error(
+			`Invalid pmcid_to_citation.json. ${issuePreview}${result.error.issues.length > 8 ? '; ...' : ''}`,
+		);
+	}
+
+	const map = new Map<string, string>();
+	for (const entry of result.data) {
+		map.set(entry.pmcid, entry.citation);
+	}
+	return map;
+}
+
+export function parseDatasets(rawData: unknown): RawDataset[] {
 	const result = datasetsSchema.safeParse(rawData);
 	if (result.success) return result.data;
 

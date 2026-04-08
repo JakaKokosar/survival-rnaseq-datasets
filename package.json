@@ -11,15 +11,15 @@
     "deploy": "astro build && wrangler pages deploy ./dist"
   },
   "dependencies": {
-    "@astrojs/svelte": "^7.2.5",
+    "@astrojs/svelte": "^8.0.4",
     "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.16.11",
+    "astro": "^6.1.4",
     "svelte": "^5.49.2",
     "tailwindcss": "^4.1.18",
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.6",
+    "@astrojs/check": "^0.9.8",
     "@testing-library/svelte": "^5.3.1",
     "jsdom": "^29.0.1",
     "typescript": "^5.9.3",
