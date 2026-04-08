@@ -55,6 +55,7 @@
 <div
 	bind:this={panelElement}
 	id={panelId}
+	data-tour="dataset-table"
 	role="tabpanel"
 	aria-labelledby={panelLabelledBy}
 	tabindex={isDesktop ? undefined : 0}

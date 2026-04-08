@@ -50,7 +50,7 @@
 	{/if}
 {/snippet}
 
-<header class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+<header data-tour="dataset-detail-header" class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
 	<!-- Title row with GEO link -->
 	<div class="flex items-start justify-between gap-3">
 		<h2 class="text-lg font-bold leading-snug text-slate-900">
