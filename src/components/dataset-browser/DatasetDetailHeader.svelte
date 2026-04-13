@@ -116,7 +116,7 @@
 					{#each dataset.data_file_names as filename (filename)}
 						<a
 							href={buildDataFileDownloadUrl(filename)}
-							download
+							download={filename}
 							class="inline-flex items-start gap-1.5 rounded text-sm text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 						>
 							<svg aria-hidden="true" class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
