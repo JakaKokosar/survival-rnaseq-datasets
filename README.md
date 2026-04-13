@@ -112,8 +112,8 @@ The app reads the following public env vars (all build-time; see `.env.example` 
   - Widget API backend origin used for session/fork/patch calls.
   - Example: `https://api.widgets.example.com`
 - `PUBLIC_DATA_FILES_ORIGIN`
-  - Base origin for dataset file download links.
-  - Falls back to `PUBLIC_WIDGET_BACKEND_ORIGIN` when not set.
+  - Optional base origin for dataset file download links.
+  - When unset, download links use `/downloads/<filename>` on the app origin.
 - `PUBLIC_ACCESS_CODE`
   - Optional. Used only for a one-time auth bootstrap redirect on app load.
   - Not appended to widget backend API request URLs.

@@ -75,12 +75,17 @@
 	let sessionError = $state<string | null>(null);
 	const widgetFrontendOrigin = PUBLIC_WIDGET_FRONTEND_ORIGIN;
 	const widgetBackendOrigin = PUBLIC_WIDGET_BACKEND_ORIGIN;
-	const dataFilesOrigin = PUBLIC_DATA_FILES_ORIGIN ?? widgetBackendOrigin;
+	const dataFilesOrigin = PUBLIC_DATA_FILES_ORIGIN;
 	const SESSION_STORAGE_KEY = `orange4_embed_session_${encodeURIComponent(widgetBackendOrigin)}`;
 	const hasWidgetIframes = true;
 
 	function buildDataFileDownloadUrl(filename: string): string {
-		return new URL(`/files/${filename}`, dataFilesOrigin).toString();
+		const encodedFilename = encodeURIComponent(filename);
+		const downloadPath = `/downloads/${encodedFilename}`;
+		if (!dataFilesOrigin) {
+			return downloadPath;
+		}
+		return new URL(downloadPath, dataFilesOrigin).toString();
 	}
 
 	const kmWidgetIframeSrc = $derived(
