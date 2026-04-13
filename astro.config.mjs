@@ -33,11 +33,6 @@ export default defineConfig({
         context: 'client',
         access: 'public',
       }),
-      PUBLIC_DATA_FILES_ORIGIN: envField.string({
-        context: 'client',
-        access: 'public',
-        optional: true,
-      }),
       PUBLIC_ACCESS_CODE: envField.string({
         context: 'client',
         access: 'public',

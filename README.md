@@ -111,9 +111,6 @@ The app reads the following public env vars (all build-time; see `.env.example` 
 - `PUBLIC_WIDGET_BACKEND_ORIGIN`
   - Widget API backend origin used for session/fork/patch calls.
   - Example: `https://api.widgets.example.com`
-- `PUBLIC_DATA_FILES_ORIGIN`
-  - Optional base origin for dataset file download links.
-  - When unset, download links use `/downloads/<filename>` on the app origin.
 - `PUBLIC_ACCESS_CODE`
   - Optional. Used only for a one-time auth bootstrap redirect on app load.
   - Not appended to widget backend API request URLs.
@@ -199,7 +196,7 @@ PATCH calls are debounced by 150ms. When the user scrolls rapidly through the da
 - Embedded iframes are restricted with:
   - `sandbox="allow-scripts allow-same-origin allow-forms"`
   - `referrerpolicy="strict-origin-when-cross-origin"`
-- Download URLs are composed via `new URL(...)` using configured origins.
+- Download URLs point to `/downloads/<filename>` on the app origin.
 
 ## Key paths
 

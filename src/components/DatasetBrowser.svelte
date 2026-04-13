@@ -7,7 +7,6 @@
 		PUBLIC_WIDGET_MASTER_DATASET_WIDGET,
 		PUBLIC_WIDGET_MASTER_KM_WIDGET,
 		PUBLIC_WIDGET_MASTER_DATA_TABLE_WIDGET,
-		PUBLIC_DATA_FILES_ORIGIN,
 		PUBLIC_ACCESS_CODE,
 	} from 'astro:env/client';
 	import type { Dataset, GeoSeriesSummary } from '../types/dataset';
@@ -75,17 +74,12 @@
 	let sessionError = $state<string | null>(null);
 	const widgetFrontendOrigin = PUBLIC_WIDGET_FRONTEND_ORIGIN;
 	const widgetBackendOrigin = PUBLIC_WIDGET_BACKEND_ORIGIN;
-	const dataFilesOrigin = PUBLIC_DATA_FILES_ORIGIN;
 	const SESSION_STORAGE_KEY = `orange4_embed_session_${encodeURIComponent(widgetBackendOrigin)}`;
 	const hasWidgetIframes = true;
 
 	function buildDataFileDownloadUrl(filename: string): string {
 		const encodedFilename = encodeURIComponent(filename);
-		const downloadPath = `/downloads/${encodedFilename}`;
-		if (!dataFilesOrigin) {
-			return downloadPath;
-		}
-		return new URL(downloadPath, dataFilesOrigin).toString();
+		return `/downloads/${encodedFilename}`;
 	}
 
 	const kmWidgetIframeSrc = $derived(

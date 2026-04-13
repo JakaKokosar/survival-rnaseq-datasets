@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { DriveStep } from 'driver.js';
 
 	type DriverLoader = () => Promise<Pick<typeof import('driver.js'), 'driver'>>;
