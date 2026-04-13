@@ -483,6 +483,7 @@
 		<button
 			bind:this={detailsTabEl}
 			id={mobileDetailsTabId}
+			data-tour="details-tab"
 			role="tab"
 			aria-selected={mobileTab === 'details'}
 			aria-controls={detailsPanelId}
@@ -560,6 +561,7 @@
 		<div
 			bind:this={detailsPanelEl}
 			id={detailsPanelId}
+			data-tour="dataset-details"
 			role="tabpanel"
 			aria-labelledby={mobileDetailsTabId}
 			tabindex={isDesktop ? undefined : 0}

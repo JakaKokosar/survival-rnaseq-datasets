@@ -14,6 +14,7 @@
     "@astrojs/svelte": "^8.0.4",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^6.1.4",
+    "driver.js": "^1.4.0",
     "svelte": "^5.49.2",
     "tailwindcss": "^4.1.18",
     "zod": "^4.1.11"
