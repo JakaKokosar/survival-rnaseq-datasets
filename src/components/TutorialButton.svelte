@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'driver.js/dist/driver.css';
 	import type { DriveStep } from 'driver.js';
 
 	type DriverLoader = () => Promise<Pick<typeof import('driver.js'), 'driver'>>;
@@ -70,7 +69,15 @@
 		},
 	];
 
-	let { loadDriver = () => import('driver.js') }: Props = $props();
+	let {
+		loadDriver = async () => {
+			const [driverModule] = await Promise.all([
+				import('driver.js'),
+				import('driver.js/dist/driver.css'),
+			]);
+			return driverModule;
+		},
+	}: Props = $props();
 	let showStartDialog = $state(false);
 	let showPreview = $state(false);
 
