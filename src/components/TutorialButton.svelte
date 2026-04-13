@@ -14,6 +14,20 @@
 		loadDriver?: DriverLoader;
 	}
 
+	const TUTORIAL_NEVER_SHOW_KEY = 'datasetBrowserTutorialNeverShow';
+
+	function getTutorialStorage(): Pick<Storage, 'getItem' | 'setItem'> | null {
+		const storage = window.localStorage;
+		if (
+			storage &&
+			typeof storage.getItem === 'function' &&
+			typeof storage.setItem === 'function'
+		) {
+			return storage;
+		}
+		return null;
+	}
+
 	const tutorialStepDefinitions: TutorialStepDefinition[] = [
 		{
 			id: 'tutorial-button',
@@ -31,7 +45,7 @@
 			selector: '[data-tour="dataset-table"]',
 			popover: {
 				title: 'Dataset list',
-				description: 'Browse datasets here, sort the table, and select a row to inspect it in more detail.',
+				description: 'Browse datasets here in the list view and select a row to inspect it in more detail.',
 				side: 'right',
 			},
 			enabled: true,
@@ -53,6 +67,72 @@
 				title: 'Dataset summary',
 				description:
 					'This section shows the selected dataset summary, key metadata, related publications, and download links.',
+				side: 'left',
+			},
+			enabled: true,
+		},
+		{
+			id: 'km-analysis',
+			selector: '[data-tour="km-analysis"]',
+			popover: {
+				title: 'Kaplan-Meier Analysis',
+				description:
+					'This panel supports exploratory survival analysis for the selected GSE dataset. Use it to examine how endpoint choice and gene-expression stratification affect the estimated survival curves.',
+				side: 'left',
+			},
+			enabled: true,
+		},
+		{
+			id: 'km-survival-endpoints',
+			selector: '[data-tour="km-survival-endpoints"]',
+			popover: {
+				title: 'Survival Endpoint',
+				description:
+					'Choose the clinical endpoint used as the time-to-event outcome. Each option corresponds to an endpoint definition detected from the dataset metadata.',
+				side: 'right',
+			},
+			enabled: true,
+		},
+		{
+			id: 'km-candidate-genes',
+			selector: '[data-tour="km-candidate-genes"]',
+			popover: {
+				title: 'Candidate Genes',
+				description:
+					'Choose a gene for expression-based stratification. This list contains the top 100 genes ranked by univariate Cox regression, and samples are divided into low- and high-expression groups at the median.',
+				side: 'right',
+			},
+			enabled: true,
+		},
+		{
+			id: 'km-plot',
+			selector: '[data-tour="km-plot"]',
+			popover: {
+				title: 'Survival Curves',
+				description:
+					'This view compares the estimated survival trajectories of the two expression-defined groups for the selected endpoint and gene. Separation between curves suggests an association between expression and outcome.',
+				side: 'left',
+			},
+			enabled: true,
+		},
+		{
+			id: 'sample-data-viewer',
+			selector: '[data-tour="sample-data-viewer"]',
+			popover: {
+				title: 'Sample data viewer',
+				description:
+					'This viewer shows the sample-level table behind the selected dataset so you can inspect rows, variables, and the data used in the analysis widgets.',
+				side: 'top',
+			},
+			enabled: true,
+		},
+		{
+			id: 'prepared-datasets',
+			selector: '[data-tour="prepared-datasets"]',
+			popover: {
+				title: 'Prepared Datasets',
+				description:
+					'If you want to continue the analysis outside the browser, use these prepared dataset files.',
 				side: 'left',
 			},
 			enabled: true,
@@ -80,6 +160,13 @@
 	}: Props = $props();
 	let showStartDialog = $state(false);
 	let showPreview = $state(false);
+
+	onMount(() => {
+		const storage = getTutorialStorage();
+		if (storage?.getItem(TUTORIAL_NEVER_SHOW_KEY) !== 'true') {
+			showStartDialog = true;
+		}
+	});
 
 	function isTourTargetVisible(element: Element | null): element is HTMLElement {
 		if (!(element instanceof HTMLElement)) {
@@ -123,6 +210,11 @@
 	}
 
 	function closeTutorialDialog(): void {
+		showStartDialog = false;
+	}
+
+	function neverShowTutorialAgain(): void {
+		getTutorialStorage()?.setItem(TUTORIAL_NEVER_SHOW_KEY, 'true');
 		showStartDialog = false;
 	}
 
@@ -176,6 +268,13 @@
 					Do you want to continue with the tutorial?
 				</p>
 				<div class="mt-5 flex items-center justify-end gap-2">
+					<button
+						type="button"
+						onclick={neverShowTutorialAgain}
+						class="rounded border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+					>
+						Never Show Again
+					</button>
 					<button
 						type="button"
 						onclick={closeTutorialDialog}

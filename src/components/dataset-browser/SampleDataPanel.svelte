@@ -26,7 +26,7 @@
 	}
 </script>
 
-<section>
+<section data-tour="sample-data-viewer">
 	<button
 		onclick={onToggle}
 		aria-expanded={isOpen}

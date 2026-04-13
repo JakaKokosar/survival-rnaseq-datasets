@@ -119,7 +119,7 @@
 
 <svelte:window onresize={updateCandidateGenesScrollAffordance} />
 
-<section>
+<section data-tour="km-analysis">
 	<button
 		onclick={onToggleOpen}
 		aria-expanded={isOpen}
@@ -137,7 +137,7 @@
 			<div class="relative grid bg-white md:h-[800px] md:grid-cols-[340px_minmax(0,1fr)]">
 				<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
 					{#if endpoints.length > 0 && getEndpointKey && onSelectEndpoint}
-						<div class="mb-3 pb-3 border-b border-slate-200/80">
+						<div data-tour="km-survival-endpoints" class="mb-3 pb-3 border-b border-slate-200/80">
 							<p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Survival Endpoint</p>
 							<div class="flex flex-col">
 								{#each endpoints as endpoint (getEndpointKey(endpoint))}
@@ -156,27 +156,28 @@
 							</div>
 						</div>
 					{/if}
-					<div class="flex items-center gap-1.5">
-						<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Genes</p>
-						<span class="group relative inline-flex">
-							<button
-								type="button"
-								class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-50"
-								aria-label="How genes are selected"
-								aria-describedby="candidate-genes-help"
-							>
-								i
-							</button>
-							<span
-								id="candidate-genes-help"
-								role="tooltip"
-								class="pointer-events-none absolute left-0 top-full z-10 mt-2 w-64 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
-							>
-								Genes are selected by filtering with univariate Cox regression analysis. The plot shows two patient groups split by the median value of gene expression.
+					<div data-tour="km-candidate-genes" class="flex min-h-0 flex-col md:flex-1">
+						<div class="flex items-center gap-1.5">
+							<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Genes</p>
+							<span class="group relative inline-flex">
+								<button
+									type="button"
+									class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-50"
+									aria-label="How genes are selected"
+									aria-describedby="candidate-genes-help"
+								>
+									i
+								</button>
+								<span
+									id="candidate-genes-help"
+									role="tooltip"
+									class="pointer-events-none absolute left-0 top-full z-10 mt-2 w-64 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+								>
+									Candidate genes represent the top 100 genes ranked by univariate Cox regression. For the selected gene, samples are stratified at the median expression into low- and high-expression groups.
+								</span>
 							</span>
-						</span>
-					</div>
-					<div class="mt-2 flex min-h-0 max-h-60 flex-col md:max-h-none md:flex-1">
+						</div>
+						<div class="mt-2 flex min-h-0 max-h-60 flex-col md:max-h-none md:flex-1">
 						<div class="relative">
 							<svg class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -236,19 +237,22 @@
 								<p class="px-3 py-3 text-sm italic text-slate-400">No genes available for this dataset.</p>
 							{/if}
 						</div>
+						</div>
 					</div>
 				</aside>
-				<iframe
-					src={kmWidgetIframeSrc}
-					onload={handleKmWidgetLoad}
-					onerror={handleKmWidgetError}
-					sandbox="allow-scripts allow-same-origin allow-forms"
-					referrerpolicy="strict-origin-when-cross-origin"
-					class="w-full overflow-hidden border-0 {kmWidgetHasLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity"
-					style="height: 800px; min-height: 800px;"
-					title="Kaplan Meier Plot"
-					loading="lazy"
-				></iframe>
+				<div data-tour="km-plot" class="relative">
+					<iframe
+						src={kmWidgetIframeSrc}
+						onload={handleKmWidgetLoad}
+						onerror={handleKmWidgetError}
+						sandbox="allow-scripts allow-same-origin allow-forms"
+						referrerpolicy="strict-origin-when-cross-origin"
+						class="w-full overflow-hidden border-0 {kmWidgetHasLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity"
+						style="height: 800px; min-height: 800px;"
+						title="Kaplan Meier Plot"
+						loading="lazy"
+					></iframe>
+				</div>
 				{#if !kmWidgetHasLoaded && !kmWidgetLoadError}
 					<div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/80 text-sm text-slate-600" role="status" aria-live="polite">
 						Loading Kaplan-Meier plot…
@@ -266,4 +270,3 @@
 		</div>
 	{/if}
 </section>
-
