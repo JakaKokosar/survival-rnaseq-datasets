@@ -61,6 +61,7 @@
 	let isSampleDataViewerOpen = $state(true);
 	let selectedKMPlotEndpointKeyOverride: string | null = $state(null);
 	let selectedCandidateGeneOverride: string | null = $state(null);
+	const DEFAULT_DATASET_ID = 'GSE224564';
 
 	const WIDGET_CONFIG = {
 		masterWs: PUBLIC_WIDGET_MASTER_WS,
@@ -155,6 +156,14 @@
 				selectedId = urlParams.selected;
 				const idx = sortedDatasets.findIndex((item) => item.data_id === urlParams.selected);
 				if (idx !== -1) focusedIndex = idx;
+			}
+		} else {
+			const defaultDataset = datasets.find((item) => item.data_id === DEFAULT_DATASET_ID) ?? datasets[0];
+			if (defaultDataset) {
+				selectedId = defaultDataset.data_id;
+				const idx = sortedDatasets.findIndex((item) => item.data_id === defaultDataset.data_id);
+				if (idx !== -1) focusedIndex = idx;
+				updateUrlParams(selectedId, sortColumn, sortDirection);
 			}
 		}
 

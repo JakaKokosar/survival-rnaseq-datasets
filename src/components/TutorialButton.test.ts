@@ -6,10 +6,30 @@ import TutorialButton from './TutorialButton.svelte';
 describe('TutorialButton', () => {
 	const driveMock = vi.fn();
 	const driverMock = vi.fn(() => ({ drive: driveMock }));
+	const localStorageMock = (() => {
+		let store = new Map<string, string>();
+		return {
+			getItem: vi.fn((key: string) => store.get(key) ?? null),
+			setItem: vi.fn((key: string, value: string) => {
+				store.set(key, value);
+			}),
+			clear: vi.fn(() => {
+				store = new Map<string, string>();
+			}),
+		};
+	})();
+
+	Object.defineProperty(window, 'localStorage', {
+		value: localStorageMock,
+		configurable: true,
+	});
 
 	afterEach(() => {
 		cleanup();
 		document.body.innerHTML = '';
+		localStorageMock.clear();
+		localStorageMock.getItem.mockClear();
+		localStorageMock.setItem.mockClear();
 		driverMock.mockClear();
 		driveMock.mockClear();
 	});
@@ -115,5 +135,32 @@ describe('TutorialButton', () => {
 			screen.getByText('This walkthrough will highlight the main parts of the dataset browser.'),
 		).toBeTruthy();
 		expect(screen.queryByText(/reset all values/i)).toBeNull();
+	});
+
+	it('opens the tutorial dialog by default until dismissed permanently', async () => {
+		render(TutorialButton, {
+			props: {
+				loadDriver: async () => ({ driver: driverMock }),
+			},
+		});
+
+		expect(screen.getByRole('dialog', { name: 'Start Tutorial?' })).toBeTruthy();
+
+		await fireEvent.click(screen.getByRole('button', { name: 'Never Show Again' }));
+
+		expect(screen.queryByRole('dialog', { name: 'Start Tutorial?' })).toBeNull();
+		expect(localStorageMock.getItem('datasetBrowserTutorialNeverShow')).toBe('true');
+	});
+
+	it('does not auto-open the tutorial dialog after opting out', async () => {
+		localStorageMock.setItem('datasetBrowserTutorialNeverShow', 'true');
+
+		render(TutorialButton, {
+			props: {
+				loadDriver: async () => ({ driver: driverMock }),
+			},
+		});
+
+		expect(screen.queryByRole('dialog', { name: 'Start Tutorial?' })).toBeNull();
 	});
 });

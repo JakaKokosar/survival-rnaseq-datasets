@@ -112,7 +112,7 @@
 					</dd>
 				</dl>
 				<div class="hidden w-px self-stretch bg-slate-200 md:block"></div>
-				<div class="flex flex-col gap-2 md:min-w-0">
+				<div data-tour="prepared-datasets" class="flex flex-col gap-2 md:min-w-0">
 					{#each dataset.data_file_names as filename (filename)}
 						<a
 							href={buildDataFileDownloadUrl(filename)}
