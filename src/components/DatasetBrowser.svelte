@@ -1,14 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		PUBLIC_WIDGET_FRONTEND_ORIGIN,
-		PUBLIC_WIDGET_BACKEND_ORIGIN,
-		PUBLIC_WIDGET_MASTER_WS,
-		PUBLIC_WIDGET_MASTER_DATASET_WIDGET,
-		PUBLIC_WIDGET_MASTER_KM_WIDGET,
-		PUBLIC_WIDGET_MASTER_DATA_TABLE_WIDGET,
-		PUBLIC_ACCESS_CODE,
-	} from 'astro:env/client';
 	import type { Dataset, GeoSeriesSummary } from '../types/dataset';
 	import {
 		clampSplitRatio,
@@ -20,14 +11,12 @@
 		sortDatasets,
 		updateUrlParams,
 	} from '../lib/dataset-utils';
-	import { DatasetBrowserSyncController } from '../lib/dataset-browser-sync';
 	import {
 		getCompleteKMPlotEndpoints,
 		getDefaultEndpointKey,
 		getKMPlotEndpointKey,
 		isCompleteKMPlotEndpoint,
 	} from '../lib/dataset-selection';
-	import { ensureOrangeAuth, resetOrangeAuth } from '../lib/orange-auth';
 	import DatasetTable from './dataset-browser/DatasetTable.svelte';
 	import DatasetDetailHeader from './dataset-browser/DatasetDetailHeader.svelte';
 	import EndpointsPanel from './dataset-browser/EndpointsPanel.svelte';
@@ -58,42 +47,12 @@
 	let detailTab: 'summary' | 'endpoints' = $state('summary');
 	let isKmPlotOpen = $state(true);
 	let isSampleDataViewerOpen = $state(true);
-	let selectedKMPlotEndpointKeyOverride: string | null = $state(null);
-	let selectedCandidateGeneOverride: string | null = $state(null);
 	const DEFAULT_DATASET_ID = 'GSE224564';
-
-	const WIDGET_CONFIG = {
-		masterWs: PUBLIC_WIDGET_MASTER_WS,
-		masterDatasetWidget: PUBLIC_WIDGET_MASTER_DATASET_WIDGET,
-		masterKmWidget: PUBLIC_WIDGET_MASTER_KM_WIDGET,
-		masterDataTableWidget: PUBLIC_WIDGET_MASTER_DATA_TABLE_WIDGET,
-	};
-	const SYNC_DEBOUNCE_MS = 150;
-	let sessionId = $state<string | null>(null);
-	let sessionLoading = $state(true);
-	let sessionError = $state<string | null>(null);
-	const widgetFrontendOrigin = PUBLIC_WIDGET_FRONTEND_ORIGIN;
-	const widgetBackendOrigin = PUBLIC_WIDGET_BACKEND_ORIGIN;
-	const SESSION_STORAGE_KEY = `orange4_embed_session_${encodeURIComponent(widgetBackendOrigin)}`;
-	const hasWidgetIframes = true;
 
 	function buildDataFileDownloadUrl(filename: string): string {
 		const encodedFilename = encodeURIComponent(filename);
 		return `/downloads/${encodedFilename}`;
 	}
-
-	const kmWidgetIframeSrc = $derived(
-		sessionId
-			? `${widgetFrontendOrigin}/embed/${WIDGET_CONFIG.masterWs}/${WIDGET_CONFIG.masterKmWidget}/${sessionId}?hidden=footer,display/show-censoring-ticks,sidebar,header`
-			: '',
-	);
-	const dataTableWidgetIframeSrc = $derived(
-		sessionId
-			? `${widgetFrontendOrigin}/embed/${WIDGET_CONFIG.masterWs}/${WIDGET_CONFIG.masterDataTableWidget}/${sessionId}?hidden=footer,header`
-			: '',
-	);
-
-	let syncController = $state<DatasetBrowserSyncController | null>(null);
 
 	let mainEl: HTMLElement;
 	let listTabEl: HTMLButtonElement;
@@ -116,25 +75,6 @@
 		selectedId ? datasets.find((dataset) => dataset.data_id === selectedId) ?? null : null,
 	);
 
-	let kmPlotEndpointsForSelectedDataset = $derived.by(() => getCompleteKMPlotEndpoints(selectedDataset));
-	let candidateGenesForSelectedDataset = $derived.by(() => selectedDataset?.candidate_genes ?? []);
-	let activeKMPlotEndpointKey = $derived.by(() => {
-		const completeEndpoints = kmPlotEndpointsForSelectedDataset;
-		const selected = selectedKMPlotEndpointKeyOverride;
-		if (selected && completeEndpoints.some((endpoint) => getKMPlotEndpointKey(endpoint) === selected)) {
-			return selected;
-		}
-		return getDefaultEndpointKey(selectedDataset);
-	});
-	let activeCandidateGene = $derived.by(() => {
-		const genes = candidateGenesForSelectedDataset;
-		if (genes.length === 0) return null;
-		if (selectedCandidateGeneOverride && genes.includes(selectedCandidateGeneOverride)) {
-			return selectedCandidateGeneOverride;
-		}
-		return genes[0] ?? null;
-	});
-
 	onMount(() => {
 		const savedRatio = localStorage.getItem('datasetBrowserSplitRatio');
 		if (savedRatio !== null) {
@@ -144,7 +84,6 @@
 		isDesktop = window.innerWidth >= 1024;
 
 		const urlParams = readUrlParams();
-		syncController = new DatasetBrowserSyncController(widgetBackendOrigin, datasets);
 		if (urlParams.sort) {
 			sortColumn = urlParams.sort;
 			sortDirection = urlParams.direction;
@@ -165,57 +104,6 @@
 				updateUrlParams(selectedId, sortColumn, sortDirection);
 			}
 		}
-
-		async function initWidgetApi() {
-			try {
-				if (!syncController) return;
-				sessionError = null;
-
-				await ensureOrangeAuth({
-					backendOrigin: widgetBackendOrigin,
-					accessCode: PUBLIC_ACCESS_CODE,
-				});
-
-				const storedSessionId = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(SESSION_STORAGE_KEY) : null;
-				const config = {
-					masterWs: WIDGET_CONFIG.masterWs,
-					masterDatasetWidget: WIDGET_CONFIG.masterDatasetWidget,
-					masterKmWidget: WIDGET_CONFIG.masterKmWidget,
-				};
-
-				if (storedSessionId) {
-					try {
-						sessionId = await syncController.initWithSessionId(storedSessionId, config);
-					} catch {
-						if (typeof sessionStorage !== 'undefined') {
-							sessionStorage.removeItem(SESSION_STORAGE_KEY);
-						}
-						const newSessionId = await syncController.initSession(config);
-						sessionId = newSessionId;
-						if (typeof sessionStorage !== 'undefined') {
-							sessionStorage.setItem(SESSION_STORAGE_KEY, newSessionId);
-						}
-					}
-				} else {
-					const newSessionId = await syncController.initSession(config);
-					sessionId = newSessionId;
-					if (typeof sessionStorage !== 'undefined') {
-						sessionStorage.setItem(SESSION_STORAGE_KEY, newSessionId);
-					}
-				}
-			} catch (error) {
-				const message = (error as Error).message;
-				if (/\bHTTP (401|403)\b/.test(message)) {
-					resetOrangeAuth(widgetBackendOrigin);
-				}
-				sessionError = message;
-				console.warn('[Widget] Init error:', error);
-			} finally {
-				sessionLoading = false;
-			}
-		}
-
-		void initWidgetApi();
 	});
 
 	function selectDataset(id: string): void {
@@ -412,52 +300,6 @@
 		requestAnimationFrame(() => activePanel.focus());
 	});
 
-	function handleKMPlotEndpointSelect(endpointKey: string): void {
-		const hasEndpoint = kmPlotEndpointsForSelectedDataset.some(
-			(endpoint) => getKMPlotEndpointKey(endpoint) === endpointKey,
-		);
-		if (!hasEndpoint) return;
-		selectedKMPlotEndpointKeyOverride = endpointKey;
-	}
-
-	function handleCandidateGeneSelect(gene: string): void {
-		selectedCandidateGeneOverride = gene;
-	}
-
-	let prevDatasetId: string | null = null;
-
-	$effect(() => {
-		const datasetId = selectedDataset?.data_id ?? null;
-		const endpointKey = activeKMPlotEndpointKey;
-		if (!datasetId || !syncController) {
-			prevDatasetId = datasetId;
-			return;
-		}
-
-		const t = setTimeout(() => {
-			const datasetChanged = datasetId !== prevDatasetId;
-			prevDatasetId = datasetId;
-			if (datasetChanged) {
-				void syncController!.patchWorkflow(datasetId, endpointKey);
-			} else if (endpointKey) {
-				void syncController!.patchKmEndpoint(datasetId, endpointKey);
-			}
-		}, SYNC_DEBOUNCE_MS);
-
-		return () => clearTimeout(t);
-	});
-
-	$effect(() => {
-		candidateGenesForSelectedDataset.length;
-		const selectedGene = activeCandidateGene;
-		if (!selectedGene || !syncController) return;
-
-		const t = setTimeout(() => {
-			void syncController!.patchGroupVariable(selectedGene);
-		}, SYNC_DEBOUNCE_MS);
-
-		return () => clearTimeout(t);
-	});
 </script>
 
 <svelte:window onresize={() => (isDesktop = window.innerWidth >= 1024)} />
@@ -619,36 +461,17 @@
 					<div class="space-y-6">
 						<DatasetDetailHeader dataset={selectedDataset} {buildDataFileDownloadUrl} {summariesMap} />
 
-						{#if hasWidgetIframes}
-							{#if sessionLoading}
-								<p class="text-sm text-slate-500" role="status">
-									Connecting to widget backend…
-								</p>
-							{:else if sessionError}
-								<p role="alert" class="rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-									Could not connect to widget backend: {sessionError}. Widgets are unavailable.
-								</p>
-							{:else if sessionId}
-								<KmPlotPanel
-									isOpen={isKmPlotOpen}
-									kmWidgetIframeSrc={kmWidgetIframeSrc}
-									candidateGenes={candidateGenesForSelectedDataset}
-									selectedCandidateGene={activeCandidateGene}
-									onToggleOpen={() => (isKmPlotOpen = !isKmPlotOpen)}
-									onSelectGene={handleCandidateGeneSelect}
-									endpoints={kmPlotEndpointsForSelectedDataset}
-									activeEndpointKey={activeKMPlotEndpointKey}
-									onSelectEndpoint={handleKMPlotEndpointSelect}
-									getEndpointKey={getKMPlotEndpointKey}
-								/>
+						<KmPlotPanel
+							isOpen={isKmPlotOpen}
+							onToggleOpen={() => (isKmPlotOpen = !isKmPlotOpen)}
+							datasetId={selectedDataset?.data_id ?? null}
+							endpoints={getCompleteKMPlotEndpoints(selectedDataset)}
+						/>
 
-								<SampleDataPanel
-									isOpen={isSampleDataViewerOpen}
-									iframeSrc={dataTableWidgetIframeSrc}
-									onToggle={() => (isSampleDataViewerOpen = !isSampleDataViewerOpen)}
-								/>
-							{/if}
-						{/if}
+						<SampleDataPanel
+							isOpen={isSampleDataViewerOpen}
+							onToggle={() => (isSampleDataViewerOpen = !isSampleDataViewerOpen)}
+						/>
 					</div>
 				</div>
 

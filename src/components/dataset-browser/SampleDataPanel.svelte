@@ -1,29 +1,10 @@
 <script lang="ts">
 	interface Props {
 		isOpen: boolean;
-		iframeSrc: string;
 		onToggle: () => void;
 	}
 
-	let { isOpen, iframeSrc, onToggle }: Props = $props();
-	let iframeHasLoaded = $state(false);
-	let iframeLoadError = $state<string | null>(null);
-
-	$effect(() => {
-		iframeSrc;
-		iframeHasLoaded = false;
-		iframeLoadError = null;
-	});
-
-	function handleIframeLoad(): void {
-		iframeHasLoaded = true;
-		iframeLoadError = null;
-	}
-
-	function handleIframeError(): void {
-		iframeHasLoaded = false;
-		iframeLoadError = 'The sample data viewer failed to load. Try selecting another dataset or reloading the page.';
-	}
+	let { isOpen, onToggle }: Props = $props();
 </script>
 
 <section data-tour="sample-data-viewer">
@@ -46,29 +27,7 @@
 	{#if isOpen}
 		<div id="sample-data-panel-content">
 			<div class="relative overflow-hidden rounded-lg border border-slate-200 shadow-sm">
-				<iframe
-					src={iframeSrc}
-					onload={handleIframeLoad}
-					onerror={handleIframeError}
-					sandbox="allow-scripts allow-same-origin allow-forms"
-					referrerpolicy="strict-origin-when-cross-origin"
-					class="w-full overflow-hidden border-0 {iframeHasLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity"
-					style="height: 560px; min-height: 560px;"
-					title="Data Table Widget"
-					loading="lazy"
-				></iframe>
-				{#if !iframeHasLoaded && !iframeLoadError}
-					<div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/80 text-sm text-slate-600" role="status" aria-live="polite">
-						Loading sample data viewer…
-					</div>
-				{/if}
-				{#if iframeLoadError}
-					<div class="absolute inset-0 flex items-center justify-center bg-white p-6">
-						<p role="alert" class="max-w-md rounded border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
-							{iframeLoadError}
-						</p>
-					</div>
-				{/if}
+				<div class="h-[560px] min-h-[560px] w-full bg-white" aria-label="Sample data viewer placeholder"></div>
 			</div>
 		</div>
 	{/if}

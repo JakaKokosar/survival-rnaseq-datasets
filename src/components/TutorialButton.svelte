@@ -78,30 +78,8 @@
 			popover: {
 				title: 'Kaplan-Meier Analysis',
 				description:
-					'This panel supports exploratory survival analysis for the selected GSE dataset. Use it to examine how endpoint choice and gene-expression stratification affect the estimated survival curves.',
+					'This panel is reserved for exploratory survival analysis for the selected GSE dataset.',
 				side: 'left',
-			},
-			enabled: true,
-		},
-		{
-			id: 'km-survival-endpoints',
-			selector: '[data-tour="km-survival-endpoints"]',
-			popover: {
-				title: 'Survival Endpoint',
-				description:
-					'Choose the clinical endpoint used as the time-to-event outcome. Each option corresponds to an endpoint definition detected from the dataset metadata.',
-				side: 'right',
-			},
-			enabled: true,
-		},
-		{
-			id: 'km-candidate-genes',
-			selector: '[data-tour="km-candidate-genes"]',
-			popover: {
-				title: 'Candidate Genes',
-				description:
-					'Choose a gene for expression-based stratification. This list contains the top 100 genes ranked by univariate Cox regression, and samples are divided into low- and high-expression groups at the median.',
-				side: 'right',
 			},
 			enabled: true,
 		},
@@ -110,8 +88,7 @@
 			selector: '[data-tour="km-plot"]',
 			popover: {
 				title: 'Survival Curves',
-				description:
-					'This view compares the estimated survival trajectories of the two expression-defined groups for the selected endpoint and gene. Separation between curves suggests an association between expression and outcome.',
+				description: 'This area will display survival curves when the plot is implemented.',
 				side: 'left',
 			},
 			enabled: true,

@@ -12,6 +12,8 @@ import '../styles/global.css'
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Survival Analysis Datasets</title>
+		<link rel="stylesheet" href="https://pyscript.net/releases/2026.3.1/core.css" />
+		<script type="module" src="https://pyscript.net/releases/2026.3.1/core.js"></script>
 	</head>
 	<body class="flex h-screen flex-col overflow-hidden">
 		<!-- 
@@ -25,5 +27,6 @@ import '../styles/global.css'
 			Skip to main content
 		</a>
 		<slot />
+		<script type="py" src="/py/km.py" config='{"packages":["lifelines"]}'></script>
 	</body>
 </html>

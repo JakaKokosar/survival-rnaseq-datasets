@@ -1,272 +1,754 @@
 <script lang="ts">
-	import { getEndpointFullName } from '../../lib/dataset-utils';
+	import { untrack } from 'svelte';
+	import { computeKm, getKmEnv, kmReady, type KmEnv, type KmPoint, type KmSeries } from '../../lib/kmPython';
 	import type { SurvivalEndpoint } from '../../types/dataset';
-	import geneDescriptions from '../../data/gene_symbol_descriptions.json';
-
-	const geneDescriptionMap: Record<string, string> = geneDescriptions;
 
 	interface Props {
 		isOpen: boolean;
-		kmWidgetIframeSrc: string;
-		candidateGenes: string[];
-		selectedCandidateGene: string | null;
 		onToggleOpen: () => void;
-		onSelectGene: (gene: string) => void;
-		endpoints?: SurvivalEndpoint[];
-		activeEndpointKey?: string | null;
-		onSelectEndpoint?: (endpointKey: string) => void;
-		getEndpointKey?: (endpoint: SurvivalEndpoint) => string;
+		datasetId: string | null;
+		endpoints: SurvivalEndpoint[];
 	}
 
-	let {
-		isOpen,
-		kmWidgetIframeSrc,
-		candidateGenes,
-		selectedCandidateGene,
-		onToggleOpen,
-		onSelectGene,
-		endpoints = [],
-		activeEndpointKey = null,
-		onSelectEndpoint,
-		getEndpointKey,
-	}: Props = $props();
+	const NON_GROUP_CLINICAL_COLUMNS = new Set(['tumor.response', 'recist']);
+	const chartMargin = { top: 38, right: 30, bottom: 64, left: 66 };
 
-	let geneFilter = $state('');
-	let filteredGenes = $derived(
-		geneFilter.trim() === ''
-			? candidateGenes
-			: candidateGenes.filter((g) => {
-					const q = geneFilter.trim().toLowerCase();
-					return g.toLowerCase().includes(q) ||
-						(geneDescriptionMap[g]?.toLowerCase().includes(q) ?? false);
-				})
-	);
+	let { isOpen, onToggleOpen, datasetId, endpoints }: Props = $props();
+	/** Sized by ResizeObserver on the chart mount — chart fills box (no fixed aspect squeeze). */
+	let plotBoxW = $state(680);
+	let plotBoxH = $state(560);
 
-	function handleGeneSelect(gene: string): void {
-		onSelectGene(gene);
-	}
+	let chart = $derived({
+		width: Math.max(300, plotBoxW),
+		height: Math.max(260, plotBoxH),
+		margin: chartMargin,
+	});
+	let plotWidth = $derived(chart.width - chart.margin.left - chart.margin.right);
+	let plotHeight = $derived(chart.height - chart.margin.top - chart.margin.bottom);
 
-	let candidateGenesListEl = $state<HTMLUListElement | null>(null);
-	let canScrollCandidateGenesUp = $state(false);
-	let canScrollCandidateGenesDown = $state(false);
-	let kmWidgetHasLoaded = $state(false);
-	let kmWidgetLoadError = $state<string | null>(null);
-
-	function updateCandidateGenesScrollAffordance(): void {
-		if (!candidateGenesListEl) {
-			canScrollCandidateGenesUp = false;
-			canScrollCandidateGenesDown = false;
-			return;
-		}
-
-		const { scrollTop, scrollHeight, clientHeight } = candidateGenesListEl;
-		const maxScrollTop = Math.max(0, scrollHeight - clientHeight);
-		canScrollCandidateGenesUp = scrollTop > 2;
-		canScrollCandidateGenesDown = maxScrollTop - scrollTop > 2;
-	}
-
-	function scrollToSelectedGene(): void {
-		if (!candidateGenesListEl || !selectedCandidateGene) return;
-		const selected = candidateGenesListEl.querySelector('[aria-pressed="true"]');
-		if (selected) {
-			selected.scrollIntoView({ block: 'center' });
-		}
-	}
-
-	let prevGeneFilter = '';
+	let endpointIndex = $state(0);
+	let groupColumn = $state('(None)');
+	let lastDatasetId: string | null = null;
 	$effect(() => {
-		const current = geneFilter.trim();
-		const wasFiltering = prevGeneFilter !== '';
-		const isNowEmpty = current === '';
-		prevGeneFilter = current;
-
-		if (wasFiltering && isNowEmpty) {
-			requestAnimationFrame(() => {
-				scrollToSelectedGene();
-				updateCandidateGenesScrollAffordance();
+		if (datasetId !== lastDatasetId) {
+			lastDatasetId = datasetId;
+			untrack(() => {
+				endpointIndex = 0;
+				groupColumn = '(None)';
 			});
 		}
 	});
 
-	$effect(() => {
-		candidateGenes.length;
-		filteredGenes.length;
-		selectedCandidateGene;
-		requestAnimationFrame(() => updateCandidateGenesScrollAffordance());
+	let endpoint = $derived(endpoints[endpointIndex] ?? null);
+	let endpointLabel = $derived(endpoint?.abbrv ?? '');
+	let excludedKeys = $derived.by(() => {
+		const set = new Set<string>(NON_GROUP_CLINICAL_COLUMNS);
+		for (const ep of endpoints) {
+			if (ep.time_var?.var_name) set.add(ep.time_var.var_name);
+			if (ep.event_var?.var_name) set.add(ep.event_var.var_name);
+		}
+		return set;
 	});
+	let showConfidenceIntervals = $state(true);
+	let showMedianSurvival = $state(true);
+	let showCensoringTicks = $state(true);
 
-	$effect(() => {
-		candidateGenes;
-		geneFilter = '';
-	});
+	let pyReady = $state(false);
+	let pyEnv = $state<KmEnv | null>(null);
+	let envOpen = $state(false);
+	let computing = $state(false);
+	let pyError = $state<string | null>(null);
+	let series = $state<KmSeries[]>([]);
+	let numericGroupOptions = $state<string[]>([]);
+	let maxTime = $state(1);
+	let xTicks = $derived(getTicks(maxTime, 10));
+	let yTicks = [0, 0.25, 0.5, 0.75, 1];
 
-	$effect(() => {
-		kmWidgetIframeSrc;
-		kmWidgetHasLoaded = false;
-		kmWidgetLoadError = null;
-	});
+	let runId = 0;
+	let csvCache = new Map<string, string>();
+	let activeAbort: AbortController | null = null;
 
-	function handleKmWidgetLoad(): void {
-		kmWidgetHasLoaded = true;
-		kmWidgetLoadError = null;
+	async function loadDatasetCsv(id: string, signal: AbortSignal): Promise<string> {
+		const cached = csvCache.get(id);
+		if (cached !== undefined) return cached;
+		const response = await fetch(`/datasets/${encodeURIComponent(id)}.csv`, { signal });
+		if (!response.ok) throw new Error(`Dataset "${id}" not found (HTTP ${response.status})`);
+		const text = await response.text();
+		csvCache.set(id, text);
+		return text;
 	}
 
-	function handleKmWidgetError(): void {
-		kmWidgetHasLoaded = false;
-		kmWidgetLoadError = 'The Kaplan-Meier plot failed to load. Try selecting another dataset or reloading the page.';
+	$effect(() => {
+		const id = datasetId;
+		const currentEndpoint = endpoint;
+		const group = groupColumn === '(None)' ? null : groupColumn;
+		const excluded = excludedKeys;
+		runId += 1;
+		const myRun = runId;
+		if (activeAbort) activeAbort.abort();
+		const abort = new AbortController();
+		activeAbort = abort;
+
+		if (!id || !currentEndpoint) {
+			series = [];
+			numericGroupOptions = [];
+			maxTime = 1;
+			computing = false;
+			pyError = null;
+			return;
+		}
+
+		const timeCol = currentEndpoint.time_var.var_name;
+		const eventCol = currentEndpoint.event_var.var_name;
+		computing = true;
+		pyError = null;
+		(async () => {
+			try {
+				const [csv] = await Promise.all([loadDatasetCsv(id, abort.signal), kmReady()]);
+				if (myRun !== runId) return;
+				pyReady = true;
+				if (!pyEnv) pyEnv = getKmEnv();
+				const result = await computeKm(csv, timeCol, eventCol, group);
+				if (myRun !== runId) return;
+				series = result.series;
+				numericGroupOptions = result.numericColumns.filter((column) => !excluded.has(column));
+				const times = result.series.flatMap((s) => s.points.map((p) => p.time));
+				maxTime = times.length > 0 ? Math.max(1, ...times) : 1;
+			} catch (error) {
+				if (myRun !== runId) return;
+				if ((error as { name?: string })?.name === 'AbortError') return;
+				pyError = error instanceof Error ? error.message : String(error);
+				series = [];
+			} finally {
+				if (myRun === runId) computing = false;
+			}
+		})();
+	});
+
+	function xScale(time: number): number {
+		return chart.margin.left + (time / maxTime) * plotWidth;
 	}
+
+	function yScale(survival: number): number {
+		return chart.margin.top + (1 - survival) * plotHeight;
+	}
+
+	function stepPath(points: KmPoint[]): string {
+		if (points.length === 0) return '';
+
+		const commands = [`M ${xScale(0)} ${yScale(1)}`];
+		for (const point of points.slice(1)) {
+			commands.push(`H ${xScale(point.time)}`);
+			commands.push(`V ${yScale(point.survival)}`);
+		}
+		commands.push(`H ${xScale(maxTime)}`);
+		return commands.join(' ');
+	}
+
+	function confidencePath(points: KmPoint[]): string {
+		if (points.length === 0) return '';
+		const upper = stepBand(points, 'ciHigh');
+		const lower = stepBand(points, 'ciLow').reverse();
+		return [...upper, ...lower].map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ') + ' Z';
+	}
+
+	function stepBand(points: KmPoint[], key: 'ciLow' | 'ciHigh'): { x: number; y: number }[] {
+		const band: { x: number; y: number }[] = [{ x: xScale(0), y: yScale(points[0]?.[key] ?? 1) }];
+		for (const point of points.slice(1)) {
+			const previous = band[band.length - 1];
+			band.push({ x: xScale(point.time), y: previous.y });
+			band.push({ x: xScale(point.time), y: yScale(point[key]) });
+		}
+		band.push({ x: xScale(maxTime), y: band[band.length - 1].y });
+		return band;
+	}
+
+	function medianPath(seriesItem: KmSeries): string {
+		if (seriesItem.median === null) return '';
+		const medianY = yScale(0.5);
+		const medianX = xScale(seriesItem.median);
+		return `M ${xScale(0)} ${medianY} H ${medianX} V ${yScale(0)}`;
+	}
+
+	function getTicks(max: number, targetCount: number): number[] {
+		const step = niceStep(max / targetCount);
+		const ticks: number[] = [];
+		for (let tick = 0; tick <= max + step * 0.5; tick += step) {
+			ticks.push(Number(tick.toFixed(10)));
+		}
+		return ticks;
+	}
+
+	function niceStep(rawStep: number): number {
+		const power = 10 ** Math.floor(Math.log10(rawStep));
+		const fraction = rawStep / power;
+		if (fraction <= 1) return power;
+		if (fraction <= 2) return 2 * power;
+		if (fraction <= 5) return 5 * power;
+		return 10 * power;
+	}
+
+	function formatNumber(value: number | null | undefined): string {
+		if (value === null || value === undefined) return 'N/A';
+		return Number(value.toFixed(1)).toString();
+	}
+
+	const legendW = 260;
+	const legendPad = 12;
+	const legendRowH = 22;
+	const legendSwatch = 10;
+	const legendGap = 8;
+	const legendLabelX = legendPad + legendSwatch + legendGap;
+	const legendNNWidth = 52;
+	const legendMedianWidth = 52;
+	const legendColGap = 10;
+	/** Right edges for text-anchor="end" — n/N column then Median column */
+	const legendXMedian = legendW - legendPad;
+	const legendXNN = legendXMedian - legendMedianWidth - legendColGap;
+	const legendHeaderEndY = legendPad + 18;
+	const legendRowStartY = legendHeaderEndY + 10;
+	/** Right edge labels may reach before they hit the n/N column. */
+	const legendLabelRight = legendXNN - legendNNWidth - legendColGap;
+	const legendLabelClipWidth = Math.max(0, legendLabelRight - legendLabelX);
+	const legendLabelClipId = 'km-legend-label-clip';
+
+	let svgRoot = $state<SVGSVGElement | undefined>(undefined);
+	/** Pixels inset from chart top-right edge (recalibrated on resize / pointer up — keeps legend anchored). */
+	let legendInsetRight = $state(16);
+	let legendInsetTop = $state(20);
+
+	let legendHeight = $derived(legendRowStartY + series.length * legendRowH + legendPad);
+
+	let legendPose = $derived.by(() => {
+		const cw = chart.width;
+		const ch = chart.height;
+		const lh = legendHeight;
+		const maxLeft = Math.max(0, cw - legendW);
+		const maxTop = Math.max(0, ch - lh);
+		const left = Math.min(Math.max(cw - legendW - legendInsetRight, 0), maxLeft);
+		const top = Math.min(Math.max(legendInsetTop, 0), maxTop);
+		return { left, top };
+	});
+
+	function rebalanceLegendInsets(chartWidth: number, chartHeight: number): void {
+		const lh = legendRowStartY + series.length * legendRowH + legendPad;
+		const maxLeft = Math.max(0, chartWidth - legendW);
+		const maxTop = Math.max(0, chartHeight - lh);
+		const desiredLeft = Math.min(Math.max(chartWidth - legendW - legendInsetRight, 0), maxLeft);
+		const desiredTop = Math.min(Math.max(legendInsetTop, 0), maxTop);
+		legendInsetRight = chartWidth - legendW - desiredLeft;
+		legendInsetTop = desiredTop;
+	}
+
+	function syncPlotBoxFromNode(node: HTMLElement) {
+		const rawW = Math.floor(node.clientWidth);
+		const rawH = Math.floor(node.clientHeight);
+		const cw = Math.max(300, rawW >= 32 ? rawW : 680);
+		const ch = Math.max(260, rawH >= 32 ? rawH : 560);
+		plotBoxW = cw;
+		plotBoxH = ch;
+		rebalanceLegendInsets(cw, ch);
+	}
+
+	function attachPlotResize(node: HTMLElement): () => void {
+		syncPlotBoxFromNode(node);
+		if (typeof ResizeObserver === 'undefined') {
+			return () => {};
+		}
+		const ro = new ResizeObserver(() => syncPlotBoxFromNode(node));
+		ro.observe(node);
+		return () => ro.disconnect();
+	}
+
+	let legendDrag = $state<{
+		pointerId: number;
+		startSvgX: number;
+		startSvgY: number;
+		originInsetRight: number;
+		originInsetTop: number;
+	} | null>(null);
+
+	function clientToSvgPoint(svg: SVGSVGElement, cx: number, cy: number) {
+		const p = svg.createSVGPoint();
+		p.x = cx;
+		p.y = cy;
+		const ctm = svg.getScreenCTM();
+		return ctm ? p.matrixTransform(ctm.inverse()) : { x: 0, y: 0 };
+	}
+
+	function onLegendPointerDown(e: PointerEvent) {
+		if (!svgRoot) return;
+		e.preventDefault();
+		const target = e.currentTarget;
+		if (target instanceof Element) target.setPointerCapture(e.pointerId);
+		const pt = clientToSvgPoint(svgRoot, e.clientX, e.clientY);
+		legendDrag = {
+			pointerId: e.pointerId,
+			startSvgX: pt.x,
+			startSvgY: pt.y,
+			originInsetRight: legendInsetRight,
+			originInsetTop: legendInsetTop,
+		};
+	}
+
+	function onLegendPointerMove(e: PointerEvent) {
+		if (!legendDrag || e.pointerId !== legendDrag.pointerId || !svgRoot) return;
+		const pt = clientToSvgPoint(svgRoot, e.clientX, e.clientY);
+		const dx = pt.x - legendDrag.startSvgX;
+		const dy = pt.y - legendDrag.startSvgY;
+		legendInsetRight = legendDrag.originInsetRight - dx;
+		legendInsetTop = legendDrag.originInsetTop + dy;
+	}
+
+	function onLegendPointerUp(e: PointerEvent) {
+		if (legendDrag?.pointerId === e.pointerId) {
+			legendDrag = null;
+			untrack(() => rebalanceLegendInsets(chart.width, chart.height));
+		}
+	}
+
+	/** When row count changes the legend grows/shrinks; keep insets clamped without waiting for ResizeObserver */
+	$effect(() => {
+		const w = chart.width;
+		const h = chart.height;
+		void legendHeight;
+		untrack(() => rebalanceLegendInsets(w, h));
+	});
 </script>
-
-<svelte:window onresize={updateCandidateGenesScrollAffordance} />
 
 <section data-tour="km-analysis">
 	<button
 		onclick={onToggleOpen}
 		aria-expanded={isOpen}
 		aria-controls="km-plot-panel-content"
-		class="mb-3 flex w-full items-center gap-2 cursor-pointer text-left text-slate-600 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+		class="mb-3 flex w-full cursor-pointer items-center gap-2 text-left text-slate-600 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 	>
-		<svg class="h-4 w-4 text-slate-400 {isOpen ? 'rotate-90' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<svg
+			class="h-4 w-4 text-slate-400 {isOpen ? 'rotate-90' : ''}"
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
 		</svg>
 		<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Kaplan-Meier plot</h3>
 	</button>
 	{#if isOpen}
 		<div id="km-plot-panel-content">
-		<div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
-			<div class="relative grid bg-white md:h-[800px] md:grid-cols-[340px_minmax(0,1fr)]">
-				<aside class="flex min-h-0 flex-col overflow-hidden border-b border-r border-slate-200 bg-slate-50 p-3 md:border-b-0">
-					{#if endpoints.length > 0 && getEndpointKey && onSelectEndpoint}
-						<div data-tour="km-survival-endpoints" class="mb-3 pb-3 border-b border-slate-200/80">
-							<p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Survival Endpoint</p>
-							<div class="flex flex-col">
-								{#each endpoints as endpoint (getEndpointKey(endpoint))}
-									{@const key = getEndpointKey(endpoint)}
-									<button
-										type="button"
-										aria-pressed={activeEndpointKey === key}
-										onclick={() => onSelectEndpoint(key)}
-										class="w-full rounded-r-md border-l-[3px] px-2.5 py-1.5 text-left text-[13px] outline-none transition-all duration-150 focus-visible:ring-1 focus-visible:ring-slate-400 focus-visible:ring-offset-1 {activeEndpointKey === key
-											? 'border-l-slate-700 bg-white font-semibold text-slate-900 shadow-sm'
-											: 'border-l-transparent text-slate-500 hover:border-l-slate-300 hover:bg-white/60 hover:text-slate-700'}"
+			<div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+				<div data-tour="km-plot" class="font-sans text-slate-700">
+					<div class="grid gap-8 p-5 lg:grid-cols-[minmax(230px,_280px)_minmax(0,_1fr)] lg:items-start lg:gap-8 xl:gap-10">
+						<aside
+							class="flex flex-col gap-4 lg:sticky lg:top-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
+							aria-label="Kaplan-Meier controls"
+						>
+							<div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
+								<div
+									class="border-b border-slate-100 bg-slate-50/90 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
+								>
+									Survival variables
+								</div>
+								<label class="flex flex-col gap-1.5 border-b border-slate-50 px-3 py-2.5 text-xs last:border-b-0">
+									<span class="font-medium text-slate-500">Time</span>
+									<select
+										bind:value={endpointIndex}
+										aria-label="Survival endpoint"
+										disabled={endpoints.length === 0}
+										class="w-full min-w-0 rounded-md border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
 									>
-										{getEndpointFullName(endpoint.abbrv)} ({endpoint.abbrv})
-									</button>
-								{/each}
+										{#if endpoints.length === 0}
+											<option value={0}>(no endpoints)</option>
+										{:else}
+											{#each endpoints as ep, index (index)}
+												<option value={index}>{ep.time_var.var_name}{ep.abbrv ? ` (${ep.abbrv})` : ''}</option>
+											{/each}
+										{/if}
+									</select>
+								</label>
+								<label class="flex flex-col gap-1.5 border-b border-slate-50 px-3 py-2.5 text-xs last:border-b-0">
+									<span class="font-medium text-slate-500">Event</span>
+									<select
+										bind:value={endpointIndex}
+										aria-label="Event endpoint"
+										disabled={endpoints.length === 0}
+										class="w-full min-w-0 rounded-md border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+									>
+										{#if endpoints.length === 0}
+											<option value={0}>(no endpoints)</option>
+										{:else}
+											{#each endpoints as ep, index (index)}
+												<option value={index}>{ep.event_var.var_name}{ep.abbrv ? ` (${ep.abbrv})` : ''}</option>
+											{/each}
+										{/if}
+									</select>
+								</label>
+								<label class="flex flex-col gap-1.5 px-3 py-2.5 text-xs">
+									<span class="leading-snug font-medium text-slate-500">
+										Group by <span class="font-normal text-slate-400">(optional)</span>
+									</span>
+									<select
+										bind:value={groupColumn}
+										aria-label="Group by"
+										class="w-full min-w-0 rounded-md border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+									>
+										<option value="(None)">(None)</option>
+										{#each numericGroupOptions as option (option)}
+											<option value={option}>{option}</option>
+										{/each}
+									</select>
+								</label>
 							</div>
-						</div>
-					{/if}
-					<div data-tour="km-candidate-genes" class="flex min-h-0 flex-col md:flex-1">
-						<div class="flex items-center gap-1.5">
-							<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Genes</p>
-							<span class="group relative inline-flex">
+
+							<div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
+								<div
+									class="border-b border-slate-100 bg-slate-50/90 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
+								>
+									Display
+								</div>
+								<label class="flex cursor-pointer items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+									<input
+										type="checkbox"
+										bind:checked={showConfidenceIntervals}
+										class="h-4 w-4 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+									/>
+									<span>Show confidence intervals</span>
+								</label>
+								<label class="flex cursor-pointer items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+									<input
+										type="checkbox"
+										bind:checked={showMedianSurvival}
+										class="h-4 w-4 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+									/>
+									<span>Show median survival</span>
+								</label>
+								<label class="flex cursor-pointer items-center gap-2.5 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+									<input
+										type="checkbox"
+										bind:checked={showCensoringTicks}
+										class="h-4 w-4 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+									/>
+									<span>Show censoring ticks</span>
+								</label>
+							</div>
+
+							<div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
 								<button
 									type="button"
-									class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-semibold leading-none text-slate-500 transition-colors hover:border-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-50"
-									aria-label="How genes are selected"
-									aria-describedby="candidate-genes-help"
+									onclick={() => (envOpen = !envOpen)}
+									aria-expanded={envOpen}
+									aria-controls="km-analysis-env-body"
+									class="flex w-full cursor-pointer items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/90 px-3 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 								>
-									i
-								</button>
-								<span
-									id="candidate-genes-help"
-									role="tooltip"
-									class="pointer-events-none absolute left-0 top-full z-10 mt-2 w-64 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
-								>
-									Candidate genes represent the top 100 genes ranked by univariate Cox regression. For the selected gene, samples are stratified at the median expression into low- and high-expression groups.
-								</span>
-							</span>
-						</div>
-						<div class="mt-2 flex min-h-0 max-h-60 flex-col md:max-h-none md:flex-1">
-						<div class="relative">
-							<svg class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-							</svg>
-							<input
-								type="text"
-								bind:value={geneFilter}
-								placeholder="Search genes…"
-								class="w-full rounded border border-slate-300 bg-white py-1.5 pl-8 pr-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-								aria-label="Search genes"
-							/>
-						</div>
-						<div class="relative mt-1 min-h-0 flex-1 overflow-hidden rounded border border-slate-200 bg-white shadow-sm">
-							{#if candidateGenes.length > 0}
-								{#if filteredGenes.length > 0}
-									<ul
-										bind:this={candidateGenesListEl}
-										onscroll={updateCandidateGenesScrollAffordance}
-										role="list"
-										aria-label="Genes"
-										class="h-full overflow-y-auto"
+									<span>Analysis environment</span>
+									<svg
+										class="h-3 w-3 text-slate-400 transition-transform {envOpen ? 'rotate-90' : ''}"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
 									>
-										{#each filteredGenes as gene (gene)}
-											<li class="border-b border-slate-100 last:border-b-0">
-												<button
-													type="button"
-													aria-pressed={selectedCandidateGene === gene}
-													onclick={() => handleGeneSelect(gene)}
-													class="block w-full px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {selectedCandidateGene === gene
-														? 'bg-neutral-800 text-white'
-														: 'bg-transparent text-slate-700 hover:bg-slate-100/70'}"
-													title="{gene}{geneDescriptionMap[gene] ? ` — ${geneDescriptionMap[gene]}` : ''}"
-												>
-													<span class="block break-all text-sm font-medium leading-5">{gene}</span>
-												{#if geneDescriptionMap[gene]}
-													<span class="block text-xs leading-4 {selectedCandidateGene === gene
-														? 'text-neutral-300'
-														: 'text-slate-400'}"
-													>
-														{geneDescriptionMap[gene]}
-													</span>
-												{/if}
-												</button>
-											</li>
-										{/each}
-									</ul>
-									{#if canScrollCandidateGenesUp}
-										<div class="pointer-events-none absolute left-0 right-0 top-0 h-6 bg-gradient-to-b from-white/85 via-white/45 to-transparent"></div>
-									{/if}
-									{#if canScrollCandidateGenesDown}
-										<div class="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/85 via-white/45 to-transparent"></div>
-									{/if}
-								{:else}
-									<p class="px-3 py-3 text-sm italic text-slate-400">No genes matching "{geneFilter}"</p>
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+									</svg>
+								</button>
+								{#if envOpen}
+									<div id="km-analysis-env-body" class="px-3 py-2.5 text-xs text-slate-600">
+										<p class="mb-2 leading-snug text-slate-500">
+											Kaplan–Meier analysis is done using
+											<a
+												href="https://lifelines.readthedocs.io/"
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-blue-600 hover:underline">lifelines</a>.
+										</p>
+										<dl class="divide-y divide-slate-100 border-y border-slate-100">
+											<div class="flex items-center justify-between py-1.5">
+												<dt class="text-slate-500">Python</dt>
+												<dd class="font-mono text-[11px] text-slate-700">
+													{pyEnv ? pyEnv.python : 'loading…'}
+												</dd>
+											</div>
+											<div class="flex items-center justify-between py-1.5">
+												<dt class="text-slate-500">lifelines</dt>
+												<dd class="font-mono text-[11px] text-slate-700">
+													{pyEnv ? pyEnv.lifelines : 'loading…'}
+												</dd>
+											</div>
+										</dl>
+										<p class="mt-2 text-[10px] leading-snug text-slate-400">
+											Executed in your browser via
+											<a
+												href="https://pyscript.net/"
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-blue-500 hover:underline">PyScript</a>.
+										</p>
+									</div>
 								{/if}
-							{:else}
-								<p class="px-3 py-3 text-sm italic text-slate-400">No genes available for this dataset.</p>
-							{/if}
-						</div>
+							</div>
+						</aside>
+
+						<div class="relative w-full min-w-0 min-h-0">
+							<div
+								class="relative h-[min(68vh,720px)] min-h-[300px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-inner"
+								{@attach attachPlotResize}
+							>
+								{#if !pyReady}
+									<div class="absolute inset-0 z-10 flex items-center justify-center bg-white/80 text-sm text-slate-500" data-testid="km-py-loading">
+										Loading Python runtime…
+									</div>
+								{:else if computing}
+									<div class="absolute right-3 top-3 z-10 rounded-md border border-slate-200 bg-white/90 px-2 py-1 text-xs text-slate-500 shadow-sm" data-testid="km-py-computing">
+										computing…
+									</div>
+								{/if}
+								{#if pyError}
+									<div class="absolute left-3 top-3 z-10 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700 shadow-sm" data-testid="km-py-error">
+										{pyError}
+									</div>
+								{/if}
+								<svg
+									bind:this={svgRoot}
+									class="km-chart text-slate-700 block h-full w-full"
+									role="img"
+									aria-label={`Kaplan-Meier ${endpointLabel} survival chart`}
+									viewBox={`0 0 ${chart.width} ${chart.height}`}
+								>
+								<rect x="0" y="0" width={chart.width} height={chart.height} fill="white" stroke="#e2e8f0" />
+
+								<g class="grid">
+									{#each yTicks as tick (tick)}
+										<line
+											x1={chart.margin.left}
+											x2={chart.width - chart.margin.right}
+											y1={yScale(tick)}
+											y2={yScale(tick)}
+										/>
+									{/each}
+								</g>
+
+								{#if showConfidenceIntervals}
+									<g data-testid="km-confidence-layer">
+										{#each series as seriesItem (seriesItem.key)}
+											<path d={confidencePath(seriesItem.points)} fill={seriesItem.color} opacity="0.18" />
+										{/each}
+									</g>
+								{/if}
+
+								<g class="axes">
+									<line
+										x1={chart.margin.left}
+										x2={chart.margin.left}
+										y1={chart.margin.top}
+										y2={chart.height - chart.margin.bottom}
+									/>
+									<line
+										x1={chart.margin.left}
+										x2={chart.width - chart.margin.right}
+										y1={chart.height - chart.margin.bottom}
+										y2={chart.height - chart.margin.bottom}
+									/>
+									{#each xTicks as tick (tick)}
+										<g>
+											<line
+												x1={xScale(tick)}
+												x2={xScale(tick)}
+												y1={chart.height - chart.margin.bottom}
+												y2={chart.height - chart.margin.bottom + 6}
+											/>
+											<text x={xScale(tick)} y={chart.height - chart.margin.bottom + 22} text-anchor="middle">
+												{tick}
+											</text>
+										</g>
+									{/each}
+									{#each yTicks as tick (tick)}
+										<g>
+											<line
+												x1={chart.margin.left - 6}
+												x2={chart.margin.left}
+												y1={yScale(tick)}
+												y2={yScale(tick)}
+											/>
+											<text x={chart.margin.left - 12} y={yScale(tick) + 4} text-anchor="end">
+												{tick.toFixed(2).replace(/0$/, '')}
+											</text>
+										</g>
+									{/each}
+									<text
+										x={chart.margin.left + plotWidth / 2}
+										y={chart.height - 18}
+										text-anchor="middle"
+										class="axis-title">Months</text
+									>
+									<text
+										x={18}
+										y={chart.margin.top + plotHeight / 2}
+										text-anchor="middle"
+										transform={`rotate(-90 18 ${chart.margin.top + plotHeight / 2})`}
+										class="axis-title">Survival Probability</text
+									>
+								</g>
+
+								{#if showMedianSurvival}
+									<g data-testid="km-median-layer">
+										{#each series as seriesItem (seriesItem.key)}
+											<path d={medianPath(seriesItem)} stroke={seriesItem.color} stroke-dasharray="3 4" />
+										{/each}
+									</g>
+								{/if}
+
+								<g data-testid="km-series-layer">
+									{#each series as seriesItem (seriesItem.key)}
+										<path d={stepPath(seriesItem.points)} fill="none" stroke={seriesItem.color} stroke-width="2.25" />
+									{/each}
+								</g>
+
+								{#if showCensoringTicks}
+									<g data-testid="km-censor-layer">
+										{#each series as seriesItem (seriesItem.key)}
+											{#each seriesItem.censorTicks as tick (`${seriesItem.key}-${tick.time}-${tick.survival}`)}
+												<path
+													d={`M ${xScale(tick.time)} ${yScale(tick.survival) - 4} V ${yScale(tick.survival) + 4}`}
+													stroke={seriesItem.color}
+													stroke-width="2"
+												/>
+											{/each}
+										{/each}
+									</g>
+								{/if}
+
+								<g
+									data-testid="km-legend"
+									class="legend legend-drag"
+									transform={`translate(${legendPose.left}, ${legendPose.top})`}
+									role="group"
+									aria-label="Chart legend — anchored to the top-right inset; drag to move"
+									onpointerdown={onLegendPointerDown}
+									onpointermove={onLegendPointerMove}
+									onpointerup={onLegendPointerUp}
+									onpointercancel={onLegendPointerUp}
+								>
+									<defs>
+										<clipPath id={legendLabelClipId}>
+											<rect x={legendLabelX} y="0" width={legendLabelClipWidth} height={legendHeight} />
+										</clipPath>
+									</defs>
+									<rect class="legend-frame" x="0" y="0" width={legendW} height={legendHeight} rx="4" />
+									<text
+										x={legendXNN}
+										y={legendPad + 13}
+										text-anchor="end"
+										class="legend-heading"
+										pointer-events="none"
+									>
+										n/N
+									</text>
+									<text
+										x={legendXMedian}
+										y={legendPad + 13}
+										text-anchor="end"
+										class="legend-heading"
+										pointer-events="none"
+									>
+										Median
+									</text>
+									<line
+										class="legend-sep"
+										x1={legendPad}
+										y1={legendHeaderEndY}
+										x2={legendW - legendPad}
+										y2={legendHeaderEndY}
+										pointer-events="none"
+									/>
+									{#each series as seriesItem, index (seriesItem.key)}
+										{@const rowTop = legendRowStartY + index * legendRowH}
+										<g class="legend-row" pointer-events="none">
+											<rect
+												x={legendPad}
+												y={rowTop}
+												width={legendSwatch}
+												height={legendSwatch}
+												fill={seriesItem.color}
+											/>
+											<text x={legendLabelX} y={rowTop + legendSwatch - 1} clip-path={`url(#${legendLabelClipId})`}>{seriesItem.label}</text>
+											<text x={legendXNN} y={rowTop + legendSwatch - 1} text-anchor="end">
+												{seriesItem.events}/{seriesItem.total}
+											</text>
+											<text x={legendXMedian} y={rowTop + legendSwatch - 1} text-anchor="end">
+												{formatNumber(seriesItem.median)}
+											</text>
+										</g>
+									{/each}
+								</g>
+							</svg>
+							</div>
 						</div>
 					</div>
-				</aside>
-				<div data-tour="km-plot" class="relative">
-					<iframe
-						src={kmWidgetIframeSrc}
-						onload={handleKmWidgetLoad}
-						onerror={handleKmWidgetError}
-						sandbox="allow-scripts allow-same-origin allow-forms"
-						referrerpolicy="strict-origin-when-cross-origin"
-						class="w-full overflow-hidden border-0 {kmWidgetHasLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity"
-						style="height: 800px; min-height: 800px;"
-						title="Kaplan Meier Plot"
-						loading="lazy"
-					></iframe>
 				</div>
-				{#if !kmWidgetHasLoaded && !kmWidgetLoadError}
-					<div class="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/80 text-sm text-slate-600" role="status" aria-live="polite">
-						Loading Kaplan-Meier plot…
-					</div>
-				{/if}
-				{#if kmWidgetLoadError}
-					<div class="absolute inset-0 flex items-center justify-center bg-white p-6">
-						<p role="alert" class="max-w-md rounded border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
-							{kmWidgetLoadError}
-						</p>
-					</div>
-				{/if}
 			</div>
-		</div>
 		</div>
 	{/if}
 </section>
+
+<style>
+	.km-chart {
+		display: block;
+		box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+		font-family: ui-sans-serif, system-ui, sans-serif;
+		background: transparent;
+	}
+
+	.grid line {
+		stroke: #f1f5f9;
+		stroke-width: 1;
+	}
+
+	.axes line {
+		stroke: #64748b;
+		stroke-width: 1;
+	}
+
+	.axes text,
+	.legend-heading,
+	.legend-row text {
+		fill: currentColor;
+		font-size: 12px;
+	}
+
+	.axis-title {
+		font-size: 14px;
+		fill: #475569;
+	}
+
+	.legend-drag {
+		cursor: grab;
+		touch-action: none;
+		user-select: none;
+	}
+
+	.legend-drag:active {
+		cursor: grabbing;
+	}
+
+	.legend-frame {
+		fill: white;
+		stroke: #cbd5e1;
+		stroke-width: 1;
+	}
+
+	.legend-sep {
+		stroke: #94a3b8;
+		stroke-width: 1;
+	}
+
+	[data-testid='km-median-layer'] path {
+		fill: none;
+		stroke-width: 1.3;
+		opacity: 0.65;
+	}
+
+	.legend-heading {
+		font-size: 11px;
+		font-weight: 700;
+	}
+</style>
