@@ -18,11 +18,20 @@ export interface SurvivalEventVar {
 	var_meaning: string;
 }
 
+export interface SurvivalEndpointStats {
+	n_incomplete: number;
+	n_complete: number;
+	n_censored: number;
+	n_events: number;
+	censored_ratio: number;
+}
+
 export interface SurvivalEndpoint {
 	abbrv?: string;
 	time_var: SurvivalTimeVar;
 	event_var: SurvivalEventVar;
 	notes: string[];
+	stats?: SurvivalEndpointStats;
 }
 
 export interface GeoSeriesSummary {

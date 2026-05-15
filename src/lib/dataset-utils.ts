@@ -1,4 +1,4 @@
-import type { Dataset, NcbiDataValue, ReproducibleValue, SurvivalEndpoint } from '../types/dataset';
+import type { Dataset, GeoSeriesSummary, NcbiDataValue, ReproducibleValue, SurvivalEndpoint } from '../types/dataset';
 
 // ── Display Formatters ──────────────────────────────────────────────
 
@@ -64,10 +64,14 @@ export function getEndpointCardBorderClass(ep: SurvivalEndpoint): string {
 
 // ── Sort Helpers ────────────────────────────────────────────────────
 
-export type SortColumn = 'samples';
+export type SortColumn = 'samples' | 'sampleOrigin' | 'cancer';
 export type SortDirection = 'asc' | 'desc';
 
-const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>(['samples']);
+const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>([
+	'samples',
+	'sampleOrigin',
+	'cancer',
+]);
 
 export function isValidSortColumn(value: string): value is SortColumn {
 	return VALID_SORT_COLUMNS.has(value);
@@ -91,22 +95,45 @@ export function ariaSort(
 	return sortDirection === 'asc' ? 'ascending' : 'descending';
 }
 
-function getSortValue(dataset: Dataset): number {
-	return dataset.data_summary.samples;
+function normalizeSortText(value: string): string {
+	return value.trim().toLocaleLowerCase();
+}
+
+function getSampleOriginSortValue(dataset: Dataset, sampleOriginMap?: Map<string, string[]>): string {
+	const origins = sampleOriginMap?.get(dataset.data_id) ?? [];
+	return origins
+		.map(normalizeSortText)
+		.filter(Boolean)
+		.join(' | ');
+}
+
+function getCancerSortValue(dataset: Dataset, summariesMap?: Map<string, GeoSeriesSummary>): string {
+	return normalizeSortText(summariesMap?.get(dataset.data_id)?.cancer_group ?? dataset.data_id);
 }
 
 export function sortDatasets(
 	datasets: Dataset[],
 	column: SortColumn | null,
 	direction: SortDirection | null,
+	summariesMap?: Map<string, GeoSeriesSummary>,
+	sampleOriginMap?: Map<string, string[]>,
 ): Dataset[] {
 	if (!column || !direction) return datasets;
 	return [...datasets].sort((a, b) => {
-		const aVal = getSortValue(a);
-		const bVal = getSortValue(b);
-		return direction === 'asc'
-			? aVal - bVal
-			: bVal - aVal;
+		let result: number;
+		if (column === 'samples') {
+			result = a.data_summary.samples - b.data_summary.samples;
+		} else {
+			const aVal = column === 'sampleOrigin'
+				? getSampleOriginSortValue(a, sampleOriginMap)
+				: getCancerSortValue(a, summariesMap);
+			const bVal = column === 'sampleOrigin'
+				? getSampleOriginSortValue(b, sampleOriginMap)
+				: getCancerSortValue(b, summariesMap);
+			result = aVal.localeCompare(bVal);
+		}
+		if (result === 0) result = a.data_id.localeCompare(b.data_id);
+		return direction === 'asc' ? result : -result;
 	});
 }
 

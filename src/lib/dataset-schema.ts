@@ -15,11 +15,20 @@ const survivalEventVarSchema = z.object({
 	var_meaning: z.string(),
 });
 
+const survivalEndpointStatsSchema = z.object({
+	n_incomplete: z.number(),
+	n_complete: z.number(),
+	n_censored: z.number(),
+	n_events: z.number(),
+	censored_ratio: z.number(),
+});
+
 const survivalEndpointSchema = z.object({
 	abbrv: z.string().optional(),
 	time_var: survivalTimeVarSchema,
 	event_var: survivalEventVarSchema,
 	notes: z.array(z.string()).default([]),
+	stats: survivalEndpointStatsSchema.optional(),
 });
 
 const datasetSummarySchema = z.object({

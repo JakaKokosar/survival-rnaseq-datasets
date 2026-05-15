@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import rawData from '../data/data_summary.json';
 import pmcidCitations from '../data/pmcid_to_citation.json';
-import { parsePmcidCitations } from './dataset-schema';
+import { parseDatasets, parsePmcidCitations } from './dataset-schema';
 
 describe('parsePmcidCitations', () => {
 	it('parses the real pmcid_to_citation dataset into a PMCID lookup map', () => {
@@ -15,5 +16,22 @@ describe('parsePmcidCitations', () => {
 		expect(() =>
 			parsePmcidCitations([{ pmcid: 'PMC123' }]),
 		).toThrow(/Invalid pmcid_to_citation\.json/);
+	});
+});
+
+describe('parseDatasets', () => {
+	it('preserves endpoint summary stats from the real data summary payload', () => {
+		const datasets = parseDatasets(rawData);
+		const endpointWithStats = datasets
+			.flatMap((dataset) => dataset['survival-endpoints'])
+			.find((endpoint) => endpoint.stats);
+
+		expect(endpointWithStats?.stats).toMatchObject({
+			n_incomplete: expect.any(Number),
+			n_complete: expect.any(Number),
+			n_censored: expect.any(Number),
+			n_events: expect.any(Number),
+			censored_ratio: expect.any(Number),
+		});
 	});
 });

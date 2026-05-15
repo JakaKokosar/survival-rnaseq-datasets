@@ -70,7 +70,9 @@
 	const detailSummaryPanelId = 'detail-panel-summary';
 	const detailEndpointsPanelId = 'detail-panel-endpoints';
 
-	let sortedDatasets = $derived.by(() => sortDatasets(datasets, sortColumn, sortDirection));
+	let sortedDatasets = $derived.by(() =>
+		sortDatasets(datasets, sortColumn, sortDirection, summariesMap, sampleOriginMap),
+	);
 	let selectedDataset = $derived(
 		selectedId ? datasets.find((dataset) => dataset.data_id === selectedId) ?? null : null,
 	);
