@@ -6,6 +6,8 @@
 		readSplitRatio,
 		readUrlParams,
 		saveSplitRatio,
+		SPLIT_RATIO_MAX,
+		SPLIT_RATIO_MIN,
 		type SortColumn,
 		type SortDirection,
 		sortDatasets,
@@ -38,6 +40,7 @@
 	let isTbodyFocused = $state(false);
 
 	let splitRatio = $state(45);
+	let maxTableSplitRatio = $state(SPLIT_RATIO_MAX);
 	let hasUserResized = $state(false);
 	let isDragging = $state(false);
 
@@ -54,11 +57,11 @@
 		return `/downloads/${encodedFilename}`;
 	}
 
-	let mainEl: HTMLElement;
-	let listTabEl: HTMLButtonElement;
-	let detailsTabEl: HTMLButtonElement;
-	let summaryTabEl: HTMLButtonElement;
-	let endpointsTabEl: HTMLButtonElement;
+	let mainEl = $state<HTMLElement>();
+	let listTabEl = $state<HTMLButtonElement>();
+	let detailsTabEl = $state<HTMLButtonElement>();
+	let summaryTabEl = $state<HTMLButtonElement>();
+	let endpointsTabEl = $state<HTMLButtonElement>();
 	let listPanelEl = $state<HTMLDivElement | null>(null);
 	let detailsPanelEl = $state<HTMLDivElement | null>(null);
 	const mobileListTabId = 'dataset-browser-tab-list';
@@ -71,16 +74,16 @@
 	const detailEndpointsPanelId = 'detail-panel-endpoints';
 
 	let sortedDatasets = $derived.by(() =>
-		sortDatasets(datasets, sortColumn, sortDirection, summariesMap, sampleOriginMap),
+		sortDatasets(datasets, sortColumn, sortDirection, summariesMap),
 	);
 	let selectedDataset = $derived(
 		selectedId ? datasets.find((dataset) => dataset.data_id === selectedId) ?? null : null,
 	);
 
 	onMount(() => {
-		const savedRatio = localStorage.getItem('datasetBrowserSplitRatio');
+		const savedRatio = readSplitRatio();
 		if (savedRatio !== null) {
-			splitRatio = readSplitRatio();
+			splitRatio = savedRatio;
 			hasUserResized = true;
 		}
 		isDesktop = window.innerWidth >= 1024;
@@ -106,6 +109,8 @@
 				updateUrlParams(selectedId, sortColumn, sortDirection);
 			}
 		}
+
+		scheduleSplitBoundsSync();
 	});
 
 	function selectDataset(id: string): void {
@@ -171,16 +176,53 @@
 		updateUrlParams(selectedId, sortColumn, sortDirection);
 	}
 
+	function getTableNaturalWidth(): number | null {
+		const tableEl = listPanelEl?.querySelector('table');
+		if (tableEl instanceof HTMLTableElement) return tableEl.offsetWidth;
+		return null;
+	}
+
+	function getListScrollbarWidth(): number {
+		if (!listPanelEl) return 0;
+		return Math.max(0, listPanelEl.offsetWidth - listPanelEl.clientWidth);
+	}
+
+	function getTableMaxSplitRatio(): number {
+		if (!mainEl) return SPLIT_RATIO_MAX;
+		const mainWidth = mainEl.getBoundingClientRect().width;
+		const tableWidth = getTableNaturalWidth();
+		if (!tableWidth || mainWidth <= 0) return SPLIT_RATIO_MAX;
+		const requiredWidth = tableWidth + getListScrollbarWidth();
+		return Math.min(SPLIT_RATIO_MAX, (requiredWidth / mainWidth) * 100);
+	}
+
+	function clampTableSplitRatio(ratio: number): number {
+		const maxRatio = getTableMaxSplitRatio();
+		return Math.min(clampSplitRatio(ratio), maxRatio);
+	}
+
+	function syncSplitBounds(): void {
+		maxTableSplitRatio = getTableMaxSplitRatio();
+		splitRatio = hasUserResized ? clampTableSplitRatio(splitRatio) : maxTableSplitRatio;
+	}
+
+	function scheduleSplitBoundsSync(): void {
+		requestAnimationFrame(() => {
+			syncSplitBounds();
+			requestAnimationFrame(syncSplitBounds);
+		});
+	}
+
+	function initializeSplitFromRenderedWidth(): void {
+		if (!mainEl || !listPanelEl) return;
+		const mainWidth = mainEl.getBoundingClientRect().width;
+		if (mainWidth <= 0) return;
+		splitRatio = clampTableSplitRatio((listPanelEl.offsetWidth / mainWidth) * 100);
+		hasUserResized = true;
+	}
+
 	function startDrag(): void {
-		if (!hasUserResized && mainEl) {
-			// First drag: initialize splitRatio from current rendered width
-			const rect = mainEl.getBoundingClientRect();
-			const tableEl = mainEl.firstElementChild as HTMLElement;
-			if (tableEl) {
-				splitRatio = clampSplitRatio((tableEl.offsetWidth / rect.width) * 100);
-			}
-			hasUserResized = true;
-		}
+		if (!hasUserResized) initializeSplitFromRenderedWidth();
 		isDragging = true;
 		document.body.style.cursor = 'col-resize';
 		document.body.style.userSelect = 'none';
@@ -191,7 +233,7 @@
 	function handleDrag(event: MouseEvent): void {
 		if (!isDragging || !mainEl) return;
 		const rect = mainEl.getBoundingClientRect();
-		splitRatio = clampSplitRatio(((event.clientX - rect.left) / rect.width) * 100);
+		splitRatio = clampTableSplitRatio(((event.clientX - rect.left) / rect.width) * 100);
 	}
 
 	function stopDrag(): void {
@@ -205,15 +247,8 @@
 	}
 
 	function adjustSplit(delta: number): void {
-		if (!hasUserResized && mainEl) {
-			const rect = mainEl.getBoundingClientRect();
-			const tableEl = mainEl.firstElementChild as HTMLElement;
-			if (tableEl) {
-				splitRatio = clampSplitRatio((tableEl.offsetWidth / rect.width) * 100);
-			}
-			hasUserResized = true;
-		}
-		splitRatio = clampSplitRatio(splitRatio + delta);
+		if (!hasUserResized) initializeSplitFromRenderedWidth();
+		splitRatio = clampTableSplitRatio(splitRatio + delta);
 		saveSplitRatio(splitRatio);
 	}
 
@@ -295,6 +330,11 @@
 		}
 	}
 
+	function handleWindowResize(): void {
+		isDesktop = window.innerWidth >= 1024;
+		scheduleSplitBoundsSync();
+	}
+
 	$effect(() => {
 		if (isDesktop) return;
 		const activePanel = mobileTab === 'list' ? listPanelEl : detailsPanelEl;
@@ -304,7 +344,7 @@
 
 </script>
 
-<svelte:window onresize={() => (isDesktop = window.innerWidth >= 1024)} />
+<svelte:window onresize={handleWindowResize} />
 
 <div class="flex h-full flex-col">
 	<div role="tablist" aria-label="View mode" class="flex border-b border-slate-200 bg-white lg:hidden">
@@ -368,7 +408,6 @@
 			{mobileTab}
 			{isDesktop}
 			{summariesMap}
-			{sampleOriginMap}
 			onSort={sortBy}
 			onSelectDataset={selectDataset}
 			onListboxKeydown={handleListboxKeydown}
@@ -381,8 +420,8 @@
 			role="separator"
 			aria-orientation="vertical"
 			aria-valuenow={Math.round(splitRatio)}
-			aria-valuemin={15}
-			aria-valuemax={85}
+			aria-valuemin={SPLIT_RATIO_MIN}
+			aria-valuemax={Math.round(maxTableSplitRatio)}
 			aria-label="Resize panels, use left and right arrow keys"
 			tabindex={0}
 			onmousedown={(event) => {
@@ -428,7 +467,7 @@
 						tabindex={detailTab === 'summary' ? 0 : -1}
 						onclick={() => (detailTab = 'summary')}
 						onkeydown={handleDetailTabKeydown}
-						class="border-b-2 px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'summary'
+						class="border-b-2 px-5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'summary'
 							? 'border-slate-600 text-slate-900'
 							: 'border-transparent text-slate-400 hover:text-slate-700'}"
 					>
@@ -445,7 +484,7 @@
 						tabindex={detailTab === 'endpoints' ? 0 : -1}
 						onclick={() => (detailTab = 'endpoints')}
 						onkeydown={handleDetailTabKeydown}
-						class="border-b-2 px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'endpoints'
+						class="border-b-2 px-5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'endpoints'
 							? 'border-slate-600 text-slate-900'
 							: 'border-transparent text-slate-400 hover:text-slate-700'}"
 					>
@@ -461,7 +500,12 @@
 					class="p-6"
 				>
 					<div class="space-y-6">
-						<DatasetDetailHeader dataset={selectedDataset} {buildDataFileDownloadUrl} {summariesMap} />
+						<DatasetDetailHeader
+							dataset={selectedDataset}
+							{buildDataFileDownloadUrl}
+							{summariesMap}
+							{sampleOriginMap}
+						/>
 
 						<KmPlotPanel
 							isOpen={isKmPlotOpen}

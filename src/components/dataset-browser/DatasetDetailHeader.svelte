@@ -6,13 +6,18 @@
 		dataset: Dataset;
 		buildDataFileDownloadUrl: (filename: string) => string;
 		summariesMap: Map<string, GeoSeriesSummary>;
+		sampleOriginMap: Map<string, string[]>;
 	}
 
-	let { dataset, buildDataFileDownloadUrl, summariesMap }: Props = $props();
+	let { dataset, buildDataFileDownloadUrl, summariesMap, sampleOriginMap }: Props = $props();
 
 	let seriesSummary = $derived(summariesMap.get(dataset.data_id));
+	let sampleOrigins = $derived(sampleOriginMap.get(dataset.data_id) ?? []);
 	let relatedPublications = $derived(dataset.related_publications);
 	let reproducibilityNoteId = $derived(`reproducibility-note-${dataset.data_id}`);
+	let detailTitle = $derived(
+		seriesSummary?.title ? `${dataset.data_id} - ${seriesSummary.title}` : dataset.data_id,
+	);
 </script>
 
 {#snippet relatedPublicationContent()}
@@ -87,7 +92,7 @@
 	<!-- Title row with GEO link -->
 	<div class="flex items-start justify-between gap-3">
 		<h2 class="text-lg font-bold leading-snug text-slate-900">
-			{seriesSummary?.title ?? dataset.data_id}
+			{detailTitle}
 		</h2>
 		<a
 			href={dataset.data_url}
@@ -107,19 +112,6 @@
 		</a>
 	</div>
 
-	<!-- Subtitle: cancer type · samples · experiment type -->
-	<p class="mt-1.5 text-sm text-slate-500">
-		<span class="font-medium text-slate-600">{dataset.data_id}</span>
-		{#if seriesSummary}
-			<span class="mx-1.5 text-slate-300">&middot;</span>
-			<span class="capitalize">{seriesSummary.cancer_type_exact}</span>
-		{/if}
-		<span class="mx-1.5 text-slate-300">&middot;</span>
-		<span>{dataset.data_summary.samples.toLocaleString()} samples</span>
-		<span class="mx-1.5 text-slate-300">&middot;</span>
-		<span>{dataset['Experiment type']}</span>
-	</p>
-
 	<!-- Summary paragraph -->
 	{#if seriesSummary}
 		<div class="mt-3 border-l-2 border-slate-200 pl-3">
@@ -133,6 +125,14 @@
 		{#if dataset.data_file_names && dataset.data_file_names.length > 0}
 			<div class="flex flex-col gap-3 md:grid md:grid-cols-[minmax(0,1.75fr)_1px_minmax(0,1fr)] md:items-start md:gap-x-4 md:gap-y-0">
 				<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm md:min-w-0">
+					<dt class="font-medium text-slate-500">Sample origin:</dt>
+					<dd class="text-slate-900">
+						{#if sampleOrigins.length > 0}
+							{sampleOrigins.join(', ')}
+						{:else}
+							—
+						{/if}
+					</dd>
 					<dt class="font-medium text-slate-500">NCBI data availability:</dt>
 					<dd class="text-slate-900">
 						{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
@@ -169,6 +169,14 @@
 			</div>
 		{:else}
 			<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm">
+				<dt class="font-medium text-slate-500">Sample origin:</dt>
+				<dd class="text-slate-900">
+					{#if sampleOrigins.length > 0}
+						{sampleOrigins.join(', ')}
+					{:else}
+						—
+					{/if}
+				</dd>
 				<dt class="font-medium text-slate-500">NCBI data availability:</dt>
 				<dd class="text-slate-900">
 					{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}

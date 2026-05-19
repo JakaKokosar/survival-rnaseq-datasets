@@ -31,27 +31,6 @@ function createSummary(cancerGroup: string): GeoSeriesSummary {
 }
 
 describe('sortDatasets', () => {
-	it('sorts sample origins by the displayed origin order', () => {
-		const datasets = [
-			createDataset('multiReversed'),
-			createDataset('belgium'),
-			createDataset('multiSorted'),
-		];
-		const sampleOriginMap = new Map<string, string[]>([
-			['multiReversed', ['United States', 'China']],
-			['belgium', ['Belgium']],
-			['multiSorted', ['China', 'United States']],
-		]);
-
-		const sorted = sortDatasets(datasets, 'sampleOrigin', 'asc', undefined, sampleOriginMap);
-
-		expect(sorted.map((dataset) => dataset.data_id)).toEqual([
-			'belgium',
-			'multiSorted',
-			'multiReversed',
-		]);
-	});
-
 	it('sorts cancer groups from GEO summaries', () => {
 		const datasets = [createDataset('GSE2'), createDataset('GSE1')];
 		const summariesMap = new Map<string, GeoSeriesSummary>([

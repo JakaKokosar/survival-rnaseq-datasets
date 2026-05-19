@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import DatasetDetailHeader from './DatasetDetailHeader.svelte';
-import type { Dataset } from '../../types/dataset';
+import type { Dataset, GeoSeriesSummary } from '../../types/dataset';
 
 describe('DatasetDetailHeader related publications', () => {
 	afterEach(() => {
@@ -33,15 +33,57 @@ describe('DatasetDetailHeader related publications', () => {
 		};
 	}
 
-	function renderHeader(dataset: Dataset) {
+	function renderHeader(
+		dataset: Dataset,
+		overrides: {
+			summariesMap?: Map<string, GeoSeriesSummary>;
+			sampleOriginMap?: Map<string, string[]>;
+		} = {},
+	) {
 		render(DatasetDetailHeader, {
 			props: {
 				dataset,
 				buildDataFileDownloadUrl: (filename: string) => `https://example.com/files/${filename}`,
-				summariesMap: new Map(),
+				summariesMap: overrides.summariesMap ?? new Map(),
+				sampleOriginMap: overrides.sampleOriginMap ?? new Map(),
 			},
 		});
 	}
+
+	it('renders GEO id and series title as a single heading', () => {
+		renderHeader(createDataset(), {
+			summariesMap: new Map([
+				[
+					'GSE123',
+					{
+						data_id: 'GSE123',
+						summary: 'Summary text',
+						title: 'RNA-seq of 3273 SCAN-B breast tumors',
+						cancer_type_exact: 'primary breast cancer',
+						cancer_group: 'breast cancer',
+					},
+				],
+			]),
+		});
+
+		expect(
+			screen.getByRole('heading', {
+				level: 2,
+				name: 'GSE123 - RNA-seq of 3273 SCAN-B breast tumors',
+			}),
+		).toBeTruthy();
+		expect(screen.queryByText('primary breast cancer')).toBeNull();
+		expect(screen.queryByText('Expression profiling by high throughput sequencing')).toBeNull();
+	});
+
+	it('shows sample origin in metadata', () => {
+		renderHeader(createDataset(), {
+			sampleOriginMap: new Map([['GSE123', ['Sweden', 'United States']]]),
+		});
+
+		expect(screen.getByText('Sample origin:')).toBeTruthy();
+		expect(screen.getByText('Sweden, United States')).toBeTruthy();
+	});
 
 	it('renders short citations as publication links instead of PMCIDs', () => {
 		renderHeader(createDataset());

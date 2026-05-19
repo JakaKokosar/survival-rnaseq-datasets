@@ -64,14 +64,10 @@ export function getEndpointCardBorderClass(ep: SurvivalEndpoint): string {
 
 // ── Sort Helpers ────────────────────────────────────────────────────
 
-export type SortColumn = 'samples' | 'sampleOrigin' | 'cancer';
+export type SortColumn = 'samples' | 'cancer';
 export type SortDirection = 'asc' | 'desc';
 
-const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>([
-	'samples',
-	'sampleOrigin',
-	'cancer',
-]);
+const VALID_SORT_COLUMNS: ReadonlySet<string> = new Set<SortColumn>(['samples', 'cancer']);
 
 export function isValidSortColumn(value: string): value is SortColumn {
 	return VALID_SORT_COLUMNS.has(value);
@@ -99,14 +95,6 @@ function normalizeSortText(value: string): string {
 	return value.trim().toLocaleLowerCase();
 }
 
-function getSampleOriginSortValue(dataset: Dataset, sampleOriginMap?: Map<string, string[]>): string {
-	const origins = sampleOriginMap?.get(dataset.data_id) ?? [];
-	return origins
-		.map(normalizeSortText)
-		.filter(Boolean)
-		.join(' | ');
-}
-
 function getCancerSortValue(dataset: Dataset, summariesMap?: Map<string, GeoSeriesSummary>): string {
 	return normalizeSortText(summariesMap?.get(dataset.data_id)?.cancer_group ?? dataset.data_id);
 }
@@ -116,7 +104,6 @@ export function sortDatasets(
 	column: SortColumn | null,
 	direction: SortDirection | null,
 	summariesMap?: Map<string, GeoSeriesSummary>,
-	sampleOriginMap?: Map<string, string[]>,
 ): Dataset[] {
 	if (!column || !direction) return datasets;
 	return [...datasets].sort((a, b) => {
@@ -124,13 +111,7 @@ export function sortDatasets(
 		if (column === 'samples') {
 			result = a.data_summary.samples - b.data_summary.samples;
 		} else {
-			const aVal = column === 'sampleOrigin'
-				? getSampleOriginSortValue(a, sampleOriginMap)
-				: getCancerSortValue(a, summariesMap);
-			const bVal = column === 'sampleOrigin'
-				? getSampleOriginSortValue(b, sampleOriginMap)
-				: getCancerSortValue(b, summariesMap);
-			result = aVal.localeCompare(bVal);
+			result = getCancerSortValue(a, summariesMap).localeCompare(getCancerSortValue(b, summariesMap));
 		}
 		if (result === 0) result = a.data_id.localeCompare(b.data_id);
 		return direction === 'asc' ? result : -result;
@@ -176,15 +157,14 @@ export function updateUrlParams(
 // ── LocalStorage ────────────────────────────────────────────────────
 
 const SPLIT_RATIO_KEY = 'datasetBrowserSplitRatio';
-const SPLIT_RATIO_DEFAULT = 45;
-const SPLIT_RATIO_MIN = 15;
-const SPLIT_RATIO_MAX = 85;
+export const SPLIT_RATIO_MIN = 15;
+export const SPLIT_RATIO_MAX = 60;
 
-export function readSplitRatio(): number {
+export function readSplitRatio(): number | null {
 	const stored = parseFloat(localStorage.getItem(SPLIT_RATIO_KEY) ?? '');
 	return Number.isFinite(stored) && stored >= SPLIT_RATIO_MIN && stored <= SPLIT_RATIO_MAX
 		? stored
-		: SPLIT_RATIO_DEFAULT;
+		: null;
 }
 
 export function saveSplitRatio(ratio: number): void {

@@ -18,7 +18,6 @@ interface DatasetTableProps {
 	mobileTab: 'list' | 'details';
 	isDesktop: boolean;
 	summariesMap: Map<string, GeoSeriesSummary>;
-	sampleOriginMap: Map<string, string[]>;
 	onSort: (column: SortColumn) => void;
 	onSelectDataset: (id: string) => void;
 	onListboxKeydown: (event: KeyboardEvent) => void;
@@ -93,7 +92,6 @@ function renderTable(sortedDatasets: Dataset[], overrides: Partial<DatasetTableP
 			mobileTab: 'list',
 			isDesktop: true,
 			summariesMap: new Map<string, GeoSeriesSummary>(),
-			sampleOriginMap: new Map(sortedDatasets.map((dataset) => [dataset.data_id, ['United States']])),
 			onSort: vi.fn(),
 			onSelectDataset: vi.fn(),
 			onListboxKeydown: vi.fn(),
@@ -131,37 +129,47 @@ describe('DatasetTable endpoint stats', () => {
 
 		const { container } = renderTable([createDataset(), noCompleteEndpoints]);
 
-		expect(screen.getByRole('columnheader', { name: 'Endpoint Complete Censored' })).toBeTruthy();
+		expect(screen.getByRole('columnheader', { name: 'Endpoint' })).toBeTruthy();
+		expect(screen.getByRole('columnheader', { name: 'Missing' })).toBeTruthy();
+		expect(screen.getByRole('columnheader', { name: 'Censored' })).toBeTruthy();
+		expect(container.querySelector('[colspan]')).toBeNull();
 		expect(screen.getAllByRole('columnheader').map((header) => header.textContent?.trim())).toEqual([
-			'# SAMPLES',
-			'SAMPLE ORIGIN',
+			'N',
 			'CANCER',
-			'Endpoint Complete Censored',
+			'Endpoint',
+			'Missing',
+			'Censored',
 		]);
 
-		const statsRow = container.querySelector('[data-dataset-id="GSE123"]');
-		expect(statsRow).not.toBeNull();
-		expect(within(statsRow as HTMLElement).getByText('OS')).toBeTruthy();
-		expect(within(statsRow as HTMLElement).getByText('DOR')).toBeTruthy();
-		expect(within(statsRow as HTMLElement).getByText('48%')).toBeTruthy();
-		expect(within(statsRow as HTMLElement).getByText('95%')).toBeTruthy();
-		expect(within(statsRow as HTMLElement).getAllByText('—').length).toBe(2);
+		const statsRows = container.querySelectorAll('[data-dataset-id="GSE123"]');
+		expect(statsRows).toHaveLength(2);
+		expect(within(statsRows[0] as HTMLElement).getByText('OS')).toBeTruthy();
+		expect(within(statsRows[0] as HTMLElement).getByText('48%')).toBeTruthy();
+		expect(within(statsRows[0] as HTMLElement).getByText('5%')).toBeTruthy();
+		expect(within(statsRows[1] as HTMLElement).getByText('DOR')).toBeTruthy();
+		expect(within(statsRows[1] as HTMLElement).getAllByText('—').length).toBe(2);
 
 		const emptyRow = container.querySelector('[data-dataset-id="GSE456"]');
 		expect(emptyRow).not.toBeNull();
 		expect(within(emptyRow as HTMLElement).getByLabelText('No complete endpoints')).toBeTruthy();
-		expect(within(emptyRow as HTMLElement).getByText('No complete endpoint metrics')).toBeTruthy();
+		expect(within(emptyRow as HTMLElement).getByText('No complete metrics')).toBeTruthy();
+		expect(within(emptyRow as HTMLElement).getAllByText('—')).toHaveLength(2);
 	});
 
-	it('makes sample origin and cancer headers sortable', async () => {
+	it('shows number-of-samples tooltip on N header and sample count cells', () => {
+		renderTable([createDataset()]);
+
+		expect(screen.getByRole('button', { name: 'N' }).getAttribute('title')).toBe('Number of samples');
+		expect(screen.getByTitle('100 samples')).toBeTruthy();
+	});
+
+	it('makes cancer header sortable', async () => {
 		const onSort = vi.fn();
 
 		renderTable([createDataset()], { onSort });
 
-		await fireEvent.click(screen.getByRole('button', { name: 'SAMPLE ORIGIN' }));
 		await fireEvent.click(screen.getByRole('button', { name: 'CANCER' }));
 
-		expect(onSort).toHaveBeenNthCalledWith(1, 'sampleOrigin');
-		expect(onSort).toHaveBeenNthCalledWith(2, 'cancer');
+		expect(onSort).toHaveBeenCalledWith('cancer');
 	});
 });
