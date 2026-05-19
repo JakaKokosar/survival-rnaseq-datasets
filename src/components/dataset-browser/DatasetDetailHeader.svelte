@@ -123,31 +123,29 @@
 	<!-- Metadata -->
 	<div class="mt-4 border-t border-slate-100 pt-4">
 		{#if dataset.data_file_names && dataset.data_file_names.length > 0}
-			<div class="flex flex-col gap-3 md:grid md:grid-cols-[minmax(0,1.75fr)_1px_minmax(0,1fr)] md:items-start md:gap-x-4 md:gap-y-0">
-				<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm md:min-w-0">
-					<dt class="font-medium text-slate-500">Sample origin:</dt>
-					<dd class="text-slate-900">
-						{#if sampleOrigins.length > 0}
-							{sampleOrigins.join(', ')}
-						{:else}
-							—
-						{/if}
-					</dd>
-					<dt class="font-medium text-slate-500">NCBI data availability:</dt>
-					<dd class="text-slate-900">
-						{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
-					</dd>
-					<dt class="font-medium text-slate-500">Data reproducibility:</dt>
-					<dd class="text-slate-900">
-						{@render reproducibilityContent()}
-					</dd>
-					<dt class="pt-0.5 font-medium text-slate-500">Related publications:</dt>
-					<dd class="min-w-0 pt-0.5 text-slate-900">
-						{@render relatedPublicationContent()}
-					</dd>
-				</dl>
-				<div class="hidden w-px self-stretch bg-slate-200 md:block"></div>
-				<div data-tour="prepared-datasets" class="flex flex-col gap-2 md:min-w-0">
+			<div class="flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] md:items-start md:gap-x-6 md:gap-y-0">
+				<section class="md:min-w-0">
+					<dl class="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-2 text-sm leading-6 text-slate-900">
+						<dt class="font-medium text-slate-500">Sample origin:</dt>
+						<dd class="text-slate-900">
+							{#if sampleOrigins.length > 0}
+								{sampleOrigins.join(', ')}
+							{:else}
+								—
+							{/if}
+						</dd>
+						<dt class="font-medium text-slate-500">Reproducibility:</dt>
+						<dd class="text-slate-900">
+							{@render reproducibilityContent()}
+						</dd>
+						<dt class="font-medium text-slate-500">Publications:</dt>
+						<dd class="min-w-0 text-slate-900">
+							{@render relatedPublicationContent()}
+						</dd>
+					</dl>
+				</section>
+				<section data-tour="prepared-datasets" class="flex flex-col gap-2 md:min-w-0 md:border-l md:border-slate-200 md:pl-6">
+					<h3 class="text-xs font-medium uppercase tracking-wide text-slate-500">Prepared downloads</h3>
 					{#each dataset.data_file_names as filename (filename)}
 						<a
 							href={buildDataFileDownloadUrl(filename)}
@@ -165,10 +163,10 @@
 							<span class="break-words whitespace-normal md:max-w-[360px] lg:max-w-[520px]">{filename}</span>
 						</a>
 					{/each}
-				</div>
+				</section>
 			</div>
 		{:else}
-			<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1.5 text-sm">
+			<dl class="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-2 text-sm leading-6">
 				<dt class="font-medium text-slate-500">Sample origin:</dt>
 				<dd class="text-slate-900">
 					{#if sampleOrigins.length > 0}
@@ -177,16 +175,12 @@
 						—
 					{/if}
 				</dd>
-				<dt class="font-medium text-slate-500">NCBI data availability:</dt>
-				<dd class="text-slate-900">
-					{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
-				</dd>
-				<dt class="font-medium text-slate-500">Data reproducibility:</dt>
+				<dt class="font-medium text-slate-500">Reproducibility:</dt>
 				<dd class="text-slate-900">
 					{@render reproducibilityContent()}
 				</dd>
-				<dt class="pt-0.5 font-medium text-slate-500">Related publications:</dt>
-				<dd class="min-w-0 pt-0.5 text-slate-900">
+				<dt class="font-medium text-slate-500">Publications:</dt>
+				<dd class="min-w-0 text-slate-900">
 					{@render relatedPublicationContent()}
 				</dd>
 			</dl>
