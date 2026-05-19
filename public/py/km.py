@@ -1,7 +1,6 @@
 """Kaplan–Meier survival curve computation for the dataset browser.
 
-Loaded by PyScript (see Layout.astro). Exposes `compute_km` on `window.kmPythonCompute`
-and fires a `kmpython:ready` event when the runtime + lifelines are loaded.
+Loaded in a PyScript web worker so Pyodide and lifelines do not block the page UI.
 
 The returned shape (a JSON string) matches the `KmResult` type defined in
 `src/lib/kmPython.ts`. JSON is used so the JS side never has to manage PyProxies.
@@ -15,7 +14,6 @@ import sys
 import lifelines
 import pandas as pd
 from lifelines import KaplanMeierFitter
-from pyscript import window
 
 PALETTE = ["#18aeea", "#ff4d24", "#16a34a", "#9333ea", "#ea580c", "#0891b2"]
 EXCLUDED_GROUP_COLUMNS = {
@@ -186,10 +184,13 @@ def compute_km(csv_text, time_col, event_col, group_col):
     return json.dumps({"series": series, "numericColumns": numeric})
 
 
-window.kmPythonCompute = compute_km
-window.kmPythonEnv = json.dumps({
-    "python": sys.version.split()[0],
-    "lifelines": lifelines.__version__,
-})
-window.kmPythonReady = True
-window.dispatchEvent(window.Event.new("kmpython:ready"))
+def get_env():
+    return json.dumps(
+        {
+            "python": sys.version.split()[0],
+            "lifelines": lifelines.__version__,
+        }
+    )
+
+
+__export__ = ["compute_km", "get_env"]
