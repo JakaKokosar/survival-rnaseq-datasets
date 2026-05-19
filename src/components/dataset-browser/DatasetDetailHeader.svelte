@@ -12,6 +12,7 @@
 
 	let seriesSummary = $derived(summariesMap.get(dataset.data_id));
 	let relatedPublications = $derived(dataset.related_publications);
+	let reproducibilityNoteId = $derived(`reproducibility-note-${dataset.data_id}`);
 </script>
 
 {#snippet relatedPublicationContent()}
@@ -48,6 +49,38 @@
 	{:else}
 		<span class="italic text-slate-400">No publications linked</span>
 	{/if}
+{/snippet}
+
+{#snippet reproducibilityContent()}
+	<span class="inline-flex items-center gap-1">
+		<span>{getReproducibleFormatted(dataset.Reproducible)}</span>
+		{#if dataset.Notes}
+			<span class="group relative inline-flex">
+				<button
+					type="button"
+					class="inline-flex rounded text-amber-600 hover:text-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-1"
+					aria-label="Reproducibility warning"
+					aria-describedby={reproducibilityNoteId}
+				>
+					<svg aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+						></path>
+					</svg>
+				</button>
+				<span
+					id={reproducibilityNoteId}
+					role="tooltip"
+					class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 w-72 max-w-[min(18rem,calc(100vw-2rem))] -translate-x-1/2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-snug text-amber-950 opacity-0 shadow-md transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+				>
+					{dataset.Notes}
+				</span>
+			</span>
+		{/if}
+	</span>
 {/snippet}
 
 <header data-tour="dataset-detail-header" class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
@@ -105,7 +138,9 @@
 						{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
 					</dd>
 					<dt class="font-medium text-slate-500">Data reproducibility:</dt>
-					<dd class="text-slate-900">{getReproducibleFormatted(dataset.Reproducible)}</dd>
+					<dd class="text-slate-900">
+						{@render reproducibilityContent()}
+					</dd>
 					<dt class="pt-0.5 font-medium text-slate-500">Related publications:</dt>
 					<dd class="min-w-0 pt-0.5 text-slate-900">
 						{@render relatedPublicationContent()}
@@ -139,7 +174,9 @@
 					{dataset['NCBI-generated data'] === 'Available' ? 'Yes' : 'No'}
 				</dd>
 				<dt class="font-medium text-slate-500">Data reproducibility:</dt>
-				<dd class="text-slate-900">{getReproducibleFormatted(dataset.Reproducible)}</dd>
+				<dd class="text-slate-900">
+					{@render reproducibilityContent()}
+				</dd>
 				<dt class="pt-0.5 font-medium text-slate-500">Related publications:</dt>
 				<dd class="min-w-0 pt-0.5 text-slate-900">
 					{@render relatedPublicationContent()}
@@ -147,19 +184,5 @@
 			</dl>
 		{/if}
 	</div>
-	{#if dataset.Notes}
-		<div class="mt-4 flex gap-3 rounded-r-lg border border-slate-200 border-l-4 border-l-slate-400 bg-slate-50 p-3">
-			<span class="flex-shrink-0 text-slate-500" aria-hidden="true">
-				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-					></path>
-				</svg>
-			</span>
-			<p class="text-sm text-slate-700">{dataset.Notes}</p>
-		</div>
-	{/if}
+
 </header>

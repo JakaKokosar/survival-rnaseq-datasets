@@ -68,4 +68,12 @@ describe('DatasetDetailHeader related publications', () => {
 
 		expect(screen.getByText('No publications linked')).toBeTruthy();
 	});
+
+	it('renders dataset notes in a reproducibility warning tooltip', () => {
+		const note = '10 samples are missing from the raw counts matrix.';
+		renderHeader(createDataset({ Notes: note }));
+
+		expect(screen.getByRole('button', { name: 'Reproducibility warning' })).toBeTruthy();
+		expect(screen.getByRole('tooltip', { name: note })).toBeTruthy();
+	});
 });
