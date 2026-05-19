@@ -8,7 +8,7 @@ An Astro + Svelte 5 application for exploring GEO datasets used in survival anal
 - Strict TypeScript + runtime schema validation (Zod)
 - URL-synced dataset selection/sort (`selected`, `sort`, `dir` query params)
 - Accessible keyboard patterns for table navigation, mobile tabs, and panel toggles
-- Local Kaplan-Meier plotting from the tracked sample CSV fixture
+- Kaplan-Meier plotting from per-GSE ssGSEA CSVs served at `/downloads/{GSE}_preprocessed_ssgsea.csv`
 
 ## Stack
 
@@ -103,16 +103,13 @@ tests/integration/
 
 No environment variables are required for local development or production builds.
 
-**Dev vs production:** Vite loads env files by mode:
-- `astro dev` → `.env.development`
-- `astro build` → `.env.production`
-
 Copy `.env.example` only if future local-only variables are added.
 
 ## Data validation
 
 - Source data is loaded from `src/data/data_summary.json`.
-- The local Kaplan-Meier panel currently renders from the tracked `test-sample.csv` fixture.
+- Kaplan-Meier loads `{data_id}_preprocessed_ssgsea.csv` from `/downloads/` (Caddy in production; `dev-downloads/` when running `npm run dev` — not copied into the build).
+- For local dev, place a sample file at e.g. `dev-downloads/GSE224564_preprocessed_ssgsea.csv` (gitignored).
 - Runtime schema validation is performed in `src/lib/dataset-schema.ts`.
 - Dataset enum-like fields are constrained (`Reproducible`, `NCBI-generated data`).
 - `src/pages/index.astro` parses JSON through `parseDatasets(...)` before rendering.
@@ -127,7 +124,8 @@ Copy `.env.example` only if future local-only variables are added.
 - `src/pages/index.astro` - page entry and data load boundary
 - `src/components/DatasetBrowser.svelte` - top-level UI state and event handling
 - `src/components/dataset-browser/` - decomposed UI components
-- `src/lib/km.ts` - CSV parsing and Kaplan-Meier estimate helpers
+- `src/lib/kmPython.ts` - Pyodide/lifelines Kaplan-Meier bridge
+- `public/py/km.py` - lifelines computation loaded by the PyScript worker
 - `src/lib/dataset-selection.ts` - endpoint selection and normalization helpers
 - `src/lib/dataset-utils.ts` - formatting/sort/url/localStorage helpers
 - `src/lib/dataset-schema.ts` - runtime data validation schema

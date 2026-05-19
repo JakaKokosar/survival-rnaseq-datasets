@@ -4,7 +4,6 @@ export interface KmPoint {
 	atRisk: number;
 	events: number;
 	censors: number;
-	varianceSum: number;
 	ciLow: number;
 	ciHigh: number;
 }

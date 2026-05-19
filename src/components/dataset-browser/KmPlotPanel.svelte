@@ -28,19 +28,24 @@
 
 	let endpointIndex = $state(0);
 	let groupColumn = $state('(None)');
-	let lastDatasetId: string | null = null;
-	$effect(() => {
-		if (datasetId !== lastDatasetId) {
-			lastDatasetId = datasetId;
-			untrack(() => {
-				endpointIndex = 0;
-				groupColumn = '(None)';
-			});
-		}
-	});
+	let endpointResetKey = $derived(
+		`${datasetId ?? ''}|${endpoints
+			.map((ep) => `${ep.time_var.var_name}:${ep.event_var.var_name}`)
+			.join('|')}`,
+	);
+	let lastEndpointResetKey = '';
 
 	let endpoint = $derived(endpoints[endpointIndex] ?? null);
 	let endpointLabel = $derived(endpoint?.abbrv ?? '');
+	let timeAxisLabel = $derived.by(() => {
+		const unit = endpoint?.time_var.var_unit?.trim();
+		if (unit && unit.toLowerCase() !== 'unknown') return unit.charAt(0).toUpperCase() + unit.slice(1);
+		const name = endpoint?.time_var.var_name?.toLowerCase() ?? '';
+		if (name.includes('day')) return 'Days';
+		if (name.includes('month') || name.includes('mos')) return 'Months';
+		if (name.includes('year')) return 'Years';
+		return 'Time';
+	});
 	let excludedKeys = $derived.by(() => {
 		const set = new Set<string>(NON_GROUP_CLINICAL_COLUMNS);
 		for (const ep of endpoints) {
@@ -58,20 +63,48 @@
 	let envOpen = $state(false);
 	let computing = $state(false);
 	let pyError = $state<string | null>(null);
-	let series = $state<KmSeries[]>([]);
 	let numericGroupOptions = $state<string[]>([]);
-	let maxTime = $state(1);
+
+	type KmChartState = {
+		series: KmSeries[];
+		maxTime: number;
+	};
+
+	const emptyChart = (): KmChartState => ({ series: [], maxTime: 1 });
+	let kmChart = $state<KmChartState>(emptyChart());
+	let chartRenderKey = $state(0);
+	let maxTime = $derived(kmChart.maxTime);
 	let xTicks = $derived(getTicks(maxTime, 10));
 	let yTicks = [0, 0.25, 0.5, 0.75, 1];
+
+	$effect(() => {
+		if (endpointResetKey !== lastEndpointResetKey) {
+			lastEndpointResetKey = endpointResetKey;
+			untrack(() => {
+				endpointIndex = 0;
+				groupColumn = '(None)';
+				numericGroupOptions = [];
+				kmChart = emptyChart();
+				chartRenderKey += 1;
+				pyError = null;
+			});
+		}
+	});
 
 	let runId = 0;
 	let csvCache = new Map<string, string>();
 	let activeAbort: AbortController | null = null;
+	let lastComputeKey = '';
+
+	function kmDataUrl(datasetId: string): string {
+		const filename = `${datasetId}_preprocessed_ssgsea.csv`;
+		return `/downloads/${encodeURIComponent(filename)}`;
+	}
 
 	async function loadDatasetCsv(id: string, signal: AbortSignal): Promise<string> {
 		const cached = csvCache.get(id);
 		if (cached !== undefined) return cached;
-		const response = await fetch(`/datasets/${encodeURIComponent(id)}.csv`, { signal });
+		const response = await fetch(kmDataUrl(id), { signal });
 		if (!response.ok) throw new Error(`Dataset "${id}" not found (HTTP ${response.status})`);
 		const text = await response.text();
 		csvCache.set(id, text);
@@ -82,24 +115,34 @@
 		const id = datasetId;
 		const currentEndpoint = endpoint;
 		const group = groupColumn === '(None)' ? null : groupColumn;
-		const excluded = excludedKeys;
 		runId += 1;
 		const myRun = runId;
 		if (activeAbort) activeAbort.abort();
 		const abort = new AbortController();
 		activeAbort = abort;
+		const excluded = excludedKeys;
 
 		if (!id || !currentEndpoint) {
-			series = [];
+			kmChart = emptyChart();
+			chartRenderKey += 1;
 			numericGroupOptions = [];
-			maxTime = 1;
+			lastComputeKey = '';
 			computing = false;
 			pyError = null;
-			return;
+			return () => {
+				abort.abort();
+				if (activeAbort === abort) activeAbort = null;
+			};
 		}
 
 		const timeCol = currentEndpoint.time_var.var_name;
 		const eventCol = currentEndpoint.event_var.var_name;
+		const computeKey = `${id}|${timeCol}|${eventCol}|${group ?? ''}`;
+		if (computeKey !== lastComputeKey) {
+			lastComputeKey = computeKey;
+			kmChart = emptyChart();
+			chartRenderKey += 1;
+		}
 		computing = true;
 		pyError = null;
 		(async () => {
@@ -110,19 +153,43 @@
 				if (!pyEnv) pyEnv = getKmEnv();
 				const result = await computeKm(csv, timeCol, eventCol, group);
 				if (myRun !== runId) return;
-				series = result.series;
-				numericGroupOptions = result.numericColumns.filter((column) => !excluded.has(column));
+				if (import.meta.env.DEV) {
+					console.debug('[KmPlotPanel] computeKm result', {
+						datasetId: id,
+						timeCol,
+						eventCol,
+						group,
+						seriesCount: result.series.length,
+						labels: result.series.map((item) => item.label),
+					});
+				}
 				const times = result.series.flatMap((s) => s.points.map((p) => p.time));
-				maxTime = times.length > 0 ? Math.max(1, ...times) : 1;
+				kmChart = {
+					series: result.series,
+					maxTime: times.length > 0 ? Math.max(1, ...times) : 1,
+				};
+				chartRenderKey += 1;
+				const availableGroups = result.numericColumns.filter((column) => !excluded.has(column));
+				numericGroupOptions = availableGroups;
+				if (group !== null && !availableGroups.includes(group)) {
+					groupColumn = '(None)';
+				}
 			} catch (error) {
 				if (myRun !== runId) return;
 				if ((error as { name?: string })?.name === 'AbortError') return;
 				pyError = error instanceof Error ? error.message : String(error);
-				series = [];
+				kmChart = emptyChart();
+				chartRenderKey += 1;
 			} finally {
 				if (myRun === runId) computing = false;
+				if (activeAbort === abort) activeAbort = null;
 			}
 		})();
+
+		return () => {
+			abort.abort();
+			if (activeAbort === abort) activeAbort = null;
+		};
 	});
 
 	function xScale(time: number): number {
@@ -193,31 +260,22 @@
 		return Number(value.toFixed(1)).toString();
 	}
 
+	function truncateLegendLabel(label: string, maxLength = 26): string {
+		if (label.length <= maxLength) return label;
+		return `${label.slice(0, maxLength - 1)}…`;
+	}
+
 	const legendW = 260;
 	const legendPad = 12;
 	const legendRowH = 22;
-	const legendSwatch = 10;
-	const legendGap = 8;
-	const legendLabelX = legendPad + legendSwatch + legendGap;
-	const legendNNWidth = 52;
-	const legendMedianWidth = 52;
-	const legendColGap = 10;
-	/** Right edges for text-anchor="end" — n/N column then Median column */
-	const legendXMedian = legendW - legendPad;
-	const legendXNN = legendXMedian - legendMedianWidth - legendColGap;
-	const legendHeaderEndY = legendPad + 18;
-	const legendRowStartY = legendHeaderEndY + 10;
-	/** Right edge labels may reach before they hit the n/N column. */
-	const legendLabelRight = legendXNN - legendNNWidth - legendColGap;
-	const legendLabelClipWidth = Math.max(0, legendLabelRight - legendLabelX);
-	const legendLabelClipId = 'km-legend-label-clip';
+	const legendHeaderH = 30;
 
 	let svgRoot = $state<SVGSVGElement | undefined>(undefined);
 	/** Pixels inset from chart top-right edge (recalibrated on resize / pointer up — keeps legend anchored). */
 	let legendInsetRight = $state(16);
 	let legendInsetTop = $state(20);
 
-	let legendHeight = $derived(legendRowStartY + series.length * legendRowH + legendPad);
+	let legendHeight = $derived(legendHeaderH + kmChart.series.length * legendRowH + legendPad);
 
 	let legendPose = $derived.by(() => {
 		const cw = chart.width;
@@ -230,14 +288,22 @@
 		return { left, top };
 	});
 
+	let legendOverlayStyle = $derived({
+		left: `${(legendPose.left / chart.width) * 100}%`,
+		top: `${(legendPose.top / chart.height) * 100}%`,
+		width: `${legendW}px`,
+	});
+
 	function rebalanceLegendInsets(chartWidth: number, chartHeight: number): void {
-		const lh = legendRowStartY + series.length * legendRowH + legendPad;
+		const lh = legendHeaderH + kmChart.series.length * legendRowH + legendPad;
 		const maxLeft = Math.max(0, chartWidth - legendW);
 		const maxTop = Math.max(0, chartHeight - lh);
 		const desiredLeft = Math.min(Math.max(chartWidth - legendW - legendInsetRight, 0), maxLeft);
 		const desiredTop = Math.min(Math.max(legendInsetTop, 0), maxTop);
-		legendInsetRight = chartWidth - legendW - desiredLeft;
-		legendInsetTop = desiredTop;
+		const nextInsetRight = chartWidth - legendW - desiredLeft;
+		const nextInsetTop = desiredTop;
+		if (legendInsetRight !== nextInsetRight) legendInsetRight = nextInsetRight;
+		if (legendInsetTop !== nextInsetTop) legendInsetTop = nextInsetTop;
 	}
 
 	function syncPlotBoxFromNode(node: HTMLElement) {
@@ -262,30 +328,21 @@
 
 	let legendDrag = $state<{
 		pointerId: number;
-		startSvgX: number;
-		startSvgY: number;
+		startClientX: number;
+		startClientY: number;
 		originInsetRight: number;
 		originInsetTop: number;
 	} | null>(null);
-
-	function clientToSvgPoint(svg: SVGSVGElement, cx: number, cy: number) {
-		const p = svg.createSVGPoint();
-		p.x = cx;
-		p.y = cy;
-		const ctm = svg.getScreenCTM();
-		return ctm ? p.matrixTransform(ctm.inverse()) : { x: 0, y: 0 };
-	}
 
 	function onLegendPointerDown(e: PointerEvent) {
 		if (!svgRoot) return;
 		e.preventDefault();
 		const target = e.currentTarget;
 		if (target instanceof Element) target.setPointerCapture(e.pointerId);
-		const pt = clientToSvgPoint(svgRoot, e.clientX, e.clientY);
 		legendDrag = {
 			pointerId: e.pointerId,
-			startSvgX: pt.x,
-			startSvgY: pt.y,
+			startClientX: e.clientX,
+			startClientY: e.clientY,
 			originInsetRight: legendInsetRight,
 			originInsetTop: legendInsetTop,
 		};
@@ -293,11 +350,13 @@
 
 	function onLegendPointerMove(e: PointerEvent) {
 		if (!legendDrag || e.pointerId !== legendDrag.pointerId || !svgRoot) return;
-		const pt = clientToSvgPoint(svgRoot, e.clientX, e.clientY);
-		const dx = pt.x - legendDrag.startSvgX;
-		const dy = pt.y - legendDrag.startSvgY;
-		legendInsetRight = legendDrag.originInsetRight - dx;
-		legendInsetTop = legendDrag.originInsetTop + dy;
+		const rect = svgRoot.getBoundingClientRect();
+		const dx = e.clientX - legendDrag.startClientX;
+		const dy = e.clientY - legendDrag.startClientY;
+		const svgDx = rect.width > 0 ? (dx / rect.width) * chart.width : 0;
+		const svgDy = rect.height > 0 ? (dy / rect.height) * chart.height : 0;
+		legendInsetRight = legendDrag.originInsetRight - svgDx;
+		legendInsetTop = legendDrag.originInsetTop + svgDy;
 	}
 
 	function onLegendPointerUp(e: PointerEvent) {
@@ -527,7 +586,7 @@
 
 								{#if showConfidenceIntervals}
 									<g data-testid="km-confidence-layer">
-										{#each series as seriesItem (seriesItem.key)}
+										{#each kmChart.series as seriesItem (`${chartRenderKey}-${seriesItem.key}`)}
 											<path d={confidencePath(seriesItem.points)} fill={seriesItem.color} opacity="0.18" />
 										{/each}
 									</g>
@@ -576,7 +635,7 @@
 										x={chart.margin.left + plotWidth / 2}
 										y={chart.height - 18}
 										text-anchor="middle"
-										class="axis-title">Months</text
+										class="axis-title">{timeAxisLabel}</text
 									>
 									<text
 										x={18}
@@ -589,22 +648,22 @@
 
 								{#if showMedianSurvival}
 									<g data-testid="km-median-layer">
-										{#each series as seriesItem (seriesItem.key)}
+										{#each kmChart.series as seriesItem (`${chartRenderKey}-${seriesItem.key}`)}
 											<path d={medianPath(seriesItem)} stroke={seriesItem.color} stroke-dasharray="3 4" />
 										{/each}
 									</g>
 								{/if}
 
 								<g data-testid="km-series-layer">
-									{#each series as seriesItem (seriesItem.key)}
+									{#each kmChart.series as seriesItem (`${chartRenderKey}-${seriesItem.key}`)}
 										<path d={stepPath(seriesItem.points)} fill="none" stroke={seriesItem.color} stroke-width="2.25" />
 									{/each}
 								</g>
 
 								{#if showCensoringTicks}
 									<g data-testid="km-censor-layer">
-										{#each series as seriesItem (seriesItem.key)}
-											{#each seriesItem.censorTicks as tick (`${seriesItem.key}-${tick.time}-${tick.survival}`)}
+										{#each kmChart.series as seriesItem (`${chartRenderKey}-${seriesItem.key}`)}
+											{#each seriesItem.censorTicks as tick, index (`${chartRenderKey}-${seriesItem.key}-${index}`)}
 												<path
 													d={`M ${xScale(tick.time)} ${yScale(tick.survival) - 4} V ${yScale(tick.survival) + 4}`}
 													stroke={seriesItem.color}
@@ -615,70 +674,49 @@
 									</g>
 								{/if}
 
-								<g
-									data-testid="km-legend"
-									class="legend legend-drag"
-									transform={`translate(${legendPose.left}, ${legendPose.top})`}
-									role="group"
-									aria-label="Chart legend — anchored to the top-right inset; drag to move"
-									onpointerdown={onLegendPointerDown}
-									onpointermove={onLegendPointerMove}
-									onpointerup={onLegendPointerUp}
-									onpointercancel={onLegendPointerUp}
-								>
-									<defs>
-										<clipPath id={legendLabelClipId}>
-											<rect x={legendLabelX} y="0" width={legendLabelClipWidth} height={legendHeight} />
-										</clipPath>
-									</defs>
-									<rect class="legend-frame" x="0" y="0" width={legendW} height={legendHeight} rx="4" />
-									<text
-										x={legendXNN}
-										y={legendPad + 13}
-										text-anchor="end"
-										class="legend-heading"
-										pointer-events="none"
-									>
-										n/N
-									</text>
-									<text
-										x={legendXMedian}
-										y={legendPad + 13}
-										text-anchor="end"
-										class="legend-heading"
-										pointer-events="none"
-									>
-										Median
-									</text>
-									<line
-										class="legend-sep"
-										x1={legendPad}
-										y1={legendHeaderEndY}
-										x2={legendW - legendPad}
-										y2={legendHeaderEndY}
-										pointer-events="none"
-									/>
-									{#each series as seriesItem, index (seriesItem.key)}
-										{@const rowTop = legendRowStartY + index * legendRowH}
-										<g class="legend-row" pointer-events="none">
-											<rect
-												x={legendPad}
-												y={rowTop}
-												width={legendSwatch}
-												height={legendSwatch}
-												fill={seriesItem.color}
-											/>
-											<text x={legendLabelX} y={rowTop + legendSwatch - 1} clip-path={`url(#${legendLabelClipId})`}>{seriesItem.label}</text>
-											<text x={legendXNN} y={rowTop + legendSwatch - 1} text-anchor="end">
-												{seriesItem.events}/{seriesItem.total}
-											</text>
-											<text x={legendXMedian} y={rowTop + legendSwatch - 1} text-anchor="end">
-												{formatNumber(seriesItem.median)}
-											</text>
-										</g>
-									{/each}
-								</g>
 							</svg>
+
+							<div
+								data-testid="km-legend"
+								class="legend-overlay absolute z-20 touch-none select-none"
+								style:left={legendOverlayStyle.left}
+								style:top={legendOverlayStyle.top}
+								style:width={legendOverlayStyle.width}
+								role="group"
+								aria-label="Chart legend — drag to move"
+								onpointerdown={onLegendPointerDown}
+								onpointermove={onLegendPointerMove}
+								onpointerup={onLegendPointerUp}
+								onpointercancel={onLegendPointerUp}
+							>
+								<div class="overflow-hidden rounded border border-slate-300 bg-white text-xs text-slate-700 shadow-sm">
+									<div class="grid grid-cols-[14px_minmax(0,1fr)_52px_52px] items-center gap-x-2 border-b border-slate-200 px-3 py-2 font-semibold text-slate-500">
+										<span aria-hidden="true"></span>
+										<span>Group</span>
+										<span class="text-right">n/N</span>
+										<span class="text-right">Median</span>
+									</div>
+									{#if kmChart.series.length === 0}
+										<div class="px-3 py-2 text-slate-400" data-testid="km-legend-empty">No groups</div>
+									{:else}
+										{#each kmChart.series as seriesItem, index (`${chartRenderKey}-${index}-${seriesItem.key}`)}
+											<div
+												class="legend-row grid grid-cols-[14px_minmax(0,1fr)_52px_52px] items-center gap-x-2 px-3 py-1.5 {index % 2 === 1 ? 'bg-slate-50/80' : ''}"
+												data-testid="km-legend-row"
+											>
+												<span
+													class="inline-block h-2.5 w-2.5 shrink-0 rounded-sm"
+													style:background-color={seriesItem.color}
+													aria-hidden="true"
+												></span>
+												<span class="truncate" title={seriesItem.label}>{truncateLegendLabel(seriesItem.label)}</span>
+												<span class="text-right tabular-nums">{seriesItem.events}/{seriesItem.total}</span>
+												<span class="text-right tabular-nums">{formatNumber(seriesItem.median)}</span>
+											</div>
+										{/each}
+									{/if}
+								</div>
+							</div>
 							</div>
 						</div>
 					</div>
@@ -708,9 +746,7 @@
 		stroke-width: 1;
 	}
 
-	.axes text,
-	.legend-heading,
-	.legend-row text {
+	.axes text {
 		fill: currentColor;
 		font-size: 12px;
 	}
@@ -720,35 +756,17 @@
 		fill: #475569;
 	}
 
-	.legend-drag {
+	.legend-overlay {
 		cursor: grab;
-		touch-action: none;
-		user-select: none;
 	}
 
-	.legend-drag:active {
+	.legend-overlay:active {
 		cursor: grabbing;
-	}
-
-	.legend-frame {
-		fill: white;
-		stroke: #cbd5e1;
-		stroke-width: 1;
-	}
-
-	.legend-sep {
-		stroke: #94a3b8;
-		stroke-width: 1;
 	}
 
 	[data-testid='km-median-layer'] path {
 		fill: none;
 		stroke-width: 1.3;
 		opacity: 0.65;
-	}
-
-	.legend-heading {
-		font-size: 11px;
-		font-weight: 700;
 	}
 </style>

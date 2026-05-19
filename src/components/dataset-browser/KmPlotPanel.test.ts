@@ -32,7 +32,6 @@ type StubResult = {
 			atRisk: number;
 			events: number;
 			censors: number;
-			varianceSum: number;
 			ciLow: number;
 			ciHigh: number;
 		}>;
@@ -52,10 +51,13 @@ function stubResult(label: string): StubResult {
 				events: 17,
 				median: 22.8,
 				points: [
-					{ time: 0, survival: 1, atRisk: 25, events: 0, censors: 0, varianceSum: 0, ciLow: 1, ciHigh: 1 },
-					{ time: 10, survival: 0.6, atRisk: 25, events: 10, censors: 0, varianceSum: 0.02, ciLow: 0.4, ciHigh: 0.78 },
+					{ time: 0, survival: 1, atRisk: 25, events: 0, censors: 0, ciLow: 1, ciHigh: 1 },
+					{ time: 10, survival: 0.6, atRisk: 25, events: 10, censors: 0, ciLow: 0.4, ciHigh: 0.78 },
 				],
-				censorTicks: [{ time: 5, survival: 0.9 }],
+				censorTicks: [
+					{ time: 5, survival: 0.9 },
+					{ time: 5, survival: 0.9 },
+				],
 			},
 		],
 		numericColumns: ['DDX31'],
@@ -103,6 +105,57 @@ describe('KmPlotPanel', () => {
 		expect(within(content as HTMLElement).getByRole('img', { name: /Kaplan-Meier OS survival chart/ })).not.toBeNull();
 	});
 
+	it('renders legend rows with group labels and stats', async () => {
+		window.kmPythonCompute = vi.fn(() =>
+			JSON.stringify({
+				series: [
+					{
+						key: '< 1',
+						label: '< 1',
+						color: '#18aeea',
+						total: 40,
+						events: 35,
+						median: 39,
+						points: [
+							{ time: 0, survival: 1, atRisk: 40, events: 0, censors: 0, ciLow: 1, ciHigh: 1 },
+						],
+						censorTicks: [],
+					},
+					{
+						key: '>= 1',
+						label: '>= 1',
+						color: '#ff4d24',
+						total: 40,
+						events: 25,
+						median: 69.6,
+						points: [
+							{ time: 0, survival: 1, atRisk: 40, events: 0, censors: 0, ciLow: 1, ciHigh: 1 },
+						],
+						censorTicks: [],
+					},
+				],
+				numericColumns: ['DDX31'],
+			}),
+		);
+
+		const { container } = renderPanel();
+		await waitFor(() => {
+			expect(container.querySelector('[data-testid="km-py-loading"]')).toBeNull();
+		});
+
+		await waitFor(() => {
+			const legend = container.querySelector('[data-testid="km-legend"]');
+			expect(legend).not.toBeNull();
+			expect(legend?.querySelectorAll('[data-testid="km-legend-row"]').length).toBe(2);
+		});
+
+		const legend = container.querySelector('[data-testid="km-legend"]');
+		expect(legend?.textContent).toContain('< 1');
+		expect(legend?.textContent).toContain('35/40');
+		expect(legend?.textContent).toContain('>= 1');
+		expect(legend?.textContent).toContain('25/40');
+	});
+
 	it('hides and shows confidence intervals, median survival, and censoring ticks', async () => {
 		const { container } = renderPanel();
 		await waitFor(() => {
@@ -143,6 +196,62 @@ describe('KmPlotPanel', () => {
 			const calls = (window.kmPythonCompute as unknown as { mock: { calls: unknown[][] } }).mock.calls;
 			expect(calls.some((args) => args[1] === 'pfs.time' && args[2] === 'pfs.event')).toBe(true);
 		});
+	});
+
+	it('clears stale grouped results and resets grouping while a new dataset loads', async () => {
+		const nextFetch = {
+			resolve: null as ((response: Response) => void) | null,
+		};
+		globalThis.fetch = vi.fn((input: RequestInfo | URL) => {
+			const url = String(input);
+			if (url.includes('GSE224564')) {
+				return Promise.resolve(new Response('first dataset', { status: 200 }));
+			}
+			if (url.includes('GSE96058')) {
+				return new Promise<Response>((resolve) => {
+					nextFetch.resolve = resolve;
+				});
+			}
+			return Promise.resolve(new Response('', { status: 404 }));
+		}) as unknown as typeof fetch;
+		window.kmPythonCompute = vi.fn((csv: string, _timeCol: string, _eventCol: string, groupCol: string | null) => {
+			const datasetLabel = csv.includes('second') ? 'Second dataset' : 'First dataset';
+			const label = groupCol ? `${datasetLabel} ${groupCol} group` : `${datasetLabel} all`;
+			return JSON.stringify(stubResult(label));
+		});
+
+		const { container, rerender } = renderPanel('GSE224564');
+
+		await waitFor(() => {
+			expect(container.querySelector('[data-testid="km-legend"]')?.textContent).toContain('First dataset all');
+		});
+
+		await fireEvent.change(screen.getByLabelText('Group by'), { target: { value: 'DDX31' } });
+		await waitFor(() => {
+			expect(container.querySelector('[data-testid="km-legend"]')?.textContent).toContain('First dataset DDX31 group');
+		});
+
+		await rerender({
+			isOpen: true,
+			onToggleOpen: vi.fn(),
+			datasetId: 'GSE96058',
+			endpoints: TEST_ENDPOINTS,
+		});
+
+		await waitFor(() => {
+			expect(screen.getByLabelText('Group by')).toHaveProperty('value', '(None)');
+			expect(container.querySelector('[data-testid="km-legend-row"]')).toBeNull();
+			expect(screen.getByTestId('km-legend-empty')).not.toBeNull();
+		});
+
+		const resolveFetch = nextFetch.resolve;
+		if (!resolveFetch) throw new Error('Expected pending dataset fetch');
+		resolveFetch(new Response('second dataset', { status: 200 }));
+
+		await waitFor(() => {
+			expect(container.querySelector('[data-testid="km-legend"]')?.textContent).toContain('Second dataset all');
+		});
+		expect(window.kmPythonCompute).toHaveBeenLastCalledWith('second dataset', 'os.time', 'os.event', null);
 	});
 
 	it('changing the event select also switches the linked time variable', async () => {

@@ -1010,8 +1010,7 @@
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
-        "Reproducible": "PARTIALLY",
-        "Notes": "One sample has missing survival data.",
+        "Reproducible": "YES",
         "Include": "YES"
     },
     {
@@ -1293,13 +1292,12 @@
             }
         ],
         "data_file_names": [
-            "GSE162682_original.csv",
-            "GSE162682_preprocessed.csv"
+            "GSE162682_original.csv"
         ],
         "data_summary": {
-            "samples": 109,
+            "samples": 105,
             "clinical_features": 19,
-            "genes": 18948
+            "genes": 18944
         },
         "candidate_genes": [],
         "Experiment type": "Expression profiling by high throughput sequencing",
@@ -1918,7 +1916,7 @@
                     "Many samples have 'time to_bcr_(days)' = 'NA' when recurrence did not occur or follow-up data are missing; event value 'NA' denotes missing event information in the metadata."
                 ],
                 "stats": {
-                    "n_incomplete": 0,
+                    "n_incomplete": 52,
                     "n_complete": 43,
                     "n_censored": 0,
                     "n_events": 43,
@@ -1931,7 +1929,7 @@
             "GSE216490_preprocessed.csv"
         ],
         "data_summary": {
-            "samples": 43,
+            "samples": 95,
             "clinical_features": 11,
             "genes": 39376
         },
