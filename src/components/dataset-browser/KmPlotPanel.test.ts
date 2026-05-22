@@ -60,7 +60,7 @@ function stubResult(label: string): StubResult {
 				],
 			},
 		],
-		numericColumns: ['DDX31'],
+		numericColumns: ['HALLMARK_HYPOXIA', 'Study_ID'],
 	};
 }
 
@@ -134,7 +134,7 @@ describe('KmPlotPanel', () => {
 						censorTicks: [],
 					},
 				],
-				numericColumns: ['DDX31'],
+				numericColumns: ['HALLMARK_HYPOXIA', 'Study_ID'],
 			}),
 		);
 
@@ -226,9 +226,13 @@ describe('KmPlotPanel', () => {
 			expect(container.querySelector('[data-testid="km-legend"]')?.textContent).toContain('First dataset all');
 		});
 
-		await fireEvent.change(screen.getByLabelText('Group by'), { target: { value: 'DDX31' } });
+		await fireEvent.change(screen.getByLabelText('Group by'), {
+			target: { value: 'HALLMARK_HYPOXIA' },
+		});
 		await waitFor(() => {
-			expect(container.querySelector('[data-testid="km-legend"]')?.textContent).toContain('First dataset DDX31 group');
+			expect(container.querySelector('[data-testid="km-legend"]')?.textContent).toContain(
+				'First dataset HALLMARK_HYPOXIA group',
+			);
 		});
 
 		await rerender({

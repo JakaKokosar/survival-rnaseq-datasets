@@ -11,6 +11,7 @@
 	}
 
 	const NON_GROUP_CLINICAL_COLUMNS = new Set(['tumor.response', 'recist']);
+	const HALLMARK_PREFIX = 'HALLMARK_';
 	const chartMargin = { top: 38, right: 30, bottom: 64, left: 66 };
 
 	let { isOpen, onToggleOpen, datasetId, endpoints }: Props = $props();
@@ -169,7 +170,9 @@
 					maxTime: times.length > 0 ? Math.max(1, ...times) : 1,
 				};
 				chartRenderKey += 1;
-				const availableGroups = result.numericColumns.filter((column) => !excluded.has(column));
+				const availableGroups = result.numericColumns.filter(
+					(column) => !excluded.has(column) && column.startsWith(HALLMARK_PREFIX),
+				);
 				numericGroupOptions = availableGroups;
 				if (group !== null && !availableGroups.includes(group)) {
 					groupColumn = '(None)';
