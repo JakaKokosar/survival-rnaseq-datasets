@@ -47,9 +47,8 @@
 	let mobileTab: 'list' | 'details' = $state('list');
 	let isDesktop = $state(true);
 
-	let detailTab: 'summary' | 'endpoints' = $state('summary');
+	let detailTab: 'summary' | 'sample-data' | 'endpoints' = $state('summary');
 	let isKmPlotOpen = $state(true);
-	let isSampleDataViewerOpen = $state(true);
 	const DEFAULT_DATASET_ID = 'GSE224564';
 
 	function buildDataFileDownloadUrl(filename: string): string {
@@ -61,6 +60,7 @@
 	let listTabEl = $state<HTMLButtonElement>();
 	let detailsTabEl = $state<HTMLButtonElement>();
 	let summaryTabEl = $state<HTMLButtonElement>();
+	let sampleDataTabEl = $state<HTMLButtonElement>();
 	let endpointsTabEl = $state<HTMLButtonElement>();
 	let listPanelEl = $state<HTMLDivElement | null>(null);
 	let detailsPanelEl = $state<HTMLDivElement | null>(null);
@@ -69,8 +69,10 @@
 	const listPanelId = 'dataset-browser-panel-list';
 	const detailsPanelId = 'dataset-browser-panel-details';
 	const detailSummaryTabId = 'detail-tab-summary';
+	const detailSampleDataTabId = 'detail-tab-sample-data';
 	const detailEndpointsTabId = 'detail-tab-endpoints';
 	const detailSummaryPanelId = 'detail-panel-summary';
+	const detailSampleDataPanelId = 'detail-panel-sample-data';
 	const detailEndpointsPanelId = 'detail-panel-endpoints';
 
 	let sortedDatasets = $derived.by(() =>
@@ -311,22 +313,30 @@
 	}
 
 	function handleDetailTabKeydown(event: KeyboardEvent): void {
+		const detailTabs = [
+			{ key: 'summary' as const, element: summaryTabEl },
+			{ key: 'sample-data' as const, element: sampleDataTabEl },
+			{ key: 'endpoints' as const, element: endpointsTabEl },
+		];
+		const currentIndex = Math.max(0, detailTabs.findIndex((tab) => tab.key === detailTab));
+		function focusDetailTab(index: number): void {
+			const tab = detailTabs[index];
+			detailTab = tab.key;
+			requestAnimationFrame(() => tab.element?.focus());
+		}
+
 		if (event.key === 'ArrowLeft') {
 			event.preventDefault();
-			detailTab = 'summary';
-			requestAnimationFrame(() => summaryTabEl?.focus());
+			focusDetailTab((currentIndex - 1 + detailTabs.length) % detailTabs.length);
 		} else if (event.key === 'ArrowRight') {
 			event.preventDefault();
-			detailTab = 'endpoints';
-			requestAnimationFrame(() => endpointsTabEl?.focus());
+			focusDetailTab((currentIndex + 1) % detailTabs.length);
 		} else if (event.key === 'Home') {
 			event.preventDefault();
-			detailTab = 'summary';
-			requestAnimationFrame(() => summaryTabEl?.focus());
+			focusDetailTab(0);
 		} else if (event.key === 'End') {
 			event.preventDefault();
-			detailTab = 'endpoints';
-			requestAnimationFrame(() => endpointsTabEl?.focus());
+			focusDetailTab(detailTabs.length - 1);
 		}
 	}
 
@@ -463,7 +473,7 @@
 						aria-selected={detailTab === 'summary'}
 						aria-controls={detailSummaryPanelId}
 						aria-posinset={1}
-						aria-setsize={2}
+						aria-setsize={3}
 						tabindex={detailTab === 'summary' ? 0 : -1}
 						onclick={() => (detailTab = 'summary')}
 						onkeydown={handleDetailTabKeydown}
@@ -474,13 +484,30 @@
 						Data Summary
 					</button>
 					<button
+						bind:this={sampleDataTabEl}
+						id={detailSampleDataTabId}
+						role="tab"
+						aria-selected={detailTab === 'sample-data'}
+						aria-controls={detailSampleDataPanelId}
+						aria-posinset={2}
+						aria-setsize={3}
+						tabindex={detailTab === 'sample-data' ? 0 : -1}
+						onclick={() => (detailTab = 'sample-data')}
+						onkeydown={handleDetailTabKeydown}
+						class="border-b-2 px-5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailTab === 'sample-data'
+							? 'border-slate-600 text-slate-900'
+							: 'border-transparent text-slate-400 hover:text-slate-700'}"
+					>
+						Sample Data Viewer
+					</button>
+					<button
 						bind:this={endpointsTabEl}
 						id={detailEndpointsTabId}
 						role="tab"
 						aria-selected={detailTab === 'endpoints'}
 						aria-controls={detailEndpointsPanelId}
-						aria-posinset={2}
-						aria-setsize={2}
+						aria-posinset={3}
+						aria-setsize={3}
 						tabindex={detailTab === 'endpoints' ? 0 : -1}
 						onclick={() => (detailTab = 'endpoints')}
 						onkeydown={handleDetailTabKeydown}
@@ -513,12 +540,19 @@
 							datasetId={selectedDataset?.data_id ?? null}
 							endpoints={getCompleteKMPlotEndpoints(selectedDataset)}
 						/>
-
-						<SampleDataPanel
-							isOpen={isSampleDataViewerOpen}
-							onToggle={() => (isSampleDataViewerOpen = !isSampleDataViewerOpen)}
-						/>
 					</div>
+				</div>
+
+				<div
+					id={detailSampleDataPanelId}
+					role="tabpanel"
+					aria-labelledby={detailSampleDataTabId}
+					hidden={detailTab !== 'sample-data'}
+					class="p-6"
+				>
+					{#if detailTab === 'sample-data'}
+						<SampleDataPanel dataset={selectedDataset} />
+					{/if}
 				</div>
 
 				<div
