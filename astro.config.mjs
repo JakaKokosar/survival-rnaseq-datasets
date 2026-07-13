@@ -45,7 +45,7 @@ function devDownloadsPlugin() {
 					if (basename.endsWith('.csv')) {
 						res.setHeader('Content-Type', 'text/csv; charset=utf-8');
 					}
-					res.end(data);
+					res.end(data);	
 				});
 			});
 		},

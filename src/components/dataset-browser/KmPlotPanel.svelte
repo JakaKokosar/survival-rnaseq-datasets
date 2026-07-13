@@ -398,13 +398,16 @@
 	{#if isOpen}
 		<div id="km-plot-panel-content">
 			<div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-				<div data-tour="km-plot" class="font-sans text-slate-700">
+				<div class="font-sans text-slate-700">
 					<div class="grid gap-8 p-5 lg:grid-cols-[minmax(230px,_280px)_minmax(0,_1fr)] lg:items-start lg:gap-8 xl:gap-10">
 						<aside
 							class="flex flex-col gap-4 lg:sticky lg:top-6 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
 							aria-label="Kaplan-Meier controls"
 						>
-							<div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
+							<div
+								data-tour="km-survival-endpoints"
+								class="overflow-hidden rounded-lg border border-slate-200 bg-white"
+							>
 								<div
 									class="border-b border-slate-100 bg-slate-50/90 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
 								>
@@ -444,7 +447,10 @@
 										{/if}
 									</select>
 								</label>
-								<label class="flex flex-col gap-1.5 px-3 py-2.5 text-xs">
+								<label
+									data-tour="km-grouping-variable"
+									class="flex flex-col gap-1.5 px-3 py-2.5 text-xs"
+								>
 									<span class="leading-snug font-medium text-slate-500">
 										Group by <span class="font-normal text-slate-400">(optional)</span>
 									</span>
@@ -548,7 +554,7 @@
 							</div>
 						</aside>
 
-						<div class="relative w-full min-w-0 min-h-0">
+						<div data-tour="km-plot" class="relative min-h-0 w-full min-w-0">
 							<div
 								class="relative h-[min(68vh,720px)] min-h-[300px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-inner"
 								{@attach attachPlotResize}

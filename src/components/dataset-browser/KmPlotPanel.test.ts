@@ -103,6 +103,17 @@ describe('KmPlotPanel', () => {
 		const content = container.querySelector('#km-plot-panel-content');
 		expect(content).not.toBeNull();
 		expect(within(content as HTMLElement).getByRole('img', { name: /Kaplan-Meier OS survival chart/ })).not.toBeNull();
+
+		const endpointTarget = container.querySelector('[data-tour="km-survival-endpoints"]');
+		const groupingTarget = container.querySelector('[data-tour="km-grouping-variable"]');
+		const plotTarget = container.querySelector('[data-tour="km-plot"]');
+		expect(endpointTarget).not.toBeNull();
+		expect(within(endpointTarget as HTMLElement).getByLabelText('Survival endpoint')).not.toBeNull();
+		expect(within(endpointTarget as HTMLElement).getByLabelText('Event endpoint')).not.toBeNull();
+		expect(groupingTarget).not.toBeNull();
+		expect(within(groupingTarget as HTMLElement).getByLabelText('Group by')).not.toBeNull();
+		expect(plotTarget).not.toBeNull();
+		expect(within(plotTarget as HTMLElement).getByRole('img', { name: /Kaplan-Meier OS survival chart/ })).not.toBeNull();
 	});
 
 	it('renders legend rows with group labels and stats', async () => {

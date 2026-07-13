@@ -1,11 +1,21 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { Config, DriveStep } from 'driver.js';
 
 import TutorialButton from './TutorialButton.svelte';
 
+type TutorialConfig = Omit<Config, 'steps'> & {
+	steps: Array<
+		DriveStep & {
+			element: Element;
+			popover: NonNullable<DriveStep['popover']>;
+		}
+	>;
+};
+
 describe('TutorialButton', () => {
 	const driveMock = vi.fn();
-	const driverMock = vi.fn(() => ({ drive: driveMock }));
+	const driverMock = vi.fn((_config?: Config) => ({ drive: driveMock }));
 	const localStorageMock = (() => {
 		let store = new Map<string, string>();
 		return {
@@ -37,6 +47,14 @@ describe('TutorialButton', () => {
 	async function flushAsyncWork(): Promise<void> {
 		await Promise.resolve();
 		await Promise.resolve();
+	}
+
+	function getTutorialConfig(): TutorialConfig {
+		const config = driverMock.mock.calls.at(-1)?.[0];
+		if (!config?.steps) {
+			throw new Error('Expected the tutorial driver to receive steps');
+		}
+		return config as TutorialConfig;
 	}
 
 	function markVisible(element: Element): void {
@@ -85,10 +103,46 @@ describe('TutorialButton', () => {
 		expect(driverMock).toHaveBeenCalledTimes(1);
 		expect(driveMock).toHaveBeenCalledTimes(1);
 
-		const config = driverMock.mock.calls[0][0];
+		const config = getTutorialConfig();
 		expect(config.showProgress).toBe(true);
 		expect(config.steps).toHaveLength(2);
 		expect(config.steps.map((step: { element: Element }) => step.element)).toEqual([table, detailHeader]);
+	});
+
+	it('includes the complete tutorial for the current Kaplan-Meier controls and chart', async () => {
+		const kmAnalysis = appendTourTarget('km-analysis');
+		const kmEndpoints = appendTourTarget('km-survival-endpoints');
+		const kmGrouping = appendTourTarget('km-grouping-variable');
+		const kmPlot = appendTourTarget('km-plot');
+
+		render(TutorialButton, {
+			props: {
+				loadDriver: async () => ({ driver: driverMock }),
+			},
+		});
+
+		await fireEvent.click(screen.getByRole('button', { name: 'Start Tutorial' }));
+		await flushAsyncWork();
+
+		const config = getTutorialConfig();
+		expect(config.steps.map((step: { element: Element }) => step.element)).toEqual([
+			kmAnalysis,
+			kmEndpoints,
+			kmGrouping,
+			kmPlot,
+		]);
+		expect(config.steps.map((step) => step.popover.title)).toEqual([
+			'Kaplan-Meier Analysis',
+			'Survival Endpoint',
+			'Grouping Variable',
+			'Survival Curves',
+		]);
+		expect(config.steps[0].popover.description).toContain('supports exploratory survival analysis');
+		expect(config.steps[1].popover.description).toContain('linked time and event variables');
+		expect(config.steps[2].popover.description).toContain('Hallmark pathway score');
+		expect(config.steps[2].popover.description).toContain('divided at the median');
+		expect(config.steps[3].popover.description).toContain('compares the estimated survival trajectories');
+		expect(config.steps[3].popover.description).not.toMatch(/will display|when the plot is implemented/i);
 	});
 
 	it('shows a preview card when starting the tutorial fails', async () => {

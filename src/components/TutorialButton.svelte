@@ -78,8 +78,30 @@
 			popover: {
 				title: 'Kaplan-Meier Analysis',
 				description:
-					'This panel is reserved for exploratory survival analysis for the selected GSE dataset.',
+					'This panel supports exploratory survival analysis for the selected GSE dataset. Use it to examine how endpoint choice and Hallmark pathway stratification affect the estimated survival curves.',
 				side: 'left',
+			},
+			enabled: true,
+		},
+		{
+			id: 'km-survival-endpoints',
+			selector: '[data-tour="km-survival-endpoints"]',
+			popover: {
+				title: 'Survival Endpoint',
+				description:
+					'Choose the clinical endpoint used as the time-to-event outcome. The linked time and event variables come from endpoint definitions detected in the dataset metadata.',
+				side: 'right',
+			},
+			enabled: true,
+		},
+		{
+			id: 'km-grouping-variable',
+			selector: '[data-tour="km-grouping-variable"]',
+			popover: {
+				title: 'Grouping Variable',
+				description:
+					'Optionally choose a Hallmark pathway score to compare low- and high-score groups. Samples are divided at the median value for the selected pathway.',
+				side: 'right',
 			},
 			enabled: true,
 		},
@@ -88,7 +110,8 @@
 			selector: '[data-tour="km-plot"]',
 			popover: {
 				title: 'Survival Curves',
-				description: 'This area will display survival curves when the plot is implemented.',
+				description:
+					'This chart compares the estimated survival trajectories for the selected endpoint and grouping. Separation between curves can suggest an association between the pathway score and outcome.',
 				side: 'left',
 			},
 			enabled: true,
