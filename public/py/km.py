@@ -9,6 +9,7 @@ The returned shape (a JSON string) matches the `KmResult` type defined in
 import io
 import json
 import math
+import numbers
 import sys
 from dataclasses import dataclass
 
@@ -177,10 +178,21 @@ def _km_points(model, total):
     return points
 
 
+def _predict_survival_at(model, times):
+    # lifelines.predict returns a scalar for one time, but a Series for many;
+    # normalize so zip() always has an iterable aligned with *times*.
+    values = model.predict(times)
+    if isinstance(values, pd.Series):
+        return values
+    if isinstance(values, numbers.Number):
+        return pd.Series([float(values)], index=times.index)
+    return pd.Series(values, index=times.index)
+
+
 def _censor_ticks(model, censored_times):
     if censored_times.empty:
         return []
-    survival_values = model.predict(censored_times)
+    survival_values = _predict_survival_at(model, censored_times)
     return [
         {"time": float(time), "survival": _finite_or(survival, 1.0)}
         for time, survival in zip(censored_times, survival_values, strict=False)
