@@ -1,0 +1,76 @@
+{
+    "data_id": "GSE162682",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE162682",
+    "pmcids": [
+        "PMC8866401"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival period from diagnosis date (year)",
+                "var_unit": "years"
+            },
+            "event_var": {
+                "var_name": "overall survival event",
+                "var_values": [
+                    "0",
+                    "1",
+                    "NA"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "Provenance: variable appears in GEO sample metadata for GSE162682 (e.g., GSM4956773, GSM4956774, etc.).",
+                "Time origin and unit are explicit in the variable name ('from diagnosis date' and '(year)').",
+                "Event variable values observed in metadata are '0', '1', and 'NA'. The metadata/paper do not explicitly define coding; typical convention is 1=death, 0=alive/censored, but this is not stated and therefore var_meaning is set to 'unknown'.",
+                "Some samples contain 'NA' indicating missing data for event and/or time."
+            ],
+            "stats": {
+                "n_incomplete": 4,
+                "n_complete": 101,
+                "n_censored": 52,
+                "n_events": 49,
+                "censored_ratio": 0.51
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival period from resection date (year)",
+                "var_unit": "years"
+            },
+            "event_var": {
+                "var_name": "overall survival event",
+                "var_values": [
+                    "0",
+                    "1",
+                    "NA"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "Provenance: variable appears in GEO sample metadata for GSE162682; the paper explicitly refers to analyses using 'time from tumor resection' (e.g., univariable Cox regression of time from tumor resection).",
+                "Time origin and unit are explicit in the variable name ('from resection date' and '(year)').",
+                "Event coding is not explicitly defined in the provided metadata or paper; observed values are '0','1','NA'.",
+                "Some analyses in the paper (e.g., association of 22q11.21 amplification with survival) are described as using time from resection, consistent with this time_var."
+            ],
+            "stats": {
+                "n_incomplete": 4,
+                "n_complete": 101,
+                "n_censored": 52,
+                "n_events": 49,
+                "censored_ratio": 0.51
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE162682_original.csv",
+        "GSE162682_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 105,
+        "clinical_features": 19,
+        "genes": 18944
+    }
+}

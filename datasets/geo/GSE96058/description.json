@@ -1,0 +1,48 @@
+{
+    "data_id": "GSE96058",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96058",
+    "pmcids": [
+        "PMC7446376",
+        "PMC7338507",
+        "PMC8933558",
+        "PMC6704148"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival days",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "overall survival event",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "death from any cause (1 = death event; 0 = censored/alive)"
+            },
+            "notes": [
+                "Variables appear in GEO sample metadata (e.g. GSM2528079 includes 'overall survival days' and 'overall survival event').",
+                "Paper methods (SCAN-B) define overall survival as death from any cause; event coding 1=death, 0=alive/censored is inferred from metadata and the paper definitions.",
+                "No recurrence/relapse (RFI) variable is present in the GSE96058 GSM fields (RFI is reported for Cohort270 in the papers but not in these sample metadata)."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 3273,
+                "n_censored": 2937,
+                "n_events": 336,
+                "censored_ratio": 0.9
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE96058_original.csv",
+        "GSE96058_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 3273,
+        "clinical_features": 26,
+        "genes": 30891
+    }
+}

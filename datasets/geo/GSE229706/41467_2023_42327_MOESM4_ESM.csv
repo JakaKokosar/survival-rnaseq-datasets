@@ -1,0 +1,151 @@
+Study_ID,Race,Male_1,stage,Dead_or_alive,smoking_Pack_Years,Days_to_Death or Last Contact,Age_range,Size_cm,LVI,Pleural_Invasion,Time to Recurrence,Progression,ProgType,ProgType_Lab,LepidicPerc,AcinarPerc,PapillaryPerc,MicropapillaryPerc,SolidPerc,CribriformPerc,Fused_glandsPerc,FINAL IASLC GRADE MOREIRA,STAS,Histologic_component_of_mitotic_hot_spot,Nuclear_grade,Cytologic_grade,Necrosis_Perc,match_normal,patient
+20,White,1,IA,1,50.0,1141,70-79,1.3,0,0,656,1,1,Systemic,0,0,0,0,50,10,40,3,Present,Solid,3,High,10,True,NYU20
+32,White,2,IA,0,5.0,4661,60-69,2.0,1,1,4661,0,0,No.Recurrence,0,10,10,40,0,20,20,3,Absent,Fused glands,2,High,5,True,NYU32
+50,White,1,1,0,7.5,2319,70-79,1.0,0,0,2319,0,0,No.Recurrence,0,40,0,20,10,0,30,3,Absent,Acinar,3,High,10,True,NYU50
+62,White,1,1,0,45.0,4610,60-69,1.4,0,0,4610,0,0,No.Recurrence,0,40,20,20,10,0,10,3,Absent,Acinar,2,High,0,True,NYU62
+68,White,2,1,0,0.0,4616,70-79,1.7,0,0,4616,0,0,No.Recurrence,20,50,30,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU68
+113,White,2,1,0,35.0,3030,70-79,1.3,0,0,3030,0,0,No.Recurrence,20,80,0,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU113
+116,White,2,1,0,45.0,4265,60-69,1.7,0,0,4265,0,0,No.Recurrence,0,0,90,10,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU116
+175,White,2,1,0,40.0,3666,50-59,0.9,0,0,3666,0,0,No.Recurrence,40,30,20,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU175
+178,White,2,1,0,3.0,4485,60-69,1.0,0,0,4485,0,0,No.Recurrence,10,50,40,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU178
+252,White,2,IB,0,10.0,5029,70-79,1.5,0,1,5029,0,0,No.Recurrence,10,20,0,0,30,0,40,3,Absent,Fused glands,3,High,0,True,NYU252
+268,White,2,1,0,30.0,3582,40-49,1.2,0,0,3582,0,0,No.Recurrence,40,60,0,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU268
+278,White,2,1,0,33.0,3698,60-69,0.9,0,0,3698,0,0,No.Recurrence,10,40,30,0,20,0,0,3,Absent,Solid,3,High,0,True,NYU278
+279,Asian,2,1,0,0.0,1926,60-69,1.8,0,0,1926,0,0,No.Recurrence,0,30,20,50,0,0,0,3,Present,Micropapillary,2,Low,0,True,NYU279
+294,White,2,IB,0,35.0,2156,80-89,2.3,0,1,2156,0,0,No.Recurrence,0,30,50,0,20,0,0,3,Absent,Papillary,1,Low,0,True,NYU294
+300,Asian,2,IB,1,0.0,1792,80-89,3.5,1,1,1392,1,2,Locoregional,10,30,10,40,0,0,10,3,Absent,Fused glands,3,High,5,True,NYU300
+304,White,2,1,0,0.0,4349,60-69,1.0,0,0,4349,0,0,No.Recurrence,40,60,0,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU304
+307,White,1,1,1,70.0,3955,60-69,2.5,0,0,3103,1,3,Secondary.Primary,40,30,20,10,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU307
+318,Asian,2,1,0,0.0,4116,70-79,1.4,0,0,4116,0,0,No.Recurrence,0,60,40,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU318
+330,White,2,IB,1,75.0,1153,70-79,2.8,0,1,988,1,1,Systemic,0,30,40,20,0,0,10,3,Absent,Acinar,2,Low,0,True,NYU330
+346,White,2,1,1,25.0,4644,70-79,1.7,0,0,4644,0,0,No.Recurrence,0,0,0,0,60,40,10,3,Absent,Solid,3,High,0,True,NYU346
+359,White,1,1,0,40.0,4308,60-69,2.2,0,0,4308,0,0,No.Recurrence,0,30,20,50,0,0,0,3,Absent,Acinar,3,High,0,True,NYU359
+373,White,2,1,0,30.0,2288,50-59,2.5,0,0,2288,0,0,No.Recurrence,10,10,20,0,40,0,20,3,Absent,Solid,3,High,0,True,NYU373
+410,White,1,IB,1,100.0,2534,70-79,1.5,0,1,1675,1,1,Systemic,30,10,40,0,20,0,0,3,Absent,Papillary,2,Low,0,True,NYU410
+411,White,1,1,1,37.0,3069,70-79,1.5,0,0,3069,0,0,No.Recurrence,10,20,50,20,0,0,0,3,Absent,Acinar,1,Low,0,True,NYU411
+450,White,2,IA,0,60.0,2392,70-79,1.8,0,0,2392,0,0,No.Recurrence,80,20,0,0,0,0,0,1,Absent,Acinar,2,Low,0,True,NYU450
+454,White,2,IA,1,10.0,2013,70-79,2.8,0,0,671,1,1,Systemic,0,20,10,30,0,0,40,3,Absent,Fused glands,3,High,0,True,NYU454
+457,Asian,2,IB,0,0.0,3815,70-79,2.4,0,1,3815,0,0,No.Recurrence,0,50,20,30,0,0,0,3,Absent,Acinar,2,Low,0,True,NYU457
+502,White,2,IA,1,0.0,4306,70-79,1.5,0,0,3060,1,3,Secondary.Primary,30,40,30,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU502
+539,White,2,IB,1,0.0,810,60-69,3.2,1,0,222,1,1,Systemic,0,20,0,30,0,10,40,3,Absent,Fused glands,3,High,5,True,NYU539
+565,White,2,1,1,20.0,3828,60-69,1.5,0,0,3828,0,0,No.Recurrence,40,40,20,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU565
+608,white,1,IA,1,20.0,2165,60-69,1.5,0,0,971,1,1,systemic,40,10,50,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU608
+634,Asian,1,IB,0,25.0,1879,70-79,3.6,0,0,1879,0,0,No.Recurrence,0,30,20,40,0,0,10,3,Absent,Acinar,3,High,30,True,NYU634
+653,White,1,1,0,30.0,2728,80-89,1.3,0,0,2728,0,0,No.Recurrence,60,30,10,0,0,0,0,1,Absent,Acinar,2,Low,0,True,NYU653
+656,White,1,IA,1,90.0,533,70-79,2.0,0,0,474,1,2,Locoregional,0,50,20,0,20,10,0,3,Absent,Solid,2,High,0,True,NYU656
+669,White,2,IA,1,15.0,2142,60-69,1.4,1,0,957,1,2,Locoregional,0,10,20,40,10,0,20,3,Absent,Solid,3,High,10,True,NYU669
+675,White,2,IA,1,30.0,1625,70-79,2.1,0,0,1224,1,2,Locoregional,30,40,10,20,0,0,0,3,Absent,Acinar,3,High,0,True,NYU675
+689,White,2,1,0,5.0,3902,70-79,1.85,0,0,3902,0,0,No.Recurrence,30,70,0,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU689
+693,White,2,1,0,17.0,3909,60-69,1.8,0,0,3495,1,3,Secondary.Primary,60,30,10,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU693
+701,White,1,1,1,40.0,3371,70-79,1.8,0,1,3371,0,0,No.Recurrence,0,10,0,0,60,0,30,3,Absent,Solid,3,High,40,True,NYU701
+704,White,2,IB,1,10.0,2257,50-59,1.7,0,1,1515,1,1,Systemic,10,40,10,0,0,10,30,3,Absent,Fused glands,3,High,0,True,NYU704
+706,White,1,IB,0,30.0,3262,80-89,2.5,0,1,3262,0,0,No.Recurrence,30,70,0,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU706
+713,White,2,1,1,50.0,3849,60-69,1.4,0,0,3849,0,0,No.Recurrence,70,10,20,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU713
+741,White,2,1,0,30.0,3853,60-69,1.3,0,0,706,1,2,Locoregional,10,40,20,30,0,0,0,3,Absent,Acinar,1,Low,0,True,NYU741
+779,White,2,IA,1,80.0,1506,80-89,1.2,0,0,1208,1,2,Locoregional,60,10,30,0,0,0,0,1,Absent,Papillary,1,Low,0,True,NYU779
+780,White,2,IA,0,10.0,2262,50-59,1.1,0,0,2262,0,0,No.Recurrence,60,40,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU780
+784,White,1,IA,1,10.0,3135,80-89,1.0,0,0,3135,0,0,No.Recurrence,70,30,0,0,0,0,0,1,Absent,Acinar,2,High,0,True,NYU784
+822,White,2,1,0,9.0,3672,50-59,1.2,0,1,3672,0,0,No.Recurrence,10,70,10,10,0,0,0,2,Absent,Acinar,2,High,0,True,NYU822
+830,White,2,IA,0,35.0,4502,60-69,1.4,0,0,4502,0,0,no.Recurrence1,80,20,0,0,0,0,0,1,Absent,Lepidic,1,Low,0,False,NYU830
+831,White,2,IA,1,75.0,3034,80-89,2.0,1,0,3034,0,0,No.Recurrence,0,80,0,20,0,0,0,3,Absent,Acinar,2,Low,0,True,NYU831
+848,White,2,1,0,0.0,3492,60-69,2.3,0,0,2220,1,3,Secondary.Primary,10,80,10,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU848
+854,White,2,IA,1,87.5,2734,80-89,1.6,0,0,2734,0,0,No.Recurrence,80,20,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU854
+867,Asian,2,1,1,10.0,3576,80-89,3.3,0,0,3051,1,3,Secondary.Primary,30,50,20,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU867
+875,White,1,1,0,60.0,1922,50-59,1.0,0,0,1922,0,0,No.Recurrence,90,10,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU875
+947,White,2,IB,0,0.0,3484,50-59,3.5,1,1,3484,0,0,No.Recurrence,0,10,50,40,0,0,0,3,Absent,Papillary,2,High,0,True,NYU947
+955,White,2,1,0,10.0,3440,70-79,0.7,0,0,3440,0,0,No.Recurrence,10,40,50,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU955
+965,White,2,1,0,20.0,3427,70-79,1.6,1,0,3427,0,0,No.Recurrence,30,40,20,0,0,0,10,2,Absent,Acinar,2,Low,0,True,NYU965
+994,White,1,1,0,20.0,2482,80-89,2.5,0,0,2482,0,0,No.Recurrence,0,50,10,0,40,0,0,3,Absent,Solid,3,High,0,True,NYU994
+1019,White,2,IB,1,20.0,840,80-89,1.5,1,1,551,1,1,Systemic,10,10,0,50,0,0,30,3,Present,Fused glands,2,Low,0,True,NYU1019
+1026,White,2,IB,0,30.0,4167,70-79,3.5,0,0,4165,0,0,No.Recurrence,0,10,0,20,70,0,0,3,Present,solid,3,High,30,True,NYU1026
+1027,White,2,IB,0,0.0,3341,80-89,3.2,1,0,3341,0,0,No.Recurrence,0,10,20,40,0,0,30,3,Absent,Fused glands,3,High,40,True,NYU1027
+1037,Black or African America,2,IA,0,10.0,1511,60-69,1.5,0,0,1511,0,0,No.Recurrence,0,30,50,20,0,0,0,3,Absent,Papillary,1,Low,0,True,NYU1037
+1057,Asian,2,1,0,0.0,3243,60-69,1.8,0,0,3243,0,0,No.Recurrence,70,30,0,0,0,0,0,1,Absent,Lepidic,1,Low,0,True,NYU1057
+1064,white,2,IA,1,0.0,1541,60-69,1.3,0,0,1541,0,0,No.Recurrence,30,40,30,0,0,0,0,2,Absent,Acinar,1,Low,0,False,NYU1064
+1079,White,2,1,0,15.0,3235,60-69,2.1,0,0,3235,0,0,No.Recurrence,0,0,0,40,60,0,0,3,Present,solid,3,High,0,True,NYU1079
+1093,Hipanic or Latino,1,IIB,0,0.0,2988,60-69,2.5,1,1,2988,0,0,No.Recurrence,0,70,0,30,0,0,0,3,Absent,Acinar,3,High,0,True,NYU1093
+1124,White,2,IB,0,0.0,3561,80-89,3.5,0,1,3561,0,0,No.Recurrence,10,60,10,20,0,0,0,3,Absent,Acinar,2,Low,0,True,NYU1124
+1141,White,1,IA,0,23.0,3540,60-69,0.7,0,0,3540,0,0,No.Recurrence,40,60,0,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1141
+1196,White,2,IB,1,40.0,558,70-79,3.2,1,1,558,0,0,No.Recurrence,0,0,0,0,80,0,20,3,Absent,Solid,3,High,10,True,NYU1196
+1205,White,2,IA,1,0.0,2088,80-89,2.0,0,0,487,1,1,Systemic,10,50,0,0,10,0,30,3,Absent,Fused glands,2,High,0,True,NYU1205
+1206,White,1,IA,0,60.0,3467,60-69,1.1,0,0,3467,0,0,No.Recurrence,30,20,50,0,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU1206
+1210,White,1,IA,0,45.0,3307,60-69,1.5,0,0,2568,1,3,Secondary.Primary,40,50,10,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1210
+1213,White,2,IA,0,0.0,2849,80-89,1.4,0,0,2849,0,0,No.Recurrence,20,20,0,0,0,0,60,3,Absent,Fused glands,2,Low,,True,NYU1213
+1222,White,1,IA,0,10.0,2935,80-89,2.1,1,0,2935,0,0,No.Recurrence,60,20,10,10,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1222
+1248,White,2,IA,0,,2065,80-89,2.4,0,0,2065,0,0,No.Recurrence,60,30,0,10,0,0,10,1,Absent,Lepidic,1,Low,0,True,NYU1248
+1257,White,1,IB,0,35.0,3309,60-69,3.5,1,0,3309,0,0,No.Recurrence,10,20,0,20,20,0,30,3,Present,Fused glands,3,High,10,True,NYU1257
+1261,White,2,IA,0,80.0,3426,70-79,1.5,0,0,3426,0,0,No.Recurrence,60,0,40,0,0,0,0,1,Absent,Papillary,1,Low,0,True,NYU1261
+1278,White,1,IA,0,18.0,2862,60-69,1.7,0,0,1096,1,2,Locoregional,80,20,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1278
+1280,White,1,IA,0,80.0,3702,70-79,1.5,0,0,3008,1,3,Secondary.Primary,10,30,0,10,0,50,0,3,Present,Cribriform,3,High,10,True,NYU1280
+1281,White,1,IIIA,0,25.0,1804,70-79,4.0,1,0,860,1,2,Locoregional,0,0,0,60,40,0,0,3,Absent,Micropapillary,3,High,50,False,NYU1281
+1284,White,1,IA,0,40.0,3468,60-69,0.9,0,0,1545,1,2,Locoregional,0,20,0,0,30,0,50,3,Absent,Fused glands,3,High,5,True,NYU1284
+1319,White,2,IB,0,20.0,2807,70-79,3.5,0,0,1585,1,3,Secondary.Primary,30,50,0,10,0,0,10,2,Absent,Acinar,2,High,0,True,NYU1319
+1321,White,2,IA,0,12.0,3251,70-79,2.3,0,0,3251,0,0,No.Recurrence,70,30,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1321
+1334,White,2,IB,0,,3617,50-59,3.2,0,0,289,1,1,Systemic,0,0,0,30,70,0,0,3,Absent,solid,3,High,30,True,NYU1334
+1351,White,2,IB,1,0.0,3090,50-59,4.0,1,0,2618,1,1,Systemic (brain) SYSTEMIC IS CORRECT PASS 2/22,0,30,80,0,10,0,0,2,Absent,solid,2,High,0,True,NYU1351
+1355,Asian,2,IA,0,0.0,3546,60-69,2.7,0,0,2746,1,3,Secondary.Primary,30,50,20,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1355
+1364,White,1,IA,0,60.0,3112,70-79,1.2,0,0,1566,1,3,Secondary.Primary,20,20,30,10,0,0,20,3,Absent,Papillary,3,High,0,True,NYU1364
+1368,White,2,IA,1,10.0,2277,70-79,3.0,0,0,160,1,3,Secondary.Primary,10,70,10,10,0,0,0,2,Absent,Acinar,2,High,0,True,NYU1368
+1416,White,1,IA,0,40.0,1530,70-79,2.7,0,0,1530,0,0,No.Recurrence,60,40,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1416
+1417,White,1,IB,0,120.0,2568,80-89,3.5,0,0,2568,0,0,No.Recurrence,10,10,20,60,0,0,0,3,Absent,Micropapillary,2,High,0,True,NYU1417
+1428,Black or African America,2,IA,0,0.0,2727,60-69,2.0,0,0,2727,0,0,No.Recurrence,50,40,10,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1428
+1433,White,2,IA,0,3.0,2765,50-59,1.3,0,0,2765,0,0,No.Recurrence,50,20,30,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1433
+1435,White,2,IA,0,0.0,2988,40-49,1.4,0,0,2988,0,0,No.Recurrence,30,30,40,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1435
+1443,White,2,IA,1,37.5,1549,60-69,2.9,0,0,1010,1,1,Systemic,0,50,40,0,10,0,0,2,Absent,Acinar,2,Low,0,True,NYU1443
+1445,White,1,IB,1,25.0,2499,80-89,4.0,0,0,2499,0,0,No.Recurrence,80,20,0,0,0,0,0,1,Absent,Lepidic,1,Low,0,True,NYU1445
+1448,White,2,IA,1,60.0,1795,80-89,2.5,0,0,1795,0,0,No.Recurrence,0,30,30,0,40,0,0,3,Absent,Papillary,2,Low,0,True,NYU1448
+1487,Asian,2,IA,0,0.0,2945,60-69,2.8,0,0,2945,0,0,No.Recurrence,0,50,20,10,20,0,0,3,Absent,Acinar,2,Low,0,True,NYU1487
+1502,White,1,IA,1,,1067,80-89,2.1,0,0,220,1,1,Systemic,0,10,0,0,90,0,0,3,Absent,Solid,3,High,0,True,NYU1502
+1512,Asian,2,IA,1,0.0,1806,70-79,2.5,0,0,1806,0,0,No.Recurrence,10,20,80,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1512
+1513,White,2,IA,1,40.0,548,60-69,2.5,0,0,548,0,0,No.Recurrence,80,20,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1513
+1534,White,2,IIA,0,80.0,1554,70-79,3.5,0,0,1245,1,3,Secondary.Primary,10,10,10,70,0,0,0,3,Absent,Micropapillary,2,High,0,True,NYU1534
+1551,White,2,IA,0,0.2,2469,60-69,2.0,0,0,2469,0,0,No.Recurrence,0,10,0,30,60,0,0,3,Absent,solid,3,High,0,True,NYU1551
+1555,White,1,IA,0,90.0,2831,60-69,1.6,0,0,1651,1,3,Secondary.Primary,20,50,30,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1555
+1562,White,1,IA,0,21.0,3176,60-69,1.9,0,0,988,1,3,Secondary.Primary,70,10,20,0,0,0,0,1,Absent,Papillary,1,Low,0,True,NYU1562
+1595,White,2,IA,0,2.5,3118,60-69,3.0,0,0,218,1,3,Secondary.Primary,30,60,10,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1595
+1597,White,2,IA,0,0.0,2728,60-69,1.8,0,0,2728,0,0,No.Recurrence,20,30,40,10,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1597
+1603,White,2,IA,0,0.0,2800,60-69,2.8,0,0,2800,0,0,No.Recurrence,40,20,30,10,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU1603
+1609,White,1,IA,1,50.0,1740,60-69,2.1,1,0,1097,1,2,Locoregional,10,40,10,20,20,0,0,3,Absent,Acinar,2,Low,0,True,NYU1609
+1630,White,2,IA,0,12.0,2732,60-69,0.7,0,0,1415,1,3,Secondary.Primary,30,10,60,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1630
+1636,White,2,IB,0,80.0,1098,70-79,3.2,0,0,1098,1,3,Secondary.Primary,0,30,30,30,10,0,0,3,Present,Micropapillary,2,Low,0,True,NYU1636
+1678,White,2,IA,0,24.0,2531,50-59,1.8,0,0,2531,0,0,No.Recurrence,20,30,40,10,0,0,0,2,Absent,Papillary,1,Low,10,True,NYU1678
+1682,White,2,IA,0,0.0,2304,70-79,2.5,1,1,2304,0,0,No.Recurrence,40,30,20,10,0,0,0,1,Absent,Papillary,1,Low,0,True,NYU1682
+1690,White,1,IIB,1,20.0,693,70-79,1.5,0,0,243,1,3,Secondary.Primary,0,40,20,30,0,10,0,3,Present,Micropapillary,2,High,0,True,NYU1690
+1707,White,2,IA,0,15.0,2972,50-59,1.4,0,0,2972,0,0,No.Recurrence,30,0,60,10,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1707
+1738,Black or African America,2,IA,0,7.5,2486,70-79,2.1,0,0,691,1,3,Secondary.Primary,0,50,30,20,0,0,0,3,Absent,Micropapillary,2,High,0,True,NYU1738
+1749,White,2,IA,0,0.8,2123,40-49,1.6,0,0,2123,0,0,No.Recurrence,10,60,30,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1749
+1767,White,2,IA,0,20.0,2505,70-79,1.5,0,1,748,1,2,Locoregional,0,10,0,0,0,0,90,3,Present,Fused glands,3,High,10,True,NYU1767
+1769,White,1,IA,0,0.0,2499,50-59,3.0,0,0,2499,0,0,No.Recurrence,10,60,0,30,0,0,0,3,Absent,Acinar,2,High,0,True,NYU1769
+1787,White,2,IA,0,6.0,2919,60-69,1.8,0,0,2420,1,3,Secondary.Primary,60,10,0,30,0,0,0,3,Absent,Micropapillary,2,Low,0,True,NYU1787
+1795,White,1,IA,1,15.0,1297,70-79,3.0,0,0,1297,0,0,No.Recurrence,0,20,40,30,10,0,0,3,Absent,Papillary,2,Low,0,True,NYU1795
+1808,White,2,IB,0,40.0,2337,50-59,3.5,0,0,2337,0,0,No.Recurrence,10,20,60,10,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU1808
+1837,White,2,IA,0,0.0,2716,70-79,2.3,0,0,2716,0,0,No.Recurrence,70,10,20,0,0,0,0,1,Absent,Lepidic,1,Low,0,True,NYU1837
+1845,White,2,IA,1,90.0,1674,70-79,2.1,0,0,1386,1,3,Secondary.Primary,40,0,60,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1845
+1848,White,2,IB,0,15.0,2284,70-79,1.6,1,1,2284,0,0,No.Recurrence,30,40,20,0,10,0,0,2,Absent,Acinar,3,High,0,True,NYU1848
+1854,Hipanic or Latino,2,IA,0,80.0,1939,60-69,1.4,0,0,1939,0,0,No.Recurrence,60,30,10,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1854
+1871,White,2,IA,0,23.0,2276,60-69,1.8,0,0,299,1,2,Locoregional,0,40,10,0,30,0,20,3,Absent,Solid,3,High,0,True,NYU1871
+1873,White,1,IA,1,40.0,1432,80-89,1.8,0,0,1432,0,0,No.Recurrence,0,60,0,30,10,0,0,3,Absent,Solid,3,High,0,True,NYU1873
+1883,White,2,IA,0,53.0,2744,60-69,1.3,0,0,1305,1,3,Secondary.Primary,0,70,30,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1883
+1884,Asian,2,IA,0,0.0,2094,80-89,2.4,0,0,2094,0,0,No.Recurrence,10,10,70,10,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1884
+1891,White,2,IA,0,120.0,2639,70-79,2.8,0,0,2639,0,0,No.Recurrence,10,60,20,10,0,0,0,2,Absent,Micropapillary,2,Low,0,True,NYU1891
+1897,asian,2,IA,0,0.0,2663,70-79,2.5,0,0,1899,1,3,Secondary.Primary,20,20,50,10,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU1897
+1898,White,1,IA,0,0.0,2649,60-69,2.0,0,0,388,1,2,Locoregional,0,50,30,20,0,0,0,3,Absent,Acinar,2,Low,0,True,NYU1898
+1900,White,2,IA,0,21.0,2680,70-79,1.2,0,0,2133,1,3,Secondary.Primary,10,60,30,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1900
+1906,White,2,IA,0,40.0,383,70-79,1.2,0,0,383,0,0,No.Recurrence,10,80,10,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1906
+1923,White,2,IB,0,0.0,1850,80-89,4.0,0,0,1850,0,0,No.Recurrence,10,40,50,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1923
+1932,White,1,IB,1,60.0,392,80-89,3.5,0,0,242,1,1,hip metastasis????,10,60,0,10,20,0,0,3,Absent,Solid,3,High,0,True,NYU1932
+1940,White,1,IB,0,0.0,1884,70-79,3.2,0,0,1884,0,0,No.Recurrence,10,10,70,10,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU1940
+1949,White,1,IA,0,5.0,2029,70-79,2.4,0,0,2029,0,0,No.Recurrence,60,40,0,0,0,0,0,1,Absent,Acinar,1,Low,0,True,NYU1949
+1951,White,2,IA,0,,2062,60-69,1.8,0,0,2062,0,0,No.Recurrence,40,30,20,10,0,0,0,1,Absent,Papillary,1,Low,0,True,NYU1951
+1953,White,1,IA,0,30.0,2373,60-69,2.4,0,0,2373,0,0,No.Recurrence,0,20,40,30,10,0,0,3,Absent,Papillary,3,High,0,True,NYU1953
+1967,White,1,IA,0,40.0,1959,50-59,2.1,0,0,1959,0,0,No.Recurrence,0,50,0,40,0,0,10,3,Absent,Acinar,3,High,0,True,NYU1967
+1970,White,2,IA,0,20.0,2011,60-69,3.0,0,0,2011,0,0,No.Recurrence,10,70,20,0,0,0,0,2,Absent,Acinar,1,Low,0,True,NYU1970
+1973,White,2,IIB,0,0.0,2005,60-69,1.2,0,0,2005,0,0,No.Recurrence,10,50,40,0,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1973
+1980,White,2,IA,0,5.0,1996,50-59,1.6,0,0,1996,0,0,No.Recurrence,10,0,90,0,0,0,0,2,Absent,Papillary,1,Low,0,True,NYU1980
+1982,Asian,2,IA,0,0.0,1461,60-69,1.5,0,0,1461,0,0,No.Recurrence,10,30,70,0,0,0,0,2,Absent,Acinar,3,High,0,True,NYU1982
+1986,Asian,2,IA,0,0.0,1861,60-69,2.0,0,0,990,1,3,Secondary.Primary,10,70,10,10,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU1986
+1988,Black or African America,1,IA,1,0.0,564,60-69,1.8,1,0,228,1,2,Locoregional,n.a,n.a,n.a,n.a,n.a,n.a,n.a,3,n.a,n.a,n.a,n.a,n.a,True,NYU1988
+1997,Asian,1,IA,0,5.0,1877,50-59,1.8,0,0,1877,0,0,No.Recurrence,0,10,10,0,80,0,0,3,Present,Solid,3,High,5,True,NYU1997
+1999,Asian,1,IA,0,1.0,1903,60-69,2.0,0,0,1903,0,0,No.Recurrence,20,10,60,10,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU1999
+2002,White,2,IA,0,40.5,1801,80-89,2.4,0,0,1801,0,0,No.Recurrence,20,30,50,0,0,0,0,2,Absent,Papillary,2,Low,0,True,NYU2002
+2005,Hipanic or Latino,2,IA,0,34.0,1933,70-79,2.2,0,0,1933,0,0,No.Recurrence,20,50,20,10,0,0,0,2,Absent,Acinar,2,Low,0,True,NYU2005

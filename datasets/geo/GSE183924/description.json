@@ -1,0 +1,83 @@
+{
+    "data_id": "GSE183924",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE183924",
+    "pmcids": [
+        "PMC8484871"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "RFS",
+            "time_var": {
+                "var_name": "RFS (months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "RFS Censor",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "1 = relapse or death from any cause (RFS event); 0 = censored/alive and relapse-free"
+            },
+            "notes": [
+                "The supplementary table explicitly provides 'RFS (months)' and 'RFS Censor'.",
+                "The paper defines RFS as time from the date of surgery until disease relapse or death from any cause; patients who remained alive and relapse free were censored at their date of last disease evaluation.",
+                "The auxiliary column 'Relapse' has observed values 'Yes' and 'No' and helps confirm recurrence status, but it is not the full RFS event indicator because some rows have 'Relapse' = 'No' with 'Date of Death' present and 'RFS Censor' = 1."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 28,
+                "n_censored": 15,
+                "n_events": 13,
+                "censored_ratio": 0.54
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "unknown",
+                "var_unit": "unknown"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": [
+                    "unknown"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "The paper reports post-hoc OS on the same cohort and defines OS as time from the date of surgery until death from any cause; patients who remained alive were censored at their last date known alive.",
+                "The supplementary table includes 'Date of Esophageal Surgery' and 'Date of Death' but does not provide an explicit OS duration field or a last-known-alive/censoring field for patients without death.",
+                "Therefore OS is described in the paper, but patient-level OS time/event variables cannot be fully extracted from the provided supplementary data."
+            ]
+        },
+        {
+            "abbrv": "OS after relapse",
+            "time_var": {
+                "var_name": "unknown",
+                "var_unit": "unknown"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": [
+                    "unknown"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "The paper defines OS after relapse as the time from the date of relapse until death from any cause.",
+                "The supplementary table includes 'Date of Relapse or Censoring' and 'Date of Death', but it does not provide an explicit OS-after-relapse duration field or a post-relapse censoring/last-known-alive date for relapsed patients who were still alive.",
+                "Therefore OS after relapse cannot be fully extracted as a patient-level time/event variable from the provided supplementary data."
+            ]
+        }
+    ],
+    "data_file_names": [
+        "GSE183924_raw_counts_NCBI.csv",
+        "GSE183924_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 28,
+        "clinical_features": 33,
+        "genes": 39376
+    }
+}

@@ -1,0 +1,55 @@
+Sample,Op,Pathology,Risk factor,Progression,Tumor stage,TNM N,TNM M,Age,Sex,Maximum size (cm),Activity (METAVIR),Fibrosis (METAVIR),Ishak score,Child-Pugh,Weight (kg),Height (cm),Family history,AFP (ng/ml),Vital status,OS (month),Disease-free,DFS (month)
+DH013,TH,DN high,HBV,None,Stage II,N0,M0,55,M,1.8,NA,Stage4,6,A,62,155,Yes,31.8,Alive,46,Yes,46
+TG1-003,TH,ES1,HBV,None,Stage II,N0,M0,66,M,1.7,NA,Stage4,6,B,NA,NA,NA,23,Alive,102,Yes,102
+TG1-005,TH,ES1,HBV,None,Stage II,N0,M0,41,M,3.5,A2,Stage4,6,B,67,170,NA,42,Alive,119,Yes,119
+TG1-007,TH,ES1,HCV,None,Stage II,N0,M0,60,M,1.5,NA,Stage4,6,C,75,162,NA,10,Alive,91,Yes,91
+TG1-009,TH,ES1,HBV,None,Stage I,N0,M0,53,M,0.5,NA,Stage4,6,C,63,163,Yes,12,Alive,84,Yes,84
+TG1-012,TH,ES1,HBV,None,Stage II,N0,M0,43,F,2.9,NA,Stage4,6,B,59,157,No,55.4,Alive,69,Yes,69
+TG1-013,TH,ES1,HBV,None,Stage I,N0,M0,52,F,1.5,NA,Stage4,6,C,56,152,Yes,5.1,Alive,68,Yes,68
+TG1-017,TH,ES1,HBV,None,Stage II,Nx,Mx,58,M,1.5,NA,NA,NA,A,76,170,NA,10,Alive,71,Yes,71
+TG1-021,TH,ES1,HBV,None,Stage II,N0,M0,60,M,3.1,NA,Stage4,6,B,54,177,Yes,8,Alive,101,Yes,101
+TG1-023,TH,ES1,HBV,None,Stage IIIA,N0,M0,53,M,5.4,NA,Stage4,6,B,66,173,No,16.2,Alive,45,Yes,45
+TG2-001,TH,ES2,HBV,None,Stage II,N0,M0,39,M,1,A2,Stage4,6,B,NA,NA,NA,0,Alive,108,Yes,108
+TG2-002,TH,ES2,HBV,None,Stage I,N0,M0,50,F,6,A2,Stage4,6,C,58,155,Yes,1460,Alive,99,Yes,99
+TG2-004,TH,ES2,HBV,Local recur,Stage II,N0,M0,48,M,3,NA,Stage4,6,B,77,177,Yes,436,Alive,92,No,8
+TG2-005,TH,ES2,HBV,None,Stage II,N0,M0,49,M,4.8,NA,Stage4,6,C,65,172,NA,52,Alive,96,Yes,96
+TG2-008,TH,ES2,HBV,None,Stage I,N0,M0,58,M,0.5,NA,NA,NA,A,68,173,Yes,5,Alive,89,Yes,89
+TG2-010,TH,ES2,HBV,None,Stage II,N0,M0,58,M,1.5,NA,Stage4,6,C,60,165,No,10,Alive,93,Yes,93
+TG2-012,TH,ES2,HBV,None,Stage I,Nx,Mx,42,M,2,NA,Stage4,6,A,74,172,Yes,6,Alive,92,Yes,92
+TG2-013,TH,ES2,HBV,Distant meta,Stage IIIC,N0,M0,58,M,4.3,NA,Stage4,6,A,63,165,Yes,15500,Alive,80,No,2
+TG2-014,TH,ES2,HBV,None,Stage I,N0,M0,36,M,2,NA,Stage4,6,A,72,168,Yes,10,Alive,79,Yes,79
+TG2-019,TH,ES2,HBV,None,Stage II,N0,M0,40,M,1.9,NA,Stage4,6,A,82,177,Yes,5,Alive,82,Yes,82
+TG2-022,TH,ES2,HBV,Local recur,Stage II,N0,M0,56,M,4.8,NA,Stage4,6,A,62,163,Yes,172,Dead,13,No,3
+TG2-023,TH,ES2,HBV,None,Stage IIIA,N0,M0,56,M,8,NA,Stage4,6,A,58,170,No,18.9,Alive,61,Yes,61
+TG2-030,TH,ES2,HBV,None,Stage II,N0,M0,51,M,3,NA,Stage4,6,A,86,174,No,45.2,Alive,46,Yes,46
+TG2-033,TH,ES2,HCV,Local recur,Stage IIIA,N0,M0,61,M,6,NA,Stage4,6,C,83,179,No,1570,Alive,22,No,1
+TG2-035,TH,ES2,HCV,None,Stage II,N0,M0,62,F,2.8,NA,Stage4,6,B,53,156,No,893,Alive,98,Yes,98
+TG3-001,TH,ES3,HBV,Recur&meta,Stage II,N0,M0,62,M,3,NA,Stage4,6,C,61,171,Yes,1980,Dead,22,No,22
+TG3-002,TH,ES3,HBV,None,Stage II,N0,M0,38,M,3.2,A1,Stage4,6,B,NA,NA,NA,5,Alive,116,Yes,116
+TG3-004,TH,ES3,HBV,None,Stage II,N0,M0,57,M,2.5,NA,Stage4,6,C,88,170,NA,172,Alive,88,Yes,88
+TG3-006,TH,ES3,HBV,None,Stage I,N0,M0,60,M,2,NA,Stage4,6,B,66,167,Yes,5,Alive,121,Yes,121
+TG3-007,TH,ES3,HBV,None,Stage II,N0,M0,57,M,4,NA,Stage4,6,C,75,164,No,61,Alive,80,Yes,80
+TG3-009,TH,ES3,HBV,None,Stage I,N0,M0,52,F,2,NA,Stage4,6,B,45,158,NA,356,Alive,75,Yes,75
+TG3-010,TH,ES3,HBV,Local recur,Stage I,N0,M0,65,M,3,NA,Stage4,6,C,72,158,No,6,Dead,26,No,15
+TG3-012,TH,ES3,HBV,Recur&meta,Stage IVB,N0,M1,51,M,12,A2,Stage3,5,C,59,163,Yes,6,Dead,84,No,42
+TG3-015,TH,ES3,HBV,None,Stage II,N0,M0,54,M,1.8,NA,Stage4,6,A,73,160,Yes,5.6,Alive,58,Yes,58
+TG3-020,TH,ES3,HCV,Recur&meta,Stage IIIB,N0,M0,44,M,5.2,NA,Stage4,6,B,82,167,No,200400,Alive,47,No,21
+HPC-002,PH,*Mixed,NASH,None,Stage I,N0,M0,55,M,5.2,A1,Stage3,5,A,81,173,No,1524,Alive,47,Yes,47
+TG1-004,PH,ES1,nonBnonC,None,Stage I,N0,M0,64,M,3.1,A1,Stage0,0,A,NA,NA,NA,0,Alive,98,Yes,98
+TG2-006,PH,ES2,nonBnonC,Local recur,Stage IIIB,N0,M0,52,M,18,A2,Stage4,6,A,70,169,NA,0,Dead,2,No,2
+TG2-025,PH,ES2,Alcoholic,Local recur,Stage I,N0,M0,64,M,10.5,A1,Stage0,0,A,73,167,No,5.4,Alive,58,No,12
+TG2-026,PH,ES2,HBV,Local recur,Stage I,N0,M0,57,M,1.8,A1,Stage2,"3,4",A,69,166,No,26.1,Alive,50,No,31
+TG2-028,PH,ES2,HBV,Local recur,Stage IIIB,N0,M0,47,M,12.5,A1,Stage3,5,A,57,172,No,2554,Alive,13,No,4
+TG2-029,PH,ES2,nonBnonC,Distant meta,Stage IIIA,N0,M0,78,M,10,A1,Stage2,"3,4",A,57,163,No,112,Alive,105,No,3
+TG2-032,PH,ES2,HBV,Local recur,Stage IVB,N0,M1,57,M,4.2,A1,Stage3,5,A,66,167,No,52.1,Alive,85,No,6
+TG2-034,PH,ES2,nonBnonC,Local recur,Stage IVB,N0,M1,70,M,22,A1,Stage3,5,A,70,164,No,6650,Alive,101,No,7
+TG2-036,PH,ES2,nonBnonC,None,Stage II,N0,M0,53,M,9,A2,Stage3,5,A,60,167,No,6.3,Alive,92,Yes,92
+TG2-037,PH,ES2,nonBnonC,None,Stage IIIA,Nx,Mx,70,M,7.5,A0,Stage0,0,A,57,158,Yes,2.7,Alive,86,Yes,86
+TG2-038,PH,ES2,HBV,Distant meta,Stage II,N0,M0,48,M,5,A1,Stage2,"3,4",A,67,174,Yes,23.9,Alive,83,No,25
+TG3-005,PH,ES3,HCV,Local recur,Stage I,N0,M0,75,F,5,NA,Stage4,6,NA,58.9,154.8,Yes,177,Dead,35,No,14
+TG3-013,PH,ES3,HBV,None,Stage II,N0,M0,50,M,2.5,A1,Stage2,"3,4",A,70,164,No,93.8,Alive,58,Yes,58
+TG3-016,PH,ES3,HBV,Local recur,Stage II,N0,M0,49,M,5.5,A1,Stage1,"1,2",A,68,162,No,21,Alive,8,No,7
+TG3-019,PH,ES3,NASH,None,Stage II,N0,M0,66,M,2.2,A2,Stage3,5,A,84,177,Yes,3.5,Alive,92,Yes,92
+TG3-021,PH,ES3,HBV,Recur&meta,Stage I,N0,M0,49,F,7.2,A0,Stage2,"3,4",A,61,166,Yes,49.1,Alive,44,No,12
+TG3-023,PH,ES3,HCV,Local recur,Stage IIIA,N0,M0,70,F,8.2,A1,Stage2,"3,4",A,56,150,Yes,176200,Alive,88,No,1
+TG3-024,PH,ES3,HBV,Local recur,Stage I,N0,M0,65,M,7.8,A1,Stage3,5,A,66,155,Yes,3.5,Alive,37,No,37

@@ -1,0 +1,46 @@
+{
+    "data_id": "GSE131521",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE131521",
+    "pmcids": [
+        "PMC7839060"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "months to death or last fu",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "status (alive - 0; dead/hospice - 1)",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "0 = alive; 1 = dead/hospice"
+            },
+            "notes": [
+                "GSM sample metadata explicitly provides both 'months to death or last fu' and 'status (alive - 0; dead/hospice - 1)' for all 17 samples.",
+                "The paper describes Kaplan-Meier and Cox survival analyses and refers to improved 'survival' without naming another endpoint; these metadata fields are most consistent with overall survival.",
+                "Time unit was inferred from the field name containing 'months'.",
+                "The time variable appears to mix death time and censored last follow-up time, as stated in the field name 'months to death or last fu'."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 17,
+                "n_censored": 9,
+                "n_events": 8,
+                "censored_ratio": 0.53
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE131521_raw_counts_NCBI.csv",
+        "GSE131521_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 17,
+        "clinical_features": 5,
+        "genes": 39376
+    }
+}

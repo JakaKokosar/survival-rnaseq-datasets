@@ -1,0 +1,76 @@
+{
+    "data_id": "GSE120622",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120622",
+    "pmcids": [
+        "PMC7339020"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "death.time..month.",
+                "var_unit": "month."
+            },
+            "event_var": {
+                "var_name": "death.event",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "overall survival status; 1 = death (event), 0 = alive / censored at last follow-up"
+            },
+            "notes": [
+                "These fields appear in the GEO sample metadata characteristics_ch1 for tumor samples in GSE120622 (e.g., GSM3405969: death.event: 1; death.time..month.: 39).",
+                "The paper's Methods state that overall survival was analyzed with death classified as the event and patients censored at last follow-up, supporting the interpretation of death.event (1=event).",
+                "Time unit is taken from the variable name 'death.time..month.' and the Methods reporting follow-up in months (median follow-up 51 months). Values in the metadata include decimal months (e.g., 6.533333333).",
+                "Time origin (start time) is inferred to be time since surgery (op.date present in sample metadata and Methods refer to surgically-resected tumors and 'post-surgery' recurrence), but the exact origin is not explicitly labeled in the field name.",
+                "Some sample records have event flag but lack an explicit time field (e.g., GSM3406049 has 'death.event: 0' but no 'death.time..month.' entry in the provided metadata)."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 80,
+                "n_censored": 20,
+                "n_events": 60,
+                "censored_ratio": 0.25
+            }
+        },
+        {
+            "abbrv": "RFS",
+            "time_var": {
+                "var_name": "relapse.time..month.",
+                "var_unit": "month."
+            },
+            "event_var": {
+                "var_name": "relapse.event.1",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "relapse/free-recurrence event; 1 = post-surgery recurrence (event), 0 = no recurrence / censored"
+            },
+            "notes": [
+                "The relapse variables are present in GEO sample metadata characteristics_ch1 for tumor samples in GSE120622 (e.g., GSM3405969: relapse.event.1: 1; relapse.time..month.: 17.46666667).",
+                "The paper Methods explicitly state that post-surgery recurrence (>3 months) was classified as an event for relapse-free survival and that patients were censored at last follow-up or death (i.e., death is treated as censoring for RFS).",
+                "Time unit inferred from the variable name 'relapse.time..month.' and the decimal month values in the metadata.",
+                "As with OS, time origin is inferred to be time since surgery (op.date present and Methods reference 'post-surgery' recurrence) though the field label does not explicitly state the origin.",
+                "Event coding (1/0) is inferred from both the sample metadata values and the paper's event definitions."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 80,
+                "n_censored": 42,
+                "n_events": 38,
+                "censored_ratio": 0.53
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE120622_raw_counts_NCBI.csv",
+        "GSE120622_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 81,
+        "clinical_features": 16,
+        "genes": 39376
+    }
+}

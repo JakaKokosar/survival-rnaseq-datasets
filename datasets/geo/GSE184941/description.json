@@ -1,0 +1,64 @@
+{
+    "data_id": "GSE184941",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE184941",
+    "pmcids": [
+        "PMC10071545"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival (months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "vital status",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "1 = deceased; 0 = alive (censored)"
+            },
+            "notes": [
+                "Time and event variables extracted from GEO sample 'characteristics_ch1' fields in GSE184941 (e.g., GSM5600755...); variable names preserved exactly as in the metadata.",
+                "Mapping of 'vital status' (1 vs 0) was inferred by cross-referencing 'death censoring' dates and 'diagnosis date' in the sample metadata: samples with vital status = 1 have earlier 'death censoring' dates consistent with death and OS values consistent with event; vital status = 0 corresponds to last follow-up (censored).",
+                "Paper PMC10071545 reports Kaplan–Meier analyses for overall survival measured from time of initial diagnosis; this is consistent with 'diagnosis date' and 'overall survival (months)' fields in the GEO metadata.",
+                "There are some data-quality anomalies in the metadata (examples: negative or implausible survival values — e.g., 'progress free survival (months)' = -1378.6 for GSM5600830; 'overall survival (months)' = -1280.9 for GSM5600871). These should be cleaned/verified before analysis."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 57,
+                "n_censored": 22,
+                "n_events": 35,
+                "censored_ratio": 0.39
+            }
+        },
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "progress free survival (months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": [],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "'progress free survival (months)' time-to-event values are present in GEO sample 'characteristics_ch1' fields of GSE184941.",
+                "No explicit binary progression event flag (e.g., progression status coded as 0/1) is provided in the sample metadata. Per-sample 'progression date' fields are available and can be used to derive a progression event/censoring indicator, but an explicit coded event variable is not present in the metadata.",
+                "Some 'progress free survival (months)' entries are NA or implausible (see examples in the metadata), indicating the need for data validation/cleaning if deriving PFS events from 'progression date'.",
+                "The paper mentions analyses 'assessed based on the date of progression' (PMC10071545), consistent with the presence of 'progression date' fields in the GEO metadata; however the derived event indicator is not supplied as a named binary field."
+            ]
+        }
+    ],
+    "data_file_names": [
+        "GSE184941_raw_counts_NCBI.csv",
+        "GSE184941_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 60,
+        "clinical_features": 25,
+        "genes": 39376
+    }
+}

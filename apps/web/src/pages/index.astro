@@ -1,0 +1,31 @@
+---
+// Local component imports
+import Layout from '../layouts/Layout.astro';
+import AppHeader from '../components/AppHeader.astro';
+import DatasetBrowser from '../components/DatasetBrowser.svelte';
+
+// Data imports
+import { rawData, rawPmcidToCitation, rawSampleOrigin, rawSummaries } from '../data';
+import { parseDatasets, parseGeoSeriesSummaries, parsePmcidCitations } from '../lib/dataset-schema';
+
+const citationMap = parsePmcidCitations(rawPmcidToCitation);
+const datasets = parseDatasets(rawData).map((dataset) => ({
+	...dataset,
+	related_publications: dataset.pmcids.map((pmcid) => ({
+		pmcid,
+		citation: citationMap.get(pmcid) ?? pmcid,
+		url: `https://www.ncbi.nlm.nih.gov/pmc/articles/${pmcid}/`,
+	})),
+}));
+const summariesMap = parseGeoSeriesSummaries(rawSummaries);
+const sampleOriginMap = new Map<string, string[]>(
+	rawSampleOrigin.map((entry) => [entry.data_id, entry.sample_geo_location])
+);
+---
+
+<Layout>
+	<AppHeader title="Survival Analysis Datasets" />
+	<div class="flex-1 overflow-hidden">
+		<DatasetBrowser datasets={datasets} {summariesMap} {sampleOriginMap} client:only="svelte" />
+	</div>
+</Layout>

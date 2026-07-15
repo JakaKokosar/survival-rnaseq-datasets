@@ -1,0 +1,75 @@
+{
+    "data_id": "GSE136961",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE136961",
+    "pmcids": [
+        "PMC6971301"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "progression-free-survival_days",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "recurrence",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "indicator of disease recurrence/progression (1 = recurrence/progression occurred; 0 = no recurrence/progression)"
+            },
+            "notes": [
+                "Time and event fields are present in the GEO sample metadata in the 'Sample_characteristics_ch1' entry as part of a composite 'survival: ...' string (e.g. GSM4063814: 'survival: recurrence:1, progression-free-survival_days:144, live, overall-survival_days:234').",
+                "The paper defines PFS as 'length of time from the start of the anti-PD-1 antibody until progression' — the 'recurrence' field in the metadata appears to encode the progression event used for PFS.",
+                "Unit 'days' is inferred from the variable name suffix '_days' in the sample metadata.",
+                "Values for 'recurrence' observed across samples are '1' and '0' (recorded as shown in metadata).",
+                "Series metadata notes that 'sample \"characteristics: survival\" information has been updated on April 16, 2020.'"
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 10,
+                "n_censored": 1,
+                "n_events": 9,
+                "censored_ratio": 0.1
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall-survival_days",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "survival",
+                "var_values": [
+                    "live",
+                    "dead"
+                ],
+                "var_meaning": "overall survival status (live = alive at last follow-up [censored]; dead = death event)"
+            },
+            "notes": [
+                "Overall survival time and vital-status tokens appear in the GEO sample metadata within the same composite 'survival: ...' Sample_characteristics_ch1 entry (e.g. '..., live, overall-survival_days:234').",
+                "The paper defines OS as 'length of time from the date of diagnosis until death' — 'overall-survival_days' corresponds to this time and the unlabelled 'live'/'dead' tokens indicate censoring/event.",
+                "No separate explicit field name for vital status is provided beyond the 'survival' composite label in the metadata; thus 'survival' is used here as the event-field name exactly as it appears.",
+                "Unit 'days' is inferred from the variable name suffix '_days'; the paper reports medians in months but the sample metadata times are in days."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 10,
+                "n_censored": 2,
+                "n_events": 8,
+                "censored_ratio": 0.2
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE136961_raw_counts_NCBI.csv",
+        "GSE136961_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 21,
+        "clinical_features": 8,
+        "genes": 39376
+    }
+}

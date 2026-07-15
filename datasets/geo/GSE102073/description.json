@@ -1,0 +1,75 @@
+{
+    "data_id": "GSE102073",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE102073",
+    "pmcids": [
+        "PMC5645359"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "pfs.mos..",
+                "var_unit": "mos.."
+            },
+            "event_var": {
+                "var_name": "recurrence",
+                "var_values": [
+                    "Y",
+                    "N"
+                ],
+                "var_meaning": "recurrence status; likely used as the event indicator paired with pfs.mos.. for progression-free survival/recurrence-free follow-up"
+            },
+            "notes": [
+                "The sample metadata explicitly contain 'pfs.mos..' and 'recurrence'.",
+                "The paper states that 'Analyses of overall and progression-free survival were performed under Cox proportional hazards assumption,' supporting that PFS was analyzed in this cohort.",
+                "Coding is not explicitly defined in GEO; Y is consistent with recurrence/event and N with no recorded recurrence/censoring in many samples.",
+                "Some samples have 'recurrence: N' together with death (for example, a dead patient with pfs.mos.. equal to os.mos..), so 'recurrence' may not fully capture all PFS events if death without documented recurrence was counted in the paper's PFS definition."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 84,
+                "n_censored": 28,
+                "n_events": 56,
+                "censored_ratio": 0.33
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "os.mos..",
+                "var_unit": "mos.."
+            },
+            "event_var": {
+                "var_name": "vitalstatus",
+                "var_values": [
+                    "Dead",
+                    "Alive",
+                    "Not available"
+                ],
+                "var_meaning": "overall survival status; 'Dead' indicates death event, 'Alive' indicates censored/alive at last follow-up, and 'Not available' indicates missing status"
+            },
+            "notes": [
+                "The sample metadata explicitly contain 'os.mos..' and 'vitalstatus'.",
+                "The paper explicitly mentions analyses of 'overall survival' in this cohort.",
+                "The time unit is embedded in the field name as 'mos..'; the paper refers to survival analyses but does not restate the unit separately in the provided text.",
+                "At least one sample shows missing OS data ('os.mos..: Not available' and/or 'vitalstatus: Not available')."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 83,
+                "n_censored": 64,
+                "n_events": 19,
+                "censored_ratio": 0.77
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE102073_raw_counts_NCBI.csv",
+        "GSE102073_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 84,
+        "clinical_features": 19,
+        "genes": 39376
+    }
+}

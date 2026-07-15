@@ -1,0 +1,74 @@
+{
+    "data_id": "GSE229706",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE229706",
+    "pmcids": [
+        "PMC10632519"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "Time to Recurrence",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "Progression",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "1 = disease progression event; 0 = no progression (censored)"
+            },
+            "notes": [
+                "Variables 'Time to Recurrence' and 'Progression' are present in the provided Supplementary Data table.",
+                "Unit for 'Time to Recurrence' is inferred as days based on the companion column 'Days_to_Death or Last Contact' and the manuscript text reporting follow-up in days (e.g., median follow-up of 2,284 days).",
+                "For patients with Progression = 0, 'Time to Recurrence' appears to equal 'Days_to_Death or Last Contact' (i.e., censoring time) — e.g., Study_ID 32 has Progression=0 and Time to Recurrence = 4661 which equals Days_to_Death or Last Contact.",
+                "Progression event subtypes are recorded in the 'ProgType' and 'ProgType_Lab' columns (e.g., 'Systemic', 'Locoregional', 'Secondary.Primary'); the paper defines the progression group as all disease progression events regardless of type.",
+                "The manuscript refers to both PFS and RFS in different analyses; the same 'Time to Recurrence'/'Progression' fields from the Supplementary Data are the apparent source for those analyses."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 122,
+                "n_censored": 77,
+                "n_events": 45,
+                "censored_ratio": 0.63
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "Days_to_Death or Last Contact",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "Dead_or_alive",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "1 = deceased; 0 = alive at last contact (inferred)"
+            },
+            "notes": [
+                "'Days_to_Death or Last Contact' and 'Dead_or_alive' are present in the provided Supplementary Data table.",
+                "Coding of 'Dead_or_alive' (1 vs 0) is not explicitly defined in the table documentation but is inferred from the column name and concordance with follow-up times (rows where Dead_or_alive=1 correspond to earlier death times in 'Days_to_Death or Last Contact').",
+                "The primary analyses in the paper focus on progression/recurrence (PFS/RFS), but overall survival data (Days_to_Death or Last Contact + Dead_or_alive) are provided in the Supplementary Data."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 122,
+                "n_censored": 89,
+                "n_events": 33,
+                "censored_ratio": 0.73
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE229706_raw_counts_NCBI.csv",
+        "GSE229706_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 150,
+        "clinical_features": 38,
+        "genes": 39376
+    }
+}

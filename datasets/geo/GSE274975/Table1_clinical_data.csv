@@ -1,0 +1,62 @@
+Sample_ID,RECIST Response,Response status available,"PFS time, months",Primary_tumor._metastasis,Targeted therapeutics (next line),Age at biosampling,Gender,Tumor_site (biosampling),tissue_type,Histotype,PD-L1 status
+OB_pat_LuC_104,PD,1,6,primary,"Pembrolizumab, Niraparib",45.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_105,PR,0,4,primary,"Pembrolizumab, Niraparib",70.0,male,Lung,Primary solid tumor,Mixed phenotype,ND
+OB_pat_LuC_107,PD,1,3,primary,"Nivolumab, Ipilimumab, Denosumab",60.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_108,PD,1,3,primary,Pembrolizumab; Niraparib,66.0,male,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_111,PD,1,3,primary,Pembrolizumab,65.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_121,CR,0,20,primary,"Pembrolizumab, Paclitaxel",64.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_122,SD,0,31,primary,"Pembrolizumab, Paclitaxel",59.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_125,SD,1,13,primary,Pembrolizumab,61.0,male,Lung,Primary solid tumor,Adenocarcinoma,positive
+OB_pat_LuC_126,SD,0,28,primary,"Nivolumab, Ipilimumab, Paclitaxel",64.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,negative
+OB_pat_LuC_129,SD,0,9,primary,"Nivolumab, Ipilimumab, Paclitaxel",66.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_130,PD,1,4,primary,Pembrolizumab,45.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_136,SD,1,21,primary,"Pembrolizumab, Paclitaxel",66.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_98,,0,12,lung metastasis,Nivolumab,62.0,female,Lung,Metastatic,Adenocarcinoma,ND
+OB_pat_LuC_1,PD,1,4,primary,"Nivolumab, Ipilimumab",69.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_100,,1,16,primary,Pembrolizumab,47.0,female,Lung,Primary solid tumor,Adenocarcinoma,positive
+OB_pat_LuC_16,PR,0,7,primary,"Pembrolizumab, Nivolumab",75.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_17,PD,0,1,skin metastasis,Nivolumab,52.0,female,skin,Metastatic,Adenocarcinoma,ND
+OB_pat_LuC_2,SD,1,55,primary,"Nivolumab, Ipilimumab",77.0,female,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_3,,0,2,primary,Nivolumab,51.0,female,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_43,PD,1,2,lymph node metastasis,Pembrolizumab,64.0,male,lymph node,Metastatic,Squamous cell carcinoma,ND
+OB_pat_LuC_45,PR,1,10,lymph node metastasis,"Avelumab, Axitinib",61.0,female,lymph node,Metastatic,Adenocarcinoma,negative
+OB_pat_LuC_59,SD,1,21,primary,Pembrolizumab,71.0,male,Lung,Primary solid tumor,other_neuroendocrine,negative
+OB_pat_LuC_61,PD,0,3,lymph node metastasis,Pembrolizumab,,female,lymph node,Metastatic,Mixed phenotype,ND
+OB_pat_LuC_62,SD,0,18,pleura metastasis,Tislelizumab (BGB-A317),52.0,female,Pleura,Metastatic,Adenocarcinoma,ND
+OB_pat_LuC_63,SD,1,8,primary,Tislelizumab (BGB-A317),56.0,male,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_64,SD,1,8,primary,Tislelizumab (BGB-A317),64.0,female,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_66,SD,1,15,primary,Tislelizumab (BGB-A317),79.0,female,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_67,PD,1,2,liver metastasis,Nivolumab,51.0,female,Liver,Metastatic,Adenocarcinoma,positive
+OB_pat_LuC_68,SD,0,5,primary,"Nivolumab, Paclitaxel, Bevacizumab",59.0,male,Lung,Primary solid tumor,Adenocarcinoma,negative
+OB_pat_LuC_69,,0,13,brain metastasis,"Nivolumab, Ipilimumab",66.0,male,Brain,Metastatic,Adenocarcinoma,ND
+OB_pat_LuC_70,PD,1,2,primary,"Avelumab, Axitinib",59.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_71,PR,0,10,primary,"Avelumab, Axitinib",60.0,male,Lung,Primary solid tumor,Mixed phenotype,ND
+OB_pat_LuC_72,PD,1,1,lymp node metastasis,"Avelumab, Axitinib",57.0,female,Lymph node,Metastatic,Mixed phenotype,ND
+OB_pat_LuC_78,PR,1,7,primary,Pembrolizumab,62.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_79,SD,1,4,primary,Nivolumab,56.0,female,Lung,,Adenocarcinoma,ND
+OB_pat_LuC_80,SD,1,4,primary,Nivolumab,63.0,male,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_81,PR,1,4,primary,"Pembrolizumab, Paclitaxel",54.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_83,PR,1,9,cerebellum metastasis,Nivolumab,63.0,male,Brain,Metastatic,Adenocarcinoma,ND
+OB_pat_LuC_84,PR,1,10,primary,Nivolumab,62.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_87,PR,0,10,primary,"Atezolizumab, Paclitaxel, Bevacizumab",50.0,female,Lung,Primary solid tumor,Mixed phenotype,positive
+OB_pat_LuC_91,PD,1,3,primary,"Nivolumab, Ipilimumab, Paclitaxel",60.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,negative
+OB_pat_LuC_99,SD,0,18,primary,Pembrolizumab,73.0,female,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_27,CR,0,5,primary,"Nivolumab, Paclitaxel",66.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_50,PD,1,3,primary,"Nivolumab, Ipilimumab",60.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_51,SD,1,9,primary,Tislelizumab (BGB-A317),51.0,female,Lung,Primary solid tumor,Adenocarcinoma,negative
+OB_pat_LuC_52,SD,1,6,primary,Tislelizumab (BGB-A317),58.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,positive
+OB_pat_LuC_53,SD,1,6,primary,Tislelizumab (BGB-A317),41.0,male,Lung,Primary solid tumor,Adenocarcinoma,negative
+OB_pat_LuC_54,PD,1,2,primary,Tislelizumab (BGB-A317),74.0,female,Lung,Primary solid tumor,Mixed phenotype,negative
+OB_pat_LuC_55,SD,1,4,primary,"Avelumab, Axitinib",62.0,male,Lung,Primary solid tumor,Mixed phenotype,negative
+OB_pat_LuC_56,SD,1,4,lymph node metastasis,"Nivolumab, Ipilimumab",,female,lymph node,Metastatic,Mixed phenotype,ND
+OB_pat_LuC_57,PR,1,19,lymph node metastasis,"Nivolumab, Ipilimumab",43.0,male,lymph node,Metastatic,Adenocarcinoma,ND
+OB_pat_LuC_134,SD,1,6,primary,"Pembrolizumab, Paclitaxel",68.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_135,SD,1,7,primary,"Pembrolizumab, Paclitaxel",65.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_123,SD,1,29,primary,Pembrolizumab,72.0,male,Lung,Primary solid tumor,Adenocarcinoma,positive
+OB_pat_LuC_65,SD,0,7,primary,Tislelizumab (BGB-A317),74.0,male,Lung,Primary solid tumor,Adenocarcinoma,ND
+OB_pat_LuC_95,SD,1,4,primary,"Pembrolizumab, Paclitaxel",75.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_128,PR,1,15,primary,Pembrolizumab,68.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_85,PD,1,2,primary,Nivolumab,60.0,female,Lung,Primary solid tumor,Squamous cell carcinoma,negative
+OB_pat_LuC_92,PR,0,6,primary,Atezolizumab,68.0,male,Lung,Primary solid tumor,Mixed phenotype,ND
+OB_pat_LuC_131,CR,0,26,primary,"Pembrolizumab, Paclitaxel",67.0,male,Lung,Primary solid tumor,Squamous cell carcinoma,ND
+OB_pat_LuC_73,PD,1,3,primary,"Ipilimumab, Nivolumab ",53.0,female,Lung,Primary solid tumor,Adenocarcinoma,ND

@@ -1,0 +1,37 @@
+{
+    "data_id": "GSE162643",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE162643",
+    "pmcids": [
+        "PMC8846434"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "survival post g207 (days)",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": "unknown",
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "GEO sample metadata explicitly provides a time-to-event-like variable as 'survival post g207 (days)' for each patient/sample.",
+                "The paper explicitly refers to this endpoint as overall survival ('OS') and describes it as 'patient survival (measured in days posttreatment)' / 'survival duration post-G207'.",
+                "No explicit event/status field is present in the GSM metadata because all 6 patients in the cohort died (100% event occurrence, 0% censoring).",
+                "Because there is no censoring, the authors analyzed this strictly as a continuous variable using a Spearman rank-order correlation rather than traditional survival models.",
+                "The available time variable appears to represent survival duration after G207 treatment rather than from initial diagnosis."
+            ]
+        }
+    ],
+    "data_summary": {
+        "samples": 6,
+        "clinical_features": 10,
+        "genes": 39376
+    },
+    "data_file_names": [
+        "GSE162643_raw_counts_NCBI.csv",
+        "GSE162643_preprocessed.csv"
+    ]
+}

@@ -1,0 +1,28 @@
+[project]
+name = "survival-rnaseq-datasets"
+version = "0.1.0"
+description = "Data preparation pipeline for the Survival RNA-seq Datasets Browser"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "geoparse",
+  "ipykernel",
+  "joblib",
+  "lifelines",
+  "matplotlib",
+  "nbconvert",
+  "numba>=0.65.1",
+  "numpy",
+  "openai",
+  "openpyxl",
+  "pandas",
+  "pydantic",
+  "pymupdf",
+  "python-dotenv>=1.2.2",
+  "rnanorm",
+  "single-sample-gsea",
+  "statsmodels",
+  "tqdm",
+]
+
+[tool.uv]
+package = false

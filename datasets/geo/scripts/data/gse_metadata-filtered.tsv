@@ -1,0 +1,117 @@
+gse_id	design	ncbi_generated_data	experiment_type
+GSE165334	is standalone	False	Expression profiling by high throughput sequencing
+GSE201868	is standalone	True	Expression profiling by high throughput sequencing
+GSE136961	is standalone	True	Expression profiling by high throughput sequencing
+GSE118113	is standalone	True	Expression profiling by high throughput sequencing
+GSE143940	is standalone	True	Expression profiling by high throughput sequencing
+GSE162682	is superseries	False	Expression profiling by high throughput sequencing
+GSE145325	is standalone	False	Expression profiling by high throughput sequencing
+GSE174237	is standalone	True	Expression profiling by high throughput sequencing, Non-coding RNA profiling by high throughput sequencing
+GSE120622	is standalone	True	Expression profiling by high throughput sequencing
+GSE156944	is superseries	False	Expression profiling by high throughput sequencing
+GSE105130	is standalone	True	Expression profiling by high throughput sequencing
+GSE156337	is superseries	False	Expression profiling by high throughput sequencing, Other
+GSE165337	is subseries	False	Expression profiling by high throughput sequencing
+GSE71651	is standalone	True	Expression profiling by high throughput sequencing
+GSE156699	is standalone	True	Expression profiling by high throughput sequencing
+GSE218750	is standalone	True	Expression profiling by high throughput sequencing
+GSE247185	is standalone	True	Expression profiling by high throughput sequencing
+GSE200065	is superseries	False	Genome binding/occupancy profiling by high throughput sequencing, Expression profiling by high throughput sequencing
+GSE158413	is standalone	True	Expression profiling by high throughput sequencing
+GSE188627	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE253086	is standalone	True	Expression profiling by high throughput sequencing
+GSE225328	is superseries	False	Expression profiling by array, Expression profiling by high throughput sequencing
+GSE93175	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE144561	is standalone	True	Expression profiling by high throughput sequencing
+GSE216490	is standalone	True	Expression profiling by high throughput sequencing
+GSE125449	is standalone	False	Expression profiling by high throughput sequencing
+GSE165335	is subseries	False	Non-coding RNA profiling by high throughput sequencing
+GSE80388	is standalone	True	Expression profiling by high throughput sequencing
+GSE101109	is superseries	False	Genome variation profiling by SNP array, Expression profiling by high throughput sequencing
+GSE213444	is superseries	False	Genome binding/occupancy profiling by high throughput sequencing, Expression profiling by high throughput sequencing
+GSE184941	is standalone	True	Expression profiling by high throughput sequencing
+GSE155945	is standalone	True	Non-coding RNA profiling by high throughput sequencing
+GSE179252	is standalone	True	Expression profiling by high throughput sequencing
+GSE224564	is subseries	True	Expression profiling by high throughput sequencing
+GSE219250	is standalone	False	Expression profiling by high throughput sequencing
+GSE217195	is standalone	True	Expression profiling by high throughput sequencing
+GSE184336	is standalone	True	Expression profiling by high throughput sequencing
+GSE225327	is subseries	True	Expression profiling by high throughput sequencing
+GSE254012	is standalone	True	Expression profiling by high throughput sequencing
+GSE182102	is standalone	False	Expression profiling by high throughput sequencing
+GSE196533	is standalone	False	Methylation profiling by high throughput sequencing, Expression profiling by high throughput sequencing
+GSE130663	is superseries	False	Expression profiling by high throughput sequencing, Genome binding/occupancy profiling by high throughput sequencing, Other
+GSE193946	is standalone	True	Expression profiling by high throughput sequencing
+GSE58135	is standalone	True	Expression profiling by high throughput sequencing
+GSE181042	is standalone	True	Expression profiling by high throughput sequencing
+GSE60052	is standalone	True	Expression profiling by high throughput sequencing
+GSE87340	is standalone	True	Expression profiling by high throughput sequencing
+GSE110875	is standalone	False	Expression profiling by high throughput sequencing
+GSE235223	is standalone	True	Expression profiling by high throughput sequencing
+GSE200064	is subseries	True	Expression profiling by high throughput sequencing
+GSE80389	is standalone	True	Expression profiling by high throughput sequencing
+GSE229706	is superseries	False	Expression profiling by high throughput sequencing
+GSE255058	is standalone	True	Expression profiling by high throughput sequencing
+GSE75473	is standalone	True	Non-coding RNA profiling by high throughput sequencing
+GSE205308	is standalone	True	Expression profiling by high throughput sequencing
+GSE131599	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE210320	is standalone	True	Expression profiling by high throughput sequencing
+GSE96058	is subseries	False	Expression profiling by high throughput sequencing
+GSE106637	is standalone	True	Expression profiling by high throughput sequencing
+GSE234737	is standalone	True	Expression profiling by high throughput sequencing
+GSE164105	is superseries	False	Expression profiling by high throughput sequencing, Other
+GSE81538	is subseries	False	Expression profiling by high throughput sequencing
+GSE77314	is standalone	True	Expression profiling by high throughput sequencing
+GSE122630	is standalone	True	Expression profiling by high throughput sequencing
+GSE229056	is superseries	False	Expression profiling by high throughput sequencing, Methylation profiling by genome tiling array
+GSE223909	is superseries	False	Expression profiling by high throughput sequencing
+GSE199692	is standalone	True	Expression profiling by high throughput sequencing
+GSE176159	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE207194	is standalone	True	Expression profiling by high throughput sequencing
+GSE37616	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE216037	is standalone	False	Expression profiling by high throughput sequencing
+GSE192667	is standalone	False	Expression profiling by high throughput sequencing
+GSE218618	is standalone	True	Expression profiling by high throughput sequencing
+GSE154938	is standalone	True	Expression profiling by high throughput sequencing
+GSE246895	is standalone	False	Expression profiling by high throughput sequencing
+GSE232569	is standalone	False	Expression profiling by high throughput sequencing
+GSE208218	is standalone	True	Expression profiling by high throughput sequencing
+GSE106534	is standalone	True	Expression profiling by high throughput sequencing
+GSE185796	is standalone	False	Expression profiling by high throughput sequencing
+GSE223908	is subseries	True	Expression profiling by high throughput sequencing
+GSE159721	is standalone	False	Expression profiling by high throughput sequencing
+GSE185861	is standalone	True	Expression profiling by high throughput sequencing
+GSE100797	is standalone	False	Expression profiling by high throughput sequencing
+GSE195952	is standalone	True	Expression profiling by high throughput sequencing
+GSE196519	is standalone	True	Expression profiling by high throughput sequencing
+GSE162643	is subseries	True	Expression profiling by high throughput sequencing
+GSE171898	is standalone	False	Expression profiling by high throughput sequencing
+GSE148355	is standalone	True	Expression profiling by high throughput sequencing
+GSE165808	is standalone	True	Expression profiling by high throughput sequencing
+GSE132554	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE217396	is standalone	False	Expression profiling by high throughput sequencing
+GSE188715	is standalone	False	Expression profiling by high throughput sequencing
+GSE92636	is standalone	False	Non-coding RNA profiling by high throughput sequencing
+GSE243371	is standalone	True	Expression profiling by high throughput sequencing
+GSE150043	is standalone	True	Expression profiling by high throughput sequencing
+GSE174630	is superseries	False	Expression profiling by high throughput sequencing
+GSE206142	is standalone	True	Expression profiling by high throughput sequencing
+GSE175648	is standalone	True	Expression profiling by high throughput sequencing
+GSE116159	is standalone	True	Expression profiling by high throughput sequencing
+GSE133713	is standalone	False	Expression profiling by high throughput sequencing
+GSE138109	is standalone	False	Expression profiling by high throughput sequencing, Non-coding RNA profiling by high throughput sequencing
+GSE227378	is standalone	True	Non-coding RNA profiling by high throughput sequencing
+GSE251916	is standalone	False	Expression profiling by high throughput sequencing
+GSE181582	is superseries	False	Expression profiling by high throughput sequencing, Genome variation profiling by high throughput sequencing
+GSE115577	is standalone	False	Expression profiling by high throughput sequencing, Third-party reanalysis
+GSE201492	is standalone	False	Expression profiling by high throughput sequencing
+GSE223536	is subseries	False	Expression profiling by high throughput sequencing
+GSE234760	is standalone	True	Expression profiling by high throughput sequencing
+GSE274975	is standalone	False	Expression profiling by high throughput sequencing
+GSE243238	is standalone	False	Expression profiling by high throughput sequencing
+GSE68085	is standalone	True	Non-coding RNA profiling by high throughput sequencing
+GSE199726	is standalone	False	Expression profiling by high throughput sequencing
+GSE165338	is superseries	False	Expression profiling by high throughput sequencing, Non-coding RNA profiling by high throughput sequencing
+GSE90866	is standalone	False	Expression profiling by high throughput sequencing, Non-coding RNA profiling by array
+GSE206199	is standalone	True	Expression profiling by high throughput sequencing
+GSE118105	is standalone	True	Expression profiling by high throughput sequencing

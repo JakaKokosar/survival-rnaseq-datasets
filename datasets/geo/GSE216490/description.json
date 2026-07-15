@@ -1,0 +1,47 @@
+{
+    "data_id": "GSE216490",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216490",
+    "pmcids": [
+        "PMC9972164"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "BCR",
+            "time_var": {
+                "var_name": "time to_bcr_(days)",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "biochemical recurrence_within_5_years_of_treatment",
+                "var_values": [
+                    "No",
+                    "Yes",
+                    "NA"
+                ],
+                "var_meaning": "occurrence of biochemical recurrence within 5 years after radical prostatectomy (Yes = recurrence occurred within 5 years; No = no recurrence within 5 years; NA = missing/not available)"
+            },
+            "notes": [
+                "Both variables are present in the GEO sample metadata (characteristics_ch1) for GSE216490 (see GSM entries).",
+                "The paper defines biochemical recurrence (BCR) as serum PSA > 0.2 ng/mL on two successive measurements and considers BCR within 5 years after radical prostatectomy; Kaplan–Meier analysis for BCR-free survival was performed.",
+                "Time unit is taken from the variable name '(days)'. However, the paper reports cohort summary statistics in months (median 16.59 months, range 2.1–55.07 months). Sample-level numeric values mostly appear consistent with days (e.g., 119, 1577), but some entries contain decimal values (e.g., 12.03, 5.63) or very small numbers that are unexpected for integer days, indicating possible formatting/unit inconsistencies—consult the supplementary phenotype file or authors for clarification.",
+                "Many samples have 'time to_bcr_(days)' = 'NA' when recurrence did not occur or follow-up data are missing; event value 'NA' denotes missing event information in the metadata."
+            ],
+            "stats": {
+                "n_incomplete": 52,
+                "n_complete": 43,
+                "n_censored": 0,
+                "n_events": 43,
+                "censored_ratio": 0.0
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE216490_raw_counts_NCBI.csv",
+        "GSE216490_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 95,
+        "clinical_features": 11,
+        "genes": 39376
+    }
+}

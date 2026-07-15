@@ -1,0 +1,2199 @@
+[
+    {
+        "data_id": "GSE100797",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100797",
+        "pmcids": [
+            "PMC5701046"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "os.time",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "os.event",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "overall survival event indicator (1 = death, 0 = censored/alive at last follow-up)"
+                },
+                "notes": [
+                    "Variable names and values taken from GEO sample 'characteristics_ch1' fields in GSE100797 (e.g. GSM2693520 contains 'os.time: 92.9' and 'os.event: 0').",
+                    "Units not stated in the GEO sample metadata; 'months' inferred from the paper text which reports survival in months (e.g. 'median overall survival (OS) was 22.8 months' and 'minimum follow-up of 37.2 months').",
+                    "Event coding (1 = event, 0 = censored) is not explicitly defined in the GEO metadata and was inferred from patterns in the sample data (long os.time values paired with os.event: 0) and standard clinical convention."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 25,
+                    "n_censored": 8,
+                    "n_events": 17,
+                    "censored_ratio": 0.32
+                }
+            },
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "pfs.time",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "pfs.event",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "progression-free survival event indicator (1 = progression and/or death, 0 = censored/no progression at last follow-up)"
+                },
+                "notes": [
+                    "Variable names and values taken from GEO sample 'characteristics_ch1' fields in GSE100797 (e.g. GSM2693520 contains 'pfs.time: 48.1' and 'pfs.event: 1').",
+                    "Units not stated in the GEO sample metadata; 'months' inferred from the paper text (paper presents PFS outcomes in yearly/monthly terms and uses months elsewhere).",
+                    "PFS event definition is not explicitly encoded in the GEO metadata; Methods state 'Response was assessed according to RECIST 1.0', so PFS is presumed to follow the standard RECIST-based definition (progression or death).",
+                    "Event coding (1 = event, 0 = censored) is inferred from metadata patterns and standard conventions, not explicitly documented in the GEO file."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 25,
+                    "n_censored": 5,
+                    "n_events": 20,
+                    "censored_ratio": 0.2
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE100797_original.csv",
+            "GSE100797_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 25,
+            "clinical_features": 11,
+            "genes": 18418
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE102073",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE102073",
+        "pmcids": [
+            "PMC5645359"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "pfs.mos..",
+                    "var_unit": "mos.."
+                },
+                "event_var": {
+                    "var_name": "recurrence",
+                    "var_values": [
+                        "Y",
+                        "N"
+                    ],
+                    "var_meaning": "recurrence status; likely used as the event indicator paired with pfs.mos.. for progression-free survival/recurrence-free follow-up"
+                },
+                "notes": [
+                    "The sample metadata explicitly contain 'pfs.mos..' and 'recurrence'.",
+                    "The paper states that 'Analyses of overall and progression-free survival were performed under Cox proportional hazards assumption,' supporting that PFS was analyzed in this cohort.",
+                    "Coding is not explicitly defined in GEO; Y is consistent with recurrence/event and N with no recorded recurrence/censoring in many samples.",
+                    "Some samples have 'recurrence: N' together with death (for example, a dead patient with pfs.mos.. equal to os.mos..), so 'recurrence' may not fully capture all PFS events if death without documented recurrence was counted in the paper's PFS definition."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 84,
+                    "n_censored": 28,
+                    "n_events": 56,
+                    "censored_ratio": 0.33
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "os.mos..",
+                    "var_unit": "mos.."
+                },
+                "event_var": {
+                    "var_name": "vitalstatus",
+                    "var_values": [
+                        "Dead",
+                        "Alive",
+                        "Not available"
+                    ],
+                    "var_meaning": "overall survival status; 'Dead' indicates death event, 'Alive' indicates censored/alive at last follow-up, and 'Not available' indicates missing status"
+                },
+                "notes": [
+                    "The sample metadata explicitly contain 'os.mos..' and 'vitalstatus'.",
+                    "The paper explicitly mentions analyses of 'overall survival' in this cohort.",
+                    "The time unit is embedded in the field name as 'mos..'; the paper refers to survival analyses but does not restate the unit separately in the provided text.",
+                    "At least one sample shows missing OS data ('os.mos..: Not available' and/or 'vitalstatus: Not available')."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 83,
+                    "n_censored": 64,
+                    "n_events": 19,
+                    "censored_ratio": 0.77
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE102073_raw_counts_NCBI.csv",
+            "GSE102073_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 84,
+            "clinical_features": 19,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE113863",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113863",
+        "pmcids": [
+            "PMC6206135"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "DMFS",
+                "time_var": {
+                    "var_name": "dmfs time",
+                    "var_unit": "years"
+                },
+                "event_var": {
+                    "var_name": "dmfs event",
+                    "var_values": [
+                        "NA",
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "distant metastasis-free survival event indicator; inferred coding 1 = distant metastasis event, 0 = censored/no event, NA = missing"
+                },
+                "notes": [
+                    "GSM metadata explicitly contains 'dmfs time' and 'dmfs event' for samples in GSE113863.",
+                    "Many samples have 'dmfs time: NA' and 'dmfs event: NA'; the series metadata states that 303 of 483 RNA-seq samples had survival data.",
+                    "The unit is not stated in GSM metadata; 'years' is taken from the paper, which describes DMFS analyses with follow-up up to 10 years and numeric values consistent with year-based times.",
+                    "The 0/1 event coding is not explicitly defined in the GSM records; meaning is inferred from the endpoint name and standard Kaplan-Meier/Cox survival analysis described in the paper."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 119,
+                    "n_censored": 105,
+                    "n_events": 14,
+                    "censored_ratio": 0.88
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE113863_raw_counts_NCBI.csv",
+            "GSE113863_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 119,
+            "clinical_features": 11,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Targeted",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "We only have 119 samples in the raw counts matrix from NCBI. However, the paper mentions 303 samples with complete survival endpoints.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE120622",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120622",
+        "pmcids": [
+            "PMC7339020"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "death.time..month.",
+                    "var_unit": "month."
+                },
+                "event_var": {
+                    "var_name": "death.event",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "overall survival status; 1 = death (event), 0 = alive / censored at last follow-up"
+                },
+                "notes": [
+                    "These fields appear in the GEO sample metadata characteristics_ch1 for tumor samples in GSE120622 (e.g., GSM3405969: death.event: 1; death.time..month.: 39).",
+                    "The paper's Methods state that overall survival was analyzed with death classified as the event and patients censored at last follow-up, supporting the interpretation of death.event (1=event).",
+                    "Time unit is taken from the variable name 'death.time..month.' and the Methods reporting follow-up in months (median follow-up 51 months). Values in the metadata include decimal months (e.g., 6.533333333).",
+                    "Time origin (start time) is inferred to be time since surgery (op.date present in sample metadata and Methods refer to surgically-resected tumors and 'post-surgery' recurrence), but the exact origin is not explicitly labeled in the field name.",
+                    "Some sample records have event flag but lack an explicit time field (e.g., GSM3406049 has 'death.event: 0' but no 'death.time..month.' entry in the provided metadata)."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 80,
+                    "n_censored": 20,
+                    "n_events": 60,
+                    "censored_ratio": 0.25
+                }
+            },
+            {
+                "abbrv": "RFS",
+                "time_var": {
+                    "var_name": "relapse.time..month.",
+                    "var_unit": "month."
+                },
+                "event_var": {
+                    "var_name": "relapse.event.1",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "relapse/free-recurrence event; 1 = post-surgery recurrence (event), 0 = no recurrence / censored"
+                },
+                "notes": [
+                    "The relapse variables are present in GEO sample metadata characteristics_ch1 for tumor samples in GSE120622 (e.g., GSM3405969: relapse.event.1: 1; relapse.time..month.: 17.46666667).",
+                    "The paper Methods explicitly state that post-surgery recurrence (>3 months) was classified as an event for relapse-free survival and that patients were censored at last follow-up or death (i.e., death is treated as censoring for RFS).",
+                    "Time unit inferred from the variable name 'relapse.time..month.' and the decimal month values in the metadata.",
+                    "As with OS, time origin is inferred to be time since surgery (op.date present and Methods reference 'post-surgery' recurrence) though the field label does not explicitly state the origin.",
+                    "Event coding (1/0) is inferred from both the sample metadata values and the paper's event definitions."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 80,
+                    "n_censored": 42,
+                    "n_events": 38,
+                    "censored_ratio": 0.53
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE120622_raw_counts_NCBI.csv",
+            "GSE120622_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 81,
+            "clinical_features": 16,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE131521",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE131521",
+        "pmcids": [
+            "PMC7839060"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "months to death or last fu",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "status (alive - 0; dead/hospice - 1)",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "0 = alive; 1 = dead/hospice"
+                },
+                "notes": [
+                    "GSM sample metadata explicitly provides both 'months to death or last fu' and 'status (alive - 0; dead/hospice - 1)' for all 17 samples.",
+                    "The paper describes Kaplan-Meier and Cox survival analyses and refers to improved 'survival' without naming another endpoint; these metadata fields are most consistent with overall survival.",
+                    "Time unit was inferred from the field name containing 'months'.",
+                    "The time variable appears to mix death time and censored last follow-up time, as stated in the field name 'months to death or last fu'."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 17,
+                    "n_censored": 9,
+                    "n_events": 8,
+                    "censored_ratio": 0.53
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE131521_raw_counts_NCBI.csv",
+            "GSE131521_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 17,
+            "clinical_features": 5,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE133713",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE133713",
+        "pmcids": [
+            "PMC7334053"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival time (os in months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "death",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "overall survival status; likely 1 = deceased, 0 = alive/censored"
+                },
+                "notes": [
+                    "Variables 'overall survival time (os in months)' and 'death' are present in the GEO Sample 'characteristics_ch1' fields (e.g., GSM3923193).",
+                    "Coding for 'death' (1 vs 0) is not explicitly defined in the series metadata or paper; mapping to deceased/alive inferred from co-occurrence with OS times (samples with death:1 generally have shorter OS).",
+                    "Time origin for 'overall survival time' (e.g., from diagnosis, randomization, surgery, or treatment start) is not specified in the GEO metadata or main paper text (paper references prior report/Supplementary Methods), so the exact start point is unknown."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 23,
+                    "n_censored": 11,
+                    "n_events": 12,
+                    "censored_ratio": 0.48
+                }
+            },
+            {
+                "abbrv": "RFS",
+                "time_var": {
+                    "var_name": "recurrence free survival time (rfs in months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "event",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "recurrence event indicator; likely 1 = recurrence, 0 = no recurrence/censored"
+                },
+                "notes": [
+                    "Variable 'recurrence free survival time (rfs in months)' and the accompanying 'event' flag are present in GEO Sample 'characteristics_ch1' entries (e.g., GSM3923193 shows 'recurrence free survival time (rfs in months): 12.3' with 'event: 1').",
+                    "'event' is an ambiguous name in the metadata (not labeled explicitly as 'rfs event'); mapping to RFS event is inferred because it consistently appears alongside the 'recurrence free survival time' field.",
+                    "Coding for 'event' (1 vs 0) is not explicitly defined in the series metadata or paper; inference (1 = recurrence) is based on sample patterns, including samples with 'rfs = 0' and 'event: 1' consistent with immediate/present recurrence.",
+                    "Time origin for RFS (whether from surgery, treatment start, or randomization) is not specified in the provided metadata or paper text (referenced definitions are in prior report/Supplementary Methods), so origin is unknown."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 23,
+                    "n_censored": 7,
+                    "n_events": 16,
+                    "censored_ratio": 0.3
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE133713_original.csv",
+            "GSE133713_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 23,
+            "clinical_features": 9,
+            "genes": 24748
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE136961",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE136961",
+        "pmcids": [
+            "PMC6971301"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "progression-free-survival_days",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "recurrence",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "indicator of disease recurrence/progression (1 = recurrence/progression occurred; 0 = no recurrence/progression)"
+                },
+                "notes": [
+                    "Time and event fields are present in the GEO sample metadata in the 'Sample_characteristics_ch1' entry as part of a composite 'survival: ...' string (e.g. GSM4063814: 'survival: recurrence:1, progression-free-survival_days:144, live, overall-survival_days:234').",
+                    "The paper defines PFS as 'length of time from the start of the anti-PD-1 antibody until progression' — the 'recurrence' field in the metadata appears to encode the progression event used for PFS.",
+                    "Unit 'days' is inferred from the variable name suffix '_days' in the sample metadata.",
+                    "Values for 'recurrence' observed across samples are '1' and '0' (recorded as shown in metadata).",
+                    "Series metadata notes that 'sample \"characteristics: survival\" information has been updated on April 16, 2020.'"
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 10,
+                    "n_censored": 1,
+                    "n_events": 9,
+                    "censored_ratio": 0.1
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall-survival_days",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "survival",
+                    "var_values": [
+                        "live",
+                        "dead"
+                    ],
+                    "var_meaning": "overall survival status (live = alive at last follow-up [censored]; dead = death event)"
+                },
+                "notes": [
+                    "Overall survival time and vital-status tokens appear in the GEO sample metadata within the same composite 'survival: ...' Sample_characteristics_ch1 entry (e.g. '..., live, overall-survival_days:234').",
+                    "The paper defines OS as 'length of time from the date of diagnosis until death' — 'overall-survival_days' corresponds to this time and the unlabelled 'live'/'dead' tokens indicate censoring/event.",
+                    "No separate explicit field name for vital status is provided beyond the 'survival' composite label in the metadata; thus 'survival' is used here as the event-field name exactly as it appears.",
+                    "Unit 'days' is inferred from the variable name suffix '_days'; the paper reports medians in months but the sample metadata times are in days."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 10,
+                    "n_censored": 2,
+                    "n_events": 8,
+                    "censored_ratio": 0.2
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE136961_raw_counts_NCBI.csv",
+            "GSE136961_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 21,
+            "clinical_features": 8,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE144561",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE144561",
+        "pmcids": [
+            "PMC7335061"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "OS (days)",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "Alive at analysis?",
+                    "var_values": [
+                        "N",
+                        "Y",
+                        "**"
+                    ],
+                    "var_meaning": "Patient vital status at the time of analysis: 'N' appears to indicate deceased (event occurred), 'Y' indicates alive at analysis (censored), '**' appears to denote missing/unavailable"
+                },
+                "notes": [
+                    "Time and event variables were extracted from the user-supplied supplementary CSV (columns 'OS (days)' and 'Alive at analysis?').",
+                    "The manuscript (Franses et al., Nature Communications 2020) presents Kaplan–Meier curves for 'overall survival' (Fig. 2c), indicating the endpoint is overall survival; however, the paper does not explicitly define the time origin (e.g., date of diagnosis, date of surgery, or date of blood draw) used for OS in the cohort, so the time-zero for 'OS (days)' is unknown.",
+                    "Rows with '**' (e.g., locPDAC10) show missing/unavailable values for the event and/or time fields in the provided file.",
+                    "The mapping 'N' = event (death) and 'Y' = censored (alive at last follow-up) is an inference based on column name and typical usage and is consistent with 'OS (days)' values for 'Y' entries representing follow-up durations; the file/manuscript does not explicitly document this coding.",
+                    "No other survival endpoints (e.g., PFS, DFS) were identified in the provided supplementary data or clearly defined for this cohort in the manuscript."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 33,
+                    "n_censored": 5,
+                    "n_events": 28,
+                    "censored_ratio": 0.15
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE144561_raw_counts_NCBI.csv",
+            "GSE144561_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 35,
+            "clinical_features": 11,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Notes": "Kaplan-Meier in the paper states N = 35. However, only 34 samples have complete time to event data.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE148355",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE148355",
+        "pmcids": [
+            "PMC7997876"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "OS (month)",
+                    "var_unit": "month"
+                },
+                "event_var": {
+                    "var_name": "Vital status",
+                    "var_values": [
+                        "Alive",
+                        "Dead"
+                    ],
+                    "var_meaning": "overall survival status (Alive = alive at last follow-up, Dead = deceased)"
+                },
+                "notes": [
+                    "Provenance: variable names and values taken from the provided supplementary CSV header and rows (user-supplied data).",
+                    "The paper (Yoon et al., npj Precision Oncology 2021) reports survival analyses (Kaplan–Meier) and states clinical information collected included postoperative survival; the CSV provides OS (month) numeric values.",
+                    "Time origin is not explicitly stated in the CSV; the Methods state clinical information (postoperative tumor recurrence, survival) were collected, so OS time is likely months since surgery/postoperative, but this is not explicitly specified in the supplementary CSV and thus the exact time origin is 'unknown'.",
+                    "Censoring convention is not explicitly described in the CSV; inferred convention: 'Alive' indicates a censored observation and 'Dead' indicates an event (death) for OS analyses.",
+                    "Some other clinical fields in the CSV contain 'NA' values for other variables, but OS (month) and Vital status are present for the cohort used in analyses."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 53,
+                    "n_censored": 47,
+                    "n_events": 6,
+                    "censored_ratio": 0.89
+                }
+            },
+            {
+                "abbrv": "DFS",
+                "time_var": {
+                    "var_name": "DFS (month)",
+                    "var_unit": "month"
+                },
+                "event_var": {
+                    "var_name": "Disease-free",
+                    "var_values": [
+                        "Yes",
+                        "No"
+                    ],
+                    "var_meaning": "disease-free status at last follow-up (Yes = no recorded recurrence/metastasis during follow-up; No = recurrence and/or metastasis occurred)"
+                },
+                "notes": [
+                    "Provenance: variable names and values taken from the provided supplementary CSV header and rows (user-supplied data).",
+                    "The paper explicitly reports disease-free survival (DFS) analyses (e.g., Kaplan–Meier DFS estimates) and uses DFS as an endpoint; the CSV contains 'Disease-free' (Yes/No) and numeric 'DFS (month)'.",
+                    "From the CSV patterns (examples where 'No' corresponds to a shorter DFS (month) prior to later death), the 'Disease-free' field appears to mark whether a relapse/metastasis event occurred during follow-up; thus in survival terms 'No' corresponds to the occurrence of the DFS event (relapse).",
+                    "Time origin for DFS (month) is not explicitly stated in the CSV; Methods indicate clinical data were postoperative, so DFS time is likely months from surgery/postoperative sampling but the exact origin is 'unknown'.",
+                    "Censoring convention is not explicitly described in the CSV; inferred convention: 'Yes' indicates censored (no relapse observed), 'No' indicates event (relapse/metastasis)."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 53,
+                    "n_censored": 32,
+                    "n_events": 21,
+                    "censored_ratio": 0.6
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE148355_raw_counts_NCBI.csv",
+            "GSE148355_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 54,
+            "clinical_features": 31,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "Sample GSM4462543 is missing from the raw counts matrix.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE150043",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE150043",
+        "pmcids": [
+            "PMC9247075"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "DFS",
+                "time_var": {
+                    "var_name": "Time between surgery and relapse (months) (DFS)c",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "unknown",
+                    "var_values": "unknown",
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "The supplementary table contains a column titled exactly 'Time between surgery and relapse (months) (DFS)c' which provides a time value in months for many patients.",
+                    "No explicit relapse-event indicator (e.g., relapse yes/no) column is present in the provided supplementary data, so the DFS event variable is not specified.",
+                    "Some rows have NA in the DFS time column — likely censored, but censoring/event coding is not provided in the table or in the paper text."
+                ]
+            },
+            {
+                "abbrv": "PRS",
+                "time_var": {
+                    "var_name": "Time between relapse and death (months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "Death",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "A column 'Time between relapse and death (months)' is present in the supplementary data and gives a time in months (often NA).",
+                    "The supplementary table contains a 'Death' column with values '1' and '0' that likely indicate vital status; however the explicit coding (e.g. 1=death, 0=alive) is not stated in the supplementary header. The paper context implies this is a death indicator but the exact coding is not explicitly documented, so var_meaning set to 'unknown'.",
+                    "Many entries for 'Time between relapse and death (months)' are NA; censoring information and linkage between this time and the 'Death' column are not explicitly described in the supplementary file."
+                ],
+                "stats": {
+                    "n_incomplete": 9,
+                    "n_complete": 10,
+                    "n_censored": 0,
+                    "n_events": 10,
+                    "censored_ratio": 0.0
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "unknown",
+                    "var_unit": "unknown"
+                },
+                "event_var": {
+                    "var_name": "Death",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "The paper explicitly describes overall survival (OS) and shows OS (in months) used for Kaplan–Meier analyses (Fig. 2A) and defines ST (≤12 months) and LT (≥36 months) based on OS.",
+                    "However, the provided supplementary table does not contain an explicit 'Overall survival' or 'OS (months)' column. Therefore the OS time variable is not available in the supplementary data (set to 'unknown').",
+                    "The 'Death' column in the supplementary data is the only explicit event-like column and is therefore the only available candidate for the OS event variable; its exact coding is not documented in the table, so var_meaning is 'unknown'.",
+                    "The 'Group*' column (values 'ST' and 'LT') reflects OS-based grouping thresholds described in the paper (ST ≤12 months, LT ≥36 months), but the underlying per-patient OS times used to assign these groups are not present in the supplied table."
+                ]
+            }
+        ],
+        "data_file_names": [
+            "GSE150043_raw_counts_NCBI.csv",
+            "GSE150043_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 19,
+            "clinical_features": 30,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "In the paper authors use overall survival (OS) as survival endpoint. However, the supplementary data does not contain any information about OS. Many entries for 'Time between relapse and death (months)' are missing (9 samples have incomplete PRS - Post-Relapse Survival).",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE162682",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE162682",
+        "pmcids": [
+            "PMC8866401"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival period from diagnosis date (year)",
+                    "var_unit": "years"
+                },
+                "event_var": {
+                    "var_name": "overall survival event",
+                    "var_values": [
+                        "0",
+                        "1",
+                        "NA"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "Provenance: variable appears in GEO sample metadata for GSE162682 (e.g., GSM4956773, GSM4956774, etc.).",
+                    "Time origin and unit are explicit in the variable name ('from diagnosis date' and '(year)').",
+                    "Event variable values observed in metadata are '0', '1', and 'NA'. The metadata/paper do not explicitly define coding; typical convention is 1=death, 0=alive/censored, but this is not stated and therefore var_meaning is set to 'unknown'.",
+                    "Some samples contain 'NA' indicating missing data for event and/or time."
+                ],
+                "stats": {
+                    "n_incomplete": 4,
+                    "n_complete": 101,
+                    "n_censored": 52,
+                    "n_events": 49,
+                    "censored_ratio": 0.51
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival period from resection date (year)",
+                    "var_unit": "years"
+                },
+                "event_var": {
+                    "var_name": "overall survival event",
+                    "var_values": [
+                        "0",
+                        "1",
+                        "NA"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "Provenance: variable appears in GEO sample metadata for GSE162682; the paper explicitly refers to analyses using 'time from tumor resection' (e.g., univariable Cox regression of time from tumor resection).",
+                    "Time origin and unit are explicit in the variable name ('from resection date' and '(year)').",
+                    "Event coding is not explicitly defined in the provided metadata or paper; observed values are '0','1','NA'.",
+                    "Some analyses in the paper (e.g., association of 22q11.21 amplification with survival) are described as using time from resection, consistent with this time_var."
+                ],
+                "stats": {
+                    "n_incomplete": 4,
+                    "n_complete": 101,
+                    "n_censored": 52,
+                    "n_events": 49,
+                    "censored_ratio": 0.51
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE162682_original.csv",
+            "GSE162682_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 105,
+            "clinical_features": 19,
+            "genes": 18944
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE164150",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE164150",
+        "pmcids": [
+            "PMC8056216"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "survival time",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "survival",
+                    "var_values": [
+                        "1",
+                        "0",
+                        "NA"
+                    ],
+                    "var_meaning": "overall survival status; inferred from the paper and censoring pattern as 1 = death/event, 0 = alive/censored at last follow-up, NA = missing"
+                },
+                "notes": [
+                    "GSM sample metadata explicitly contain 'survival time' and 'survival'.",
+                    "The paper reports Kaplan-Meier overall survival and gives median overall survival in months, supporting 'survival time' as an overall survival time variable measured in months.",
+                    "The coding of 'survival' is not explicitly defined in GEO; 1 = death and 0 = censored/alive is inferred because multiple long follow-up samples have value 0, consistent with censored survivors.",
+                    "One GSM record have missing OS annotations ('survival time: NA' and 'survival: NA').",
+                    "The paper also analyzes distant brain failure-free survival, local failure, and neurologic death, but no corresponding per-sample GSM variables for those endpoints were provided in the supplied metadata."
+                ],
+                "stats": {
+                    "n_incomplete": 2,
+                    "n_complete": 45,
+                    "n_censored": 21,
+                    "n_events": 24,
+                    "censored_ratio": 0.47
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE164150_raw_counts_NCBI.csv",
+            "GSE164150_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 47,
+            "clinical_features": 7,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE165656",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE165656",
+        "pmcids": [
+            "PMC8372368",
+            "PMC10902356",
+            "PMC12092627"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "New OS",
+                    "var_unit": "weeks"
+                },
+                "event_var": {
+                    "var_name": "vital.status NEW",
+                    "var_values": [
+                        "D",
+                        "A"
+                    ],
+                    "var_meaning": "overall survival status; D=dead, A=alive"
+                },
+                "notes": [
+                    "The supplementary table contains both 'vital.status NEW' and a paired numeric field 'vital.status New-numeric'; observed pairs indicate D corresponds to 1 and A corresponds to 0.",
+                    "The paper (PMC8372368) reports overall survival in weeks, so the unit for 'New OS' was taken from the paper text rather than from the column name itself."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 81,
+                    "n_censored": 11,
+                    "n_events": 70,
+                    "censored_ratio": 0.14
+                }
+            },
+            {
+                "abbrv": "DOR",
+                "time_var": {
+                    "var_name": "New RemDur",
+                    "var_unit": "weeks"
+                },
+                "event_var": {
+                    "var_name": "event",
+                    "var_values": [
+                        "Yes",
+                        "No"
+                    ],
+                    "var_meaning": "remission duration event indicator; 'Yes' indicates remission ended, consistent with relapse or death after response, and 'No' indicates censored remission duration"
+                },
+                "notes": [
+                    "The paper (PMC8372368) reports remission duration in weeks, so the unit for 'New RemDur' was taken from the paper text.",
+                    "Interpretation of 'event' is based on cross-referencing the supplementary columns 'resp.simple', 'Relapse', 'New RemDur', and patient outcomes: 'New RemDur' is typically missing for non-responders, and 'event' can be 'Yes' even when 'Relapse' is 'No', consistent with remission duration ending by death without recorded relapse.",
+                    "A paired numeric coding column 'event 2' is also present in the supplementary table and appears to encode Yes=1, No=0.",
+                    "While the supplementary data column is labeled RemDur, DOR (Duration of Response) is the correct clinical abbreviation for this metric. The authors use 'remission duration' to describe this, and in oncological trials, 'Duration of Response' is the formal term for the time spent in a state of clinical response (CR) before an event (relapse or death) occurs. Do not use 'RemDur' in your final analysis/output; use DOR."
+                ],
+                "stats": {
+                    "n_incomplete": 46,
+                    "n_complete": 35,
+                    "n_censored": 8,
+                    "n_events": 27,
+                    "censored_ratio": 0.23
+                }
+            },
+            {
+                "abbrv": "EFS",
+                "time_var": {
+                    "var_name": "Event.Free.Survival",
+                    "var_unit": "weeks"
+                },
+                "event_var": {
+                    "var_name": "unknown",
+                    "var_values": [],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "The supplementary table explicitly contains the time variable 'Event.Free.Survival'.",
+                    "PMC8372368 reports event-free survival analysis for this cohort, but no unambiguous event indicator column for EFS could be identified from the supplementary table alone.",
+                    "The available 'event'/'event 2' fields align best with remission duration rather than EFS, because some non-responders with recorded event-free survival times have 'event'='No'.",
+                    "Therefore the EFS event variable/coding was not extracted and is set to unknown."
+                ]
+            }
+        ],
+        "data_file_names": [
+            "GSE165656_raw_counts_NCBI.csv",
+            "GSE165656_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 81,
+            "clinical_features": 58,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE165808",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE165808",
+        "pmcids": [
+            "PMC8391231",
+            "PMC10137910"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "progression-free-survival_days",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "recurrence",
+                    "var_values": [
+                        "0",
+                        "1",
+                        "Not available"
+                    ],
+                    "var_meaning": "recurrence indicator for progression-free survival; '0' appears to denote no recurrence (censored), '1' denotes recurrence (event); 'Not available' indicates missing follow-up information"
+                },
+                "notes": [
+                    "Time and event fields extracted from GEO sample metadata 'characteristics_ch1' (examples: GSM5050316 etc.).",
+                    "Unit 'days' inferred from the variable name suffix '_days' in the sample metadata.",
+                    "The paper (PMC8391231) defines 'no recurrence' and recurrence relative to the end of first-line platinum-based chemotherapy; PFS in the dataset appears to be measured relative to that clinical timeline.",
+                    "Some samples have 'Not available' for the event and/or time (paper notes 3 patients lost to follow-up), indicating missing PFS data.",
+                    "PMC10137910 refers to 'Disease-free survival (DFS)' in analysis of the same cohort; that term appears to correspond to the 'progression-free-survival_days' variable in GEO."
+                ],
+                "stats": {
+                    "n_incomplete": 4,
+                    "n_complete": 42,
+                    "n_censored": 8,
+                    "n_events": 34,
+                    "censored_ratio": 0.19
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall-survival_days",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "live/dead",
+                    "var_values": [
+                        "live",
+                        "dead"
+                    ],
+                    "var_meaning": "overall survival status at last follow-up; 'live' = alive (censored), 'dead' = death (event)"
+                },
+                "notes": [
+                    "Overall survival time and status are provided in GEO sample metadata 'characteristics_ch1'.",
+                    "Paper (PMC8391231) reports mean and median follow-up and compares OS between cohorts; OS times in GEO match those reported.",
+                    "Some samples show identical values for progression-free-survival_days and overall-survival_days when no recurrence/event occurred (consistent with censoring)."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 46,
+                    "n_censored": 36,
+                    "n_events": 10,
+                    "censored_ratio": 0.78
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE165808_raw_counts_NCBI.csv",
+            "GSE165808_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 51,
+            "clinical_features": 9,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE167573",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE167573",
+        "pmcids": [
+            "PMC8421377"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "os time (months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "OS status",
+                    "var_values": [
+                        "0",
+                        "1",
+                        "-"
+                    ],
+                    "var_meaning": "overall survival status; inferred from the paper and sample metadata that '1' = death, '0' = alive/censored at last follow-up, and '-' = missing"
+                },
+                "notes": [
+                    "The GSM metadata explicitly provide 'os time (months)' and 'OS status' for the renal cell carcinoma samples.",
+                    "The paper defines OS as 'the time from surgery to the date of death.'",
+                    "The numeric coding for 'OS status' is not explicitly decoded in the metadata or Methods; '1' was inferred to mean death because 10 tumor samples have value '1', matching the paper's statement that 10 patients died at the end of follow-up.",
+                    "Value '-' appears in some tumor samples for 'os time (months)' and/or 'OS status', indicating missing survival metadata.",
+                    "PFS is discussed in the paper for a treated subset, but no per-sample PFS variable is present in the GSM metadata, so it is not extracted as a dataset survival endpoint."
+                ],
+                "stats": {
+                    "n_incomplete": 7,
+                    "n_complete": 54,
+                    "n_censored": 45,
+                    "n_events": 9,
+                    "censored_ratio": 0.83
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE167573_raw_counts_NCBI.csv",
+            "GSE167573_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 61,
+            "clinical_features": 10,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "Some samples have incomplete survival data and this is not discussed in the paper.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE181582",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE181582",
+        "pmcids": [
+            "PMC10226260"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "dead or last follow up (days)",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "dead",
+                    "var_values": [
+                        "-",
+                        "+",
+                        "nd"
+                    ],
+                    "var_meaning": "Overall survival status: '+' = deceased (event), '-' = alive/censored at last follow-up, 'nd' = missing/not determined"
+                },
+                "notes": [
+                    "Time and event variables are present in the provided supplementary data table (column headers 'dead or last follow up (days)' and 'dead').",
+                    "Unit for the time variable is explicitly given as 'days' in the column header.",
+                    "Mapping of '+' and '-' to deceased/alive is inferred from the header 'dead' and the dataset; sample 48 contains 'nd' for missing survival data. The paper text states 'Of 100 tumors one was lacking survival data', consistent with this missing entry.",
+                    "Survival analyses described in Methods (Kaplan–Meier, log-rank test, Cox regression) were performed using these variables, consistent with an overall survival endpoint.",
+                    "No other survival endpoints (e.g., progression-free survival, event-free survival) are provided in the supplied supplementary table or paper text.",
+                    "Data provenance: supplementary table included in the manuscript and associated sequencing deposit GSE181582 (as noted in the paper)."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 95,
+                    "n_censored": 74,
+                    "n_events": 21,
+                    "censored_ratio": 0.78
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE181582_raw_counts_NCBI.csv",
+            "GSE181582_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 96,
+            "clinical_features": 15,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE183924",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE183924",
+        "pmcids": [
+            "PMC8484871"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "RFS",
+                "time_var": {
+                    "var_name": "RFS (months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "RFS Censor",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "1 = relapse or death from any cause (RFS event); 0 = censored/alive and relapse-free"
+                },
+                "notes": [
+                    "The supplementary table explicitly provides 'RFS (months)' and 'RFS Censor'.",
+                    "The paper defines RFS as time from the date of surgery until disease relapse or death from any cause; patients who remained alive and relapse free were censored at their date of last disease evaluation.",
+                    "The auxiliary column 'Relapse' has observed values 'Yes' and 'No' and helps confirm recurrence status, but it is not the full RFS event indicator because some rows have 'Relapse' = 'No' with 'Date of Death' present and 'RFS Censor' = 1."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 28,
+                    "n_censored": 15,
+                    "n_events": 13,
+                    "censored_ratio": 0.54
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "unknown",
+                    "var_unit": "unknown"
+                },
+                "event_var": {
+                    "var_name": "unknown",
+                    "var_values": [
+                        "unknown"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "The paper reports post-hoc OS on the same cohort and defines OS as time from the date of surgery until death from any cause; patients who remained alive were censored at their last date known alive.",
+                    "The supplementary table includes 'Date of Esophageal Surgery' and 'Date of Death' but does not provide an explicit OS duration field or a last-known-alive/censoring field for patients without death.",
+                    "Therefore OS is described in the paper, but patient-level OS time/event variables cannot be fully extracted from the provided supplementary data."
+                ]
+            },
+            {
+                "abbrv": "OS after relapse",
+                "time_var": {
+                    "var_name": "unknown",
+                    "var_unit": "unknown"
+                },
+                "event_var": {
+                    "var_name": "unknown",
+                    "var_values": [
+                        "unknown"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "The paper defines OS after relapse as the time from the date of relapse until death from any cause.",
+                    "The supplementary table includes 'Date of Relapse or Censoring' and 'Date of Death', but it does not provide an explicit OS-after-relapse duration field or a post-relapse censoring/last-known-alive date for relapsed patients who were still alive.",
+                    "Therefore OS after relapse cannot be fully extracted as a patient-level time/event variable from the provided supplementary data."
+                ]
+            }
+        ],
+        "data_file_names": [
+            "GSE183924_raw_counts_NCBI.csv",
+            "GSE183924_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 28,
+            "clinical_features": 33,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE184941",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE184941",
+        "pmcids": [
+            "PMC10071545"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival (months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "vital status",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "1 = deceased; 0 = alive (censored)"
+                },
+                "notes": [
+                    "Time and event variables extracted from GEO sample 'characteristics_ch1' fields in GSE184941 (e.g., GSM5600755...); variable names preserved exactly as in the metadata.",
+                    "Mapping of 'vital status' (1 vs 0) was inferred by cross-referencing 'death censoring' dates and 'diagnosis date' in the sample metadata: samples with vital status = 1 have earlier 'death censoring' dates consistent with death and OS values consistent with event; vital status = 0 corresponds to last follow-up (censored).",
+                    "Paper PMC10071545 reports Kaplan–Meier analyses for overall survival measured from time of initial diagnosis; this is consistent with 'diagnosis date' and 'overall survival (months)' fields in the GEO metadata.",
+                    "There are some data-quality anomalies in the metadata (examples: negative or implausible survival values — e.g., 'progress free survival (months)' = -1378.6 for GSM5600830; 'overall survival (months)' = -1280.9 for GSM5600871). These should be cleaned/verified before analysis."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 57,
+                    "n_censored": 22,
+                    "n_events": 35,
+                    "censored_ratio": 0.39
+                }
+            },
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "progress free survival (months)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "unknown",
+                    "var_values": [],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "'progress free survival (months)' time-to-event values are present in GEO sample 'characteristics_ch1' fields of GSE184941.",
+                    "No explicit binary progression event flag (e.g., progression status coded as 0/1) is provided in the sample metadata. Per-sample 'progression date' fields are available and can be used to derive a progression event/censoring indicator, but an explicit coded event variable is not present in the metadata.",
+                    "Some 'progress free survival (months)' entries are NA or implausible (see examples in the metadata), indicating the need for data validation/cleaning if deriving PFS events from 'progression date'.",
+                    "The paper mentions analyses 'assessed based on the date of progression' (PMC10071545), consistent with the presence of 'progression date' fields in the GEO metadata; however the derived event indicator is not supplied as a named binary field."
+                ]
+            }
+        ],
+        "data_file_names": [
+            "GSE184941_raw_counts_NCBI.csv",
+            "GSE184941_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 60,
+            "clinical_features": 25,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "While the data for the raw counts is available, there is not enough information on how they selected the samples (from 180 samples (found in GSE184941) to 64 samples discussed in the paper). After applying the selection criteria, 60 samples are left.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE188715",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE188715",
+        "pmcids": [
+            "PMC8718409",
+            "PMC11297740",
+            "PMC9450692",
+            "PMC10192868"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "Overall survival time",
+                    "var_unit": "day"
+                },
+                "event_var": {
+                    "var_name": "Overall survival status",
+                    "var_values": [
+                        "overall survival: death",
+                        "overall survival: survival"
+                    ],
+                    "var_meaning": "Overall survival status: 'overall survival: death' indicates the patient died (event occurred); 'overall survival: survival' indicates the patient was alive at last follow-up (censored)."
+                },
+                "notes": [
+                    "Provenance: Both fields ('Overall survival time' and 'Overall survival status') are present in the provided supplementary CSV block (labelled supp_data) accompanying the request.",
+                    "The unit 'day' for 'Overall survival time' is inferred from the per-sample value prefix 'survival day: <number>' present in the CSV values (e.g., 'survival day: 377'); the header itself does not include an explicit unit.",
+                    "The 'Overall survival time' values are textual entries of the form 'survival day: <integer>' with some inconsistent spacing (e.g., 'survival day:  443'); the numeric portion represents days but the exact reference timepoint (e.g., from diagnosis, from surgery, or from sample collection) is not specified in the supplementary data.",
+                    "The event variable values are textual and no numeric coding (e.g., 0/1) is provided in the supplementary data. Mapping to event/censoring above is inferred from the text but numeric encoding used in analyses (if any) is unknown.",
+                    "One sample row (sample_title 'tpm_CA1520663') has 'lost to follow-up' in the Age column and missing values for the survival time and status fields; such records exist in the supplied CSV and will need handling (e.g., exclusion or separate censoring rules) in any analysis.",
+                    "Both papers (Frontiers in Pharmacology 2023 and BMC Cancer 2024) describe conducting overall survival analyses on cohorts including the Xiangya cohort; the BMC article states the Xiangya cohort comprises 56 patients with survival outcomes. The supplied CSV contains 57 rows including one with missing survival data (see note above), consistent with the cohort described but with one record lacking survival info.",
+                    "No additional survival endpoints (e.g., PFS, DFS) were identified in the supplied CSV. If other endpoints were used in the papers, their corresponding variables are not present in the provided supplementary CSV."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 56,
+                    "n_censored": 44,
+                    "n_events": 12,
+                    "censored_ratio": 0.79
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE188715_original.csv",
+            "GSE188715_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 57,
+            "clinical_features": 8,
+            "genes": 19778
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Notes": "Expression data from GEO is truncated. Full expression matrix is available as supplementary file.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE192667",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE192667",
+        "pmcids": [
+            "PMC8800070"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival (os) (month)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "outcome",
+                    "var_values": [
+                        "Dead",
+                        "Alive"
+                    ],
+                    "var_meaning": "overall survival status (Alive/Dead); 'Dead' indicates death, 'Alive' indicates patient alive at last follow-up (censored)"
+                },
+                "notes": [
+                    "Time variable and unit taken from GEO sample metadata 'characteristics_ch1' fields (e.g., 'overall survival (os) (month): 34' in GSM5754372).",
+                    "Contradiction between sources: STAR Methods (Samples) states 'Overall survival was defined number of days from the start of the treatment.' This conflicts with the '(month)' unit in the sample metadata; the unit is therefore ambiguous.",
+                    "Observed numeric values across samples (examples up to 124) are more consistent with months as the unit; unit chosen as 'month' to reflect the metadata but users should verify original clinical records.",
+                    "Event coding (Dead/Alive) is present in metadata but not formally enumerated in Methods; mapping 'Dead' = event (death) and 'Alive' = censored is inferred from common survival-analysis practice and the paper's use of log-rank/Cox models.",
+                    "Time origin for OS is explicitly given in the paper Methods as 'start of the treatment' (though the Methods' stated unit—days—disagrees with the sample metadata)."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 89,
+                    "n_censored": 17,
+                    "n_events": 72,
+                    "censored_ratio": 0.19
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE192667_raw_counts.csv",
+            "GSE192667_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 89,
+            "clinical_features": 8,
+            "genes": 26391
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE201868",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE201868",
+        "pmcids": [
+            "PMC9428591"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "OS.time",
+                    "var_unit": "years"
+                },
+                "event_var": {
+                    "var_name": "OS",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "Overall survival event indicator; inferred coding: '1' = death, '0' = censored (alive)"
+                },
+                "notes": [
+                    "Variables 'OS' and 'OS.time' are present in the provided supplementary data (Tongji cohort; 30 samples).",
+                    "OS.time unit is not explicitly stated in the supplementary snippet; 'years' is inferred because the manuscript reports 2- and 3-year calibration curves and the numeric range of OS.time (~0.05–5.09) is consistent with years of follow-up.",
+                    "Event coding (1 vs 0) is not explicitly defined in the paper or supplementary snippet; the mapping '1' = death, '0' = censored (alive) is inferred from patterns in the data (cases with very small OS.time often have OS=1) and common convention.",
+                    "Tongji cohort (described in Methods) corresponds to GEO accession GSE201868 per the Data availability statement; the supplied supplementary table rows correspond to that cohort."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 30,
+                    "n_censored": 19,
+                    "n_events": 11,
+                    "censored_ratio": 0.63
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE201868_raw_counts_NCBI.csv",
+            "GSE201868_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 30,
+            "clinical_features": 9,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE216037",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216037",
+        "pmcids": [
+            "PMC9780475"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "Overall survival(month)",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "Survival state",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "overall survival event status (inferred coding: '1' = death/event, '0' = censored/alive)"
+                },
+                "notes": [
+                    "Source/provenance: GEO series GSE216037 sample metadata (fields under Sample_characteristics_ch1; e.g., GSM6656519) and study Methods which state 'Overall survival of patients was assessed using Kaplan–Meier analysis.'",
+                    "Unit 'month' taken directly from the time variable name 'overall survival(month)'; the time origin (e.g., from diagnosis, surgery, or sample collection) is not specified in the paper or metadata and is therefore unknown.",
+                    "The coding of 'survival state' (0 vs 1) is not explicitly defined in the metadata or manuscript; the mapping '1' = death and '0' = censored/alive is inferred from the pattern of values (samples with long follow-up commonly have '0', short follow-up often have '1') and the use of Kaplan–Meier, but this inference is not explicitly stated by the authors.",
+                    "Observed time values in the metadata include integer and decimal month values (e.g., '9.5'), consistent with the var_unit 'month'.",
+                    "No other survival endpoints (e.g., progression-free survival, disease-free survival) were identified in the provided metadata or paper text."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 52,
+                    "n_censored": 35,
+                    "n_events": 17,
+                    "censored_ratio": 0.67
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE216037_original.csv",
+            "GSE216037_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 52,
+            "clinical_features": 12,
+            "genes": 34372
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE216490",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216490",
+        "pmcids": [
+            "PMC9972164"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "BCR",
+                "time_var": {
+                    "var_name": "time to_bcr_(days)",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "biochemical recurrence_within_5_years_of_treatment",
+                    "var_values": [
+                        "No",
+                        "Yes",
+                        "NA"
+                    ],
+                    "var_meaning": "occurrence of biochemical recurrence within 5 years after radical prostatectomy (Yes = recurrence occurred within 5 years; No = no recurrence within 5 years; NA = missing/not available)"
+                },
+                "notes": [
+                    "Both variables are present in the GEO sample metadata (characteristics_ch1) for GSE216490 (see GSM entries).",
+                    "The paper defines biochemical recurrence (BCR) as serum PSA > 0.2 ng/mL on two successive measurements and considers BCR within 5 years after radical prostatectomy; Kaplan–Meier analysis for BCR-free survival was performed.",
+                    "Time unit is taken from the variable name '(days)'. However, the paper reports cohort summary statistics in months (median 16.59 months, range 2.1–55.07 months). Sample-level numeric values mostly appear consistent with days (e.g., 119, 1577), but some entries contain decimal values (e.g., 12.03, 5.63) or very small numbers that are unexpected for integer days, indicating possible formatting/unit inconsistencies—consult the supplementary phenotype file or authors for clarification.",
+                    "Many samples have 'time to_bcr_(days)' = 'NA' when recurrence did not occur or follow-up data are missing; event value 'NA' denotes missing event information in the metadata."
+                ],
+                "stats": {
+                    "n_incomplete": 52,
+                    "n_complete": 43,
+                    "n_censored": 0,
+                    "n_events": 43,
+                    "censored_ratio": 0.0
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE216490_raw_counts_NCBI.csv",
+            "GSE216490_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 95,
+            "clinical_features": 11,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "NO",
+        "Notes": "Only 43 samples have complete time to event data (52 are missing time to time to_bcr_(days)). In the paper they state BCR infromation was avaialble for 73 samples.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE218527",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE218527",
+        "pmcids": [
+            "PMC10106446"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "EFS",
+                "time_var": {
+                    "var_name": "efstime",
+                    "var_unit": "unknown"
+                },
+                "event_var": {
+                    "var_name": "efscens",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "likely event-free survival event indicator: 1 = event, 0 = censored"
+                },
+                "notes": [
+                    "EFS is explicitly defined in the paper as time from diagnosis to first episode of relapse, progression, death, or secondary malignancy; patients without an event were censored at the date of last contact.",
+                    "The GSM metadata explicitly contain 'efstime' and 'efscens'.",
+                    "The time unit is not explicitly stated in the metadata or paper, so var_unit is set to 'unknown'; values are consistent with days because 'age at_diag' and 'age at_first_event_or_censor' appear to be recorded in days and their differences match 'efstime' approximately.",
+                    "Coding for 'efscens' is not explicitly documented; it is inferred from the paper definition and sample patterns (e.g., GSM6751298 has 'efstime: 148', 'stime: 3216', 'efscens: 1', 'scens: 0', consistent with an EFS event but no OS death).",
+                    "Although the field name contains 'cens', observed values are most consistent with 1 meaning an EFS event occurred and 0 meaning censored for EFS."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 47,
+                    "n_censored": 37,
+                    "n_events": 10,
+                    "censored_ratio": 0.79
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "stime",
+                    "var_unit": "unknown"
+                },
+                "event_var": {
+                    "var_name": "scens",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "likely overall survival event indicator: 1 = death, 0 = censored/alive"
+                },
+                "notes": [
+                    "OS is explicitly defined in the paper as time from diagnosis to death; surviving patients were censored at the date of last contact.",
+                    "The GSM metadata explicitly contain 'stime' and 'scens'.",
+                    "The time unit is not explicitly stated in the metadata or paper, so var_unit is set to 'unknown'; values are consistent with days from diagnosis.",
+                    "Coding for 'scens' is not explicitly documented; it is inferred from the paper definition and sample patterns (e.g., GSM6751298 has longer 'stime' than 'efstime' and 'scens: 0', consistent with being alive/censored after an earlier EFS event; GSM6751294 has 'scens: 1' with shorter survival time than long-follow-up censored cases, consistent with death).",
+                    "Although the field name contains 'cens', observed values are most consistent with 1 meaning OS event (death) and 0 meaning censored/alive."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 47,
+                    "n_censored": 41,
+                    "n_events": 6,
+                    "censored_ratio": 0.87
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE218527_raw_counts_NCBI.csv",
+            "GSE218527_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 47,
+            "clinical_features": 9,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE224564",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE224564",
+        "pmcids": [
+            "PMC10842852"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "month",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "cancer_death",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "Time and event variables present in GEO sample metadata (characteristics_ch1) for GSE224564 (e.g., GSM7026054: 'cancer_death: 1', 'month: 17.47').",
+                    "Paper reports Kaplan–Meier and log-rank test for overall survival, indicating this endpoint corresponds to overall survival.",
+                    "Unit 'months' inferred from the variable name 'month' in sample metadata; not explicitly defined in methods.",
+                    "Coding of 'cancer_death' (1 vs 0) is not explicitly defined in the metadata or paper; values observed are '1' and '0' and likely represent death vs censored/alive."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 165,
+                    "n_censored": 50,
+                    "n_events": 115,
+                    "censored_ratio": 0.3
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE224564_raw_counts_NCBI.csv",
+            "GSE224564_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 175,
+            "clinical_features": 9,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Notes": "10 samples are missing from the raw counts matrix provided from NCBI (possibly low quality samples). RNA-Seq data provided as supplementary file contains all 175 samples.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE227378",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227378",
+        "pmcids": [
+            "PMC10083302"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "living_day",
+                    "var_unit": "day"
+                },
+                "event_var": {
+                    "var_name": "die",
+                    "var_values": [
+                        "decensed",
+                        "living"
+                    ],
+                    "var_meaning": "overall survival status (decensed = death event; living = censored/alive at last follow-up)"
+                },
+                "notes": [
+                    "Time and event variables taken directly from the provided supplementary CSV (column headers: living_day, die).",
+                    "Unit inferred from column name suffix '_day'; no separate unit field provided.",
+                    "Spelling 'decensed' is preserved exactly as in the data (interpreted as 'deceased').",
+                    "Paper text confirms OS analyses on the same 32-patient cohort (Kaplan–Meier, Cox; 5-year OS reported)."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 32,
+                    "n_censored": 7,
+                    "n_events": 25,
+                    "censored_ratio": 0.22
+                }
+            },
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "PFS_day",
+                    "var_unit": "day"
+                },
+                "event_var": {
+                    "var_name": "unknown",
+                    "var_values": [],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "Time variable taken from the provided supplementary CSV (column header: PFS_day).",
+                    "No explicit progression event/censoring indicator is present in the supplementary CSV; therefore event variable is unknown.",
+                    "Paper text reports PFS analyses (time-dependent ROC for PFS) on the same 32-patient cohort, but the event field is not provided in the shared supplementary data.",
+                    "Unit inferred from column name suffix '_day'; no separate unit field provided."
+                ]
+            }
+        ],
+        "data_file_names": [
+            "GSE227378_raw_counts_NCBI.csv",
+            "GSE227378_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 32,
+            "clinical_features": 19,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Non-coding RNA profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "Supplementary data includes a PFS time column (\"PFS_day\"), though no explicit PFS event indicator is provided.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE229706",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE229706",
+        "pmcids": [
+            "PMC10632519"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "Time to Recurrence",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "Progression",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "1 = disease progression event; 0 = no progression (censored)"
+                },
+                "notes": [
+                    "Variables 'Time to Recurrence' and 'Progression' are present in the provided Supplementary Data table.",
+                    "Unit for 'Time to Recurrence' is inferred as days based on the companion column 'Days_to_Death or Last Contact' and the manuscript text reporting follow-up in days (e.g., median follow-up of 2,284 days).",
+                    "For patients with Progression = 0, 'Time to Recurrence' appears to equal 'Days_to_Death or Last Contact' (i.e., censoring time) — e.g., Study_ID 32 has Progression=0 and Time to Recurrence = 4661 which equals Days_to_Death or Last Contact.",
+                    "Progression event subtypes are recorded in the 'ProgType' and 'ProgType_Lab' columns (e.g., 'Systemic', 'Locoregional', 'Secondary.Primary'); the paper defines the progression group as all disease progression events regardless of type.",
+                    "The manuscript refers to both PFS and RFS in different analyses; the same 'Time to Recurrence'/'Progression' fields from the Supplementary Data are the apparent source for those analyses."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 122,
+                    "n_censored": 77,
+                    "n_events": 45,
+                    "censored_ratio": 0.63
+                }
+            },
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "Days_to_Death or Last Contact",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "Dead_or_alive",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "1 = deceased; 0 = alive at last contact (inferred)"
+                },
+                "notes": [
+                    "'Days_to_Death or Last Contact' and 'Dead_or_alive' are present in the provided Supplementary Data table.",
+                    "Coding of 'Dead_or_alive' (1 vs 0) is not explicitly defined in the table documentation but is inferred from the column name and concordance with follow-up times (rows where Dead_or_alive=1 correspond to earlier death times in 'Days_to_Death or Last Contact').",
+                    "The primary analyses in the paper focus on progression/recurrence (PFS/RFS), but overall survival data (Days_to_Death or Last Contact + Dead_or_alive) are provided in the Supplementary Data."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 122,
+                    "n_censored": 89,
+                    "n_events": 33,
+                    "censored_ratio": 0.73
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE229706_raw_counts_NCBI.csv",
+            "GSE229706_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 150,
+            "clinical_features": 38,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "One sample is lost if we use the raw counts matrix from NCBI.",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE241876",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE241876",
+        "pmcids": [
+            "PMC10767305"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "os",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "os event",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "overall survival event indicator: 1 = death; 0 = censored/alive at last follow-up"
+                },
+                "notes": [
+                    "The GSM metadata explicitly contains 'os' and 'os event' for individual samples.",
+                    "The unit is not stated in GSM metadata; 'months' is inferred from the paper, which reports median OS in months and defines OS as measured from the date of biopsy to date of death, censored at last follow-up for survivors.",
+                    "Some patients have paired pre/post-treatment biopsies with the same survival annotations, so OS values may be duplicated across GSM records from the same patient."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 12,
+                    "n_censored": 3,
+                    "n_events": 9,
+                    "censored_ratio": 0.25
+                }
+            },
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "pfs",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "pfs event",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "progression-free survival event indicator: 1 = disease progression or death; 0 = censored alive without disease progression at last follow-up"
+                },
+                "notes": [
+                    "The GSM metadata explicitly contains 'pfs' and 'pfs event' for individual samples.",
+                    "The unit is not stated in GSM metadata; 'months' is inferred from the paper, which reports median PFS in months and defines PFS as measured from the date of biopsy to disease progression or date of death, censored at last follow-up for those alive without disease progression.",
+                    "Some patients have paired pre/post-treatment biopsies with the same survival annotations, so PFS values may be duplicated across GSM records from the same patient."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 12,
+                    "n_censored": 8,
+                    "n_events": 4,
+                    "censored_ratio": 0.67
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE241876_raw_counts_NCBI.csv",
+            "GSE241876_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 12,
+            "clinical_features": 16,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "PARTIALLY",
+        "Notes": "Some samples are missing from the raw counts matrix from NCBI (we lose 3 samples due to using NCBI raw counts data).",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE274975",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE274975",
+        "pmcids": [
+            "PMC11669362"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "PFS",
+                "time_var": {
+                    "var_name": "PFS time, months",
+                    "var_unit": "months"
+                },
+                "event_var": {
+                    "var_name": "Response status available",
+                    "var_values": [
+                        "1",
+                        "0"
+                    ],
+                    "var_meaning": "PFS event status (1 = event/progression, 0 = censored)"
+                },
+                "notes": [
+                    "The variable name 'Response status available' appears to be a misnomer in the supplementary data. However, the number of samples with value '1' in this column is 41, which exactly matches the '# of events' (41) reported in Table 1 of the paper for the Total NSCLC cohort. Therefore, this column represents the binary event indicator for Progression-Free Survival."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 61,
+                    "n_censored": 20,
+                    "n_events": 41,
+                    "censored_ratio": 0.33
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE274975_original.csv",
+            "GSE274975_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 61,
+            "clinical_features": 16,
+            "genes": 26275
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE60052",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60052",
+        "pmcids": [
+            "PMC4836692"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "Months",
+                    "var_unit": "Months"
+                },
+                "event_var": {
+                    "var_name": "Survival Status",
+                    "var_values": [
+                        "0.0",
+                        "1.0"
+                    ],
+                    "var_meaning": "overall survival status: 1.0 = death (event); 0.0 = censored / alive at last follow-up (inferred)"
+                },
+                "notes": [
+                    "Provenance: 'Months', 'Dx Date', 'Survival Date', and 'Survival Status' columns are present in the provided supplementary data snippet.",
+                    "The paper Methods (Time-to-event analyses) explicitly describe using overall survival (OS) for time-to-event analyses on the cohort.",
+                    "'Months' appears to be the follow-up time (time-to-event) likely computed as the interval between 'Dx Date' and 'Survival Date'.",
+                    "The numeric coding of 'Survival Status' is not explicitly defined in the supplementary file; mapping 1.0 = death (event) and 0.0 = censored/alive is inferred by comparing short 'Months' values and corresponding 'Survival Date' entries and by the Methods statement that patients were followed until death or last follow-up.",
+                    "Some other fields in the supplementary data show 'NaN' or special marks (e.g., '△', 'x') for other columns; no other event encodings were observed in the provided rows."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 48,
+                    "n_censored": 25,
+                    "n_events": 23,
+                    "censored_ratio": 0.52
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE60052_raw_counts_NCBI.csv",
+            "GSE60052_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 48,
+            "clinical_features": 19,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE78220",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE78220",
+        "pmcids": [
+            "PMC4808437"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival (days)",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "vital status",
+                    "var_values": [
+                        "Alive",
+                        "Dead"
+                    ],
+                    "var_meaning": "overall survival status (censored if Alive, event if Dead)"
+                },
+                "notes": [
+                    "Both 'overall survival (days)' and 'vital status' are present in the GSM sample characteristics for this cohort.",
+                    "The paper explicitly discusses survival in this anti-PD-1-treated melanoma cohort ('improved survival'; Figure 1A/B), consistent with the OS variables in GEO metadata.",
+                    "At least one sample has missing time value recorded as 'overall survival (days): NA' (e.g., Pt8), so OS time is not complete for all samples.",
+                    "Patient Pt27 appears twice as two pre-treatment biopsies (GSM2069842 and GSM2069843) with the same OS annotations, indicating duplicated patient-level survival information across samples."
+                ],
+                "stats": {
+                    "n_incomplete": 1,
+                    "n_complete": 27,
+                    "n_censored": 15,
+                    "n_events": 12,
+                    "censored_ratio": 0.56
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE78220_raw_counts_NCBI.csv",
+            "GSE78220_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 28,
+            "clinical_features": 18,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "Scope": "Whole-transcriptome",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE87340",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87340",
+        "pmcids": [
+            "PMC5704234"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "time to last followup",
+                    "var_unit": "years"
+                },
+                "event_var": {
+                    "var_name": "survstatus",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "unknown"
+                },
+                "notes": [
+                    "Both variables ('survstatus' and 'time to last followup') are present in the GEO sample metadata (characteristics_ch1 fields).",
+                    "Unit for 'time to last followup' set to 'years' based on the paper Methods (2.1): 'The follow-up time ranged from 2.98 to 11.94 years with the median time of six years.'",
+                    "'survstatus' values observed in the metadata are '0' and '1'; the mapping (e.g., 0=alive/censored, 1=dead/event) is not explicitly stated in the GEO metadata or paper and therefore var_meaning is set to 'unknown'.",
+                    "The GEO series contains paired tumor and normal samples per patient; the survival fields are duplicated across pairs. The paper's survival analyses were performed at the patient/tumor level.",
+                    "Discrepancy noted: the paper reports follow-up range 2.98–11.94 years, but the sample metadata includes values below 2.98 (e.g., 0.36, 0.78, 1.38). Units are assumed years per the paper, but this inconsistency may reflect metadata entry differences or other unit ambiguities."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 27,
+                    "n_censored": 20,
+                    "n_events": 7,
+                    "censored_ratio": 0.74
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE87340_raw_counts_NCBI.csv",
+            "GSE87340_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 54,
+            "clinical_features": 11,
+            "genes": 39376
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    },
+    {
+        "data_id": "GSE96058",
+        "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96058",
+        "pmcids": [
+            "PMC7446376",
+            "PMC7338507",
+            "PMC8933558",
+            "PMC6704148"
+        ],
+        "survival-endpoints": [
+            {
+                "abbrv": "OS",
+                "time_var": {
+                    "var_name": "overall survival days",
+                    "var_unit": "days"
+                },
+                "event_var": {
+                    "var_name": "overall survival event",
+                    "var_values": [
+                        "0",
+                        "1"
+                    ],
+                    "var_meaning": "death from any cause (1 = death event; 0 = censored/alive)"
+                },
+                "notes": [
+                    "Variables appear in GEO sample metadata (e.g. GSM2528079 includes 'overall survival days' and 'overall survival event').",
+                    "Paper methods (SCAN-B) define overall survival as death from any cause; event coding 1=death, 0=alive/censored is inferred from metadata and the paper definitions.",
+                    "No recurrence/relapse (RFI) variable is present in the GSE96058 GSM fields (RFI is reported for Cohort270 in the papers but not in these sample metadata)."
+                ],
+                "stats": {
+                    "n_incomplete": 0,
+                    "n_complete": 3273,
+                    "n_censored": 2937,
+                    "n_events": 336,
+                    "censored_ratio": 0.9
+                }
+            }
+        ],
+        "data_file_names": [
+            "GSE96058_original.csv",
+            "GSE96058_preprocessed.csv"
+        ],
+        "data_summary": {
+            "samples": 3273,
+            "clinical_features": 26,
+            "genes": 30891
+        },
+        "candidate_genes": [],
+        "Experiment type": "Expression profiling by high throughput sequencing",
+        "NCBI-generated data": "Not available",
+        "Reproducible": "YES",
+        "Include": "YES"
+    }
+]

@@ -1,0 +1,76 @@
+{
+    "data_id": "GSE148355",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE148355",
+    "pmcids": [
+        "PMC7997876"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "OS (month)",
+                "var_unit": "month"
+            },
+            "event_var": {
+                "var_name": "Vital status",
+                "var_values": [
+                    "Alive",
+                    "Dead"
+                ],
+                "var_meaning": "overall survival status (Alive = alive at last follow-up, Dead = deceased)"
+            },
+            "notes": [
+                "Provenance: variable names and values taken from the provided supplementary CSV header and rows (user-supplied data).",
+                "The paper (Yoon et al., npj Precision Oncology 2021) reports survival analyses (Kaplan–Meier) and states clinical information collected included postoperative survival; the CSV provides OS (month) numeric values.",
+                "Time origin is not explicitly stated in the CSV; the Methods state clinical information (postoperative tumor recurrence, survival) were collected, so OS time is likely months since surgery/postoperative, but this is not explicitly specified in the supplementary CSV and thus the exact time origin is 'unknown'.",
+                "Censoring convention is not explicitly described in the CSV; inferred convention: 'Alive' indicates a censored observation and 'Dead' indicates an event (death) for OS analyses.",
+                "Some other clinical fields in the CSV contain 'NA' values for other variables, but OS (month) and Vital status are present for the cohort used in analyses."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 53,
+                "n_censored": 47,
+                "n_events": 6,
+                "censored_ratio": 0.89
+            }
+        },
+        {
+            "abbrv": "DFS",
+            "time_var": {
+                "var_name": "DFS (month)",
+                "var_unit": "month"
+            },
+            "event_var": {
+                "var_name": "Disease-free",
+                "var_values": [
+                    "Yes",
+                    "No"
+                ],
+                "var_meaning": "disease-free status at last follow-up (Yes = no recorded recurrence/metastasis during follow-up; No = recurrence and/or metastasis occurred)"
+            },
+            "notes": [
+                "Provenance: variable names and values taken from the provided supplementary CSV header and rows (user-supplied data).",
+                "The paper explicitly reports disease-free survival (DFS) analyses (e.g., Kaplan–Meier DFS estimates) and uses DFS as an endpoint; the CSV contains 'Disease-free' (Yes/No) and numeric 'DFS (month)'.",
+                "From the CSV patterns (examples where 'No' corresponds to a shorter DFS (month) prior to later death), the 'Disease-free' field appears to mark whether a relapse/metastasis event occurred during follow-up; thus in survival terms 'No' corresponds to the occurrence of the DFS event (relapse).",
+                "Time origin for DFS (month) is not explicitly stated in the CSV; Methods indicate clinical data were postoperative, so DFS time is likely months from surgery/postoperative sampling but the exact origin is 'unknown'.",
+                "Censoring convention is not explicitly described in the CSV; inferred convention: 'Yes' indicates censored (no relapse observed), 'No' indicates event (relapse/metastasis)."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 53,
+                "n_censored": 32,
+                "n_events": 21,
+                "censored_ratio": 0.6
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE148355_raw_counts_NCBI.csv",
+        "GSE148355_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 54,
+        "clinical_features": 31,
+        "genes": 39376
+    }
+}

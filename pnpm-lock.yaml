@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  apps/web:
     dependencies:
       '@astrojs/svelte':
         specifier: ^8.0.4
@@ -60,9 +62,6 @@ importers:
       vitest:
         specifier: ^4.1.0
         version: 4.1.7(@types/node@25.9.1)(jsdom@29.1.1)(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
-      wrangler:
-        specifier: ^4.59.2
-        version: 4.93.0
 
 packages:
 

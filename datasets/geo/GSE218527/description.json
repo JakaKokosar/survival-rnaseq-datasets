@@ -1,0 +1,76 @@
+{
+    "data_id": "GSE218527",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE218527",
+    "pmcids": [
+        "PMC10106446"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "EFS",
+            "time_var": {
+                "var_name": "efstime",
+                "var_unit": "unknown"
+            },
+            "event_var": {
+                "var_name": "efscens",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "likely event-free survival event indicator: 1 = event, 0 = censored"
+            },
+            "notes": [
+                "EFS is explicitly defined in the paper as time from diagnosis to first episode of relapse, progression, death, or secondary malignancy; patients without an event were censored at the date of last contact.",
+                "The GSM metadata explicitly contain 'efstime' and 'efscens'.",
+                "The time unit is not explicitly stated in the metadata or paper, so var_unit is set to 'unknown'; values are consistent with days because 'age at_diag' and 'age at_first_event_or_censor' appear to be recorded in days and their differences match 'efstime' approximately.",
+                "Coding for 'efscens' is not explicitly documented; it is inferred from the paper definition and sample patterns (e.g., GSM6751298 has 'efstime: 148', 'stime: 3216', 'efscens: 1', 'scens: 0', consistent with an EFS event but no OS death).",
+                "Although the field name contains 'cens', observed values are most consistent with 1 meaning an EFS event occurred and 0 meaning censored for EFS."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 47,
+                "n_censored": 37,
+                "n_events": 10,
+                "censored_ratio": 0.79
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "stime",
+                "var_unit": "unknown"
+            },
+            "event_var": {
+                "var_name": "scens",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "likely overall survival event indicator: 1 = death, 0 = censored/alive"
+            },
+            "notes": [
+                "OS is explicitly defined in the paper as time from diagnosis to death; surviving patients were censored at the date of last contact.",
+                "The GSM metadata explicitly contain 'stime' and 'scens'.",
+                "The time unit is not explicitly stated in the metadata or paper, so var_unit is set to 'unknown'; values are consistent with days from diagnosis.",
+                "Coding for 'scens' is not explicitly documented; it is inferred from the paper definition and sample patterns (e.g., GSM6751298 has longer 'stime' than 'efstime' and 'scens: 0', consistent with being alive/censored after an earlier EFS event; GSM6751294 has 'scens: 1' with shorter survival time than long-follow-up censored cases, consistent with death).",
+                "Although the field name contains 'cens', observed values are most consistent with 1 meaning OS event (death) and 0 meaning censored/alive."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 47,
+                "n_censored": 41,
+                "n_events": 6,
+                "censored_ratio": 0.87
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE218527_raw_counts_NCBI.csv",
+        "GSE218527_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 47,
+        "clinical_features": 9,
+        "genes": 39376
+    }
+}

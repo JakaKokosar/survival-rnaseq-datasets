@@ -1,0 +1,49 @@
+{
+    "data_id": "GSE181582",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE181582",
+    "pmcids": [
+        "PMC10226260"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "dead or last follow up (days)",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "dead",
+                "var_values": [
+                    "-",
+                    "+",
+                    "nd"
+                ],
+                "var_meaning": "Overall survival status: '+' = deceased (event), '-' = alive/censored at last follow-up, 'nd' = missing/not determined"
+            },
+            "notes": [
+                "Time and event variables are present in the provided supplementary data table (column headers 'dead or last follow up (days)' and 'dead').",
+                "Unit for the time variable is explicitly given as 'days' in the column header.",
+                "Mapping of '+' and '-' to deceased/alive is inferred from the header 'dead' and the dataset; sample 48 contains 'nd' for missing survival data. The paper text states 'Of 100 tumors one was lacking survival data', consistent with this missing entry.",
+                "Survival analyses described in Methods (Kaplan–Meier, log-rank test, Cox regression) were performed using these variables, consistent with an overall survival endpoint.",
+                "No other survival endpoints (e.g., progression-free survival, event-free survival) are provided in the supplied supplementary table or paper text.",
+                "Data provenance: supplementary table included in the manuscript and associated sequencing deposit GSE181582 (as noted in the paper)."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 95,
+                "n_censored": 74,
+                "n_events": 21,
+                "censored_ratio": 0.78
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE181582_raw_counts_NCBI.csv",
+        "GSE181582_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 96,
+        "clinical_features": 15,
+        "genes": 39376
+    }
+}

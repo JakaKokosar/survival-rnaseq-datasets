@@ -1,0 +1,32 @@
+{
+    "data_id": "GSE219250",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE219250",
+    "pmcids": [
+        "PMC10025505"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "survival (months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "status alive_(0)/dead_(1)",
+                "var_values": [
+                    "1",
+                    "0",
+                    "-"
+                ],
+                "var_meaning": "overall survival event indicator: 1 = dead (event), 0 = alive (likely censored), - = missing / not applicable (e.g., healthy control)"
+            },
+            "notes": [
+                "Endpoint inferred as overall survival (OS) from presence of 'alive/dead' coding and Kaplan-Meier survival analyses described in the paper.",
+                "Variable names and coding taken verbatim from GEO Sample 'characteristics_ch1' fields.",
+                "Time origin (start point for 'survival (months)'; e.g., date of diagnosis, surgery, or sample collection) is not specified in the paper or metadata — origin unknown.",
+                "'0' (alive) is treated as censored for survival analysis (inferred from coding and use of Kaplan-Meier), but censoring definition/dates are not provided in metadata.",
+                "Control/normal brain sample (GSM6779169) has 'survival (months): -' and 'status alive_(0)/dead_(1): -', indicating missing/not applicable for that sample."
+            ]
+        }
+    ]
+}

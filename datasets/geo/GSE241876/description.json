@@ -1,0 +1,72 @@
+{
+    "data_id": "GSE241876",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE241876",
+    "pmcids": [
+        "PMC10767305"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "os",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "os event",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "overall survival event indicator: 1 = death; 0 = censored/alive at last follow-up"
+            },
+            "notes": [
+                "The GSM metadata explicitly contains 'os' and 'os event' for individual samples.",
+                "The unit is not stated in GSM metadata; 'months' is inferred from the paper, which reports median OS in months and defines OS as measured from the date of biopsy to date of death, censored at last follow-up for survivors.",
+                "Some patients have paired pre/post-treatment biopsies with the same survival annotations, so OS values may be duplicated across GSM records from the same patient."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 12,
+                "n_censored": 3,
+                "n_events": 9,
+                "censored_ratio": 0.25
+            }
+        },
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "pfs",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "pfs event",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "progression-free survival event indicator: 1 = disease progression or death; 0 = censored alive without disease progression at last follow-up"
+            },
+            "notes": [
+                "The GSM metadata explicitly contains 'pfs' and 'pfs event' for individual samples.",
+                "The unit is not stated in GSM metadata; 'months' is inferred from the paper, which reports median PFS in months and defines PFS as measured from the date of biopsy to disease progression or date of death, censored at last follow-up for those alive without disease progression.",
+                "Some patients have paired pre/post-treatment biopsies with the same survival annotations, so PFS values may be duplicated across GSM records from the same patient."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 12,
+                "n_censored": 8,
+                "n_events": 4,
+                "censored_ratio": 0.67
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE241876_raw_counts_NCBI.csv",
+        "GSE241876_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 12,
+        "clinical_features": 16,
+        "genes": 39376
+    }
+}

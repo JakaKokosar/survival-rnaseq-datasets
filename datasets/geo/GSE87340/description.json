@@ -1,0 +1,47 @@
+{
+    "data_id": "GSE87340",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87340",
+    "pmcids": [
+        "PMC5704234"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "time to last followup",
+                "var_unit": "years"
+            },
+            "event_var": {
+                "var_name": "survstatus",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "Both variables ('survstatus' and 'time to last followup') are present in the GEO sample metadata (characteristics_ch1 fields).",
+                "Unit for 'time to last followup' set to 'years' based on the paper Methods (2.1): 'The follow-up time ranged from 2.98 to 11.94 years with the median time of six years.'",
+                "'survstatus' values observed in the metadata are '0' and '1'; the mapping (e.g., 0=alive/censored, 1=dead/event) is not explicitly stated in the GEO metadata or paper and therefore var_meaning is set to 'unknown'.",
+                "The GEO series contains paired tumor and normal samples per patient; the survival fields are duplicated across pairs. The paper's survival analyses were performed at the patient/tumor level.",
+                "Discrepancy noted: the paper reports follow-up range 2.98–11.94 years, but the sample metadata includes values below 2.98 (e.g., 0.36, 0.78, 1.38). Units are assumed years per the paper, but this inconsistency may reflect metadata entry differences or other unit ambiguities."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 27,
+                "n_censored": 20,
+                "n_events": 7,
+                "censored_ratio": 0.74
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE87340_raw_counts_NCBI.csv",
+        "GSE87340_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 54,
+        "clinical_features": 11,
+        "genes": 39376
+    }
+}

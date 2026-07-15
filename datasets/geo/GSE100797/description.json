@@ -1,0 +1,73 @@
+{
+    "data_id": "GSE100797",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100797",
+    "pmcids": [
+        "PMC5701046"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "os.time",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "os.event",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "overall survival event indicator (1 = death, 0 = censored/alive at last follow-up)"
+            },
+            "notes": [
+                "Variable names and values taken from GEO sample 'characteristics_ch1' fields in GSE100797 (e.g. GSM2693520 contains 'os.time: 92.9' and 'os.event: 0').",
+                "Units not stated in the GEO sample metadata; 'months' inferred from the paper text which reports survival in months (e.g. 'median overall survival (OS) was 22.8 months' and 'minimum follow-up of 37.2 months').",
+                "Event coding (1 = event, 0 = censored) is not explicitly defined in the GEO metadata and was inferred from patterns in the sample data (long os.time values paired with os.event: 0) and standard clinical convention."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 25,
+                "n_censored": 8,
+                "n_events": 17,
+                "censored_ratio": 0.32
+            }
+        },
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "pfs.time",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "pfs.event",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "progression-free survival event indicator (1 = progression and/or death, 0 = censored/no progression at last follow-up)"
+            },
+            "notes": [
+                "Variable names and values taken from GEO sample 'characteristics_ch1' fields in GSE100797 (e.g. GSM2693520 contains 'pfs.time: 48.1' and 'pfs.event: 1').",
+                "Units not stated in the GEO sample metadata; 'months' inferred from the paper text (paper presents PFS outcomes in yearly/monthly terms and uses months elsewhere).",
+                "PFS event definition is not explicitly encoded in the GEO metadata; Methods state 'Response was assessed according to RECIST 1.0', so PFS is presumed to follow the standard RECIST-based definition (progression or death).",
+                "Event coding (1 = event, 0 = censored) is inferred from metadata patterns and standard conventions, not explicitly documented in the GEO file."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 25,
+                "n_censored": 5,
+                "n_events": 20,
+                "censored_ratio": 0.2
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE100797_original.csv",
+        "GSE100797_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 25,
+        "clinical_features": 11,
+        "genes": 18418
+    }
+}

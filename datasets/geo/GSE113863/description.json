@@ -1,0 +1,47 @@
+{
+    "data_id": "GSE113863",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE113863",
+    "pmcids": [
+        "PMC6206135"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "DMFS",
+            "time_var": {
+                "var_name": "dmfs time",
+                "var_unit": "years"
+            },
+            "event_var": {
+                "var_name": "dmfs event",
+                "var_values": [
+                    "NA",
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "distant metastasis-free survival event indicator; inferred coding 1 = distant metastasis event, 0 = censored/no event, NA = missing"
+            },
+            "notes": [
+                "GSM metadata explicitly contains 'dmfs time' and 'dmfs event' for samples in GSE113863.",
+                "Many samples have 'dmfs time: NA' and 'dmfs event: NA'; the series metadata states that 303 of 483 RNA-seq samples had survival data.",
+                "The unit is not stated in GSM metadata; 'years' is taken from the paper, which describes DMFS analyses with follow-up up to 10 years and numeric values consistent with year-based times.",
+                "The 0/1 event coding is not explicitly defined in the GSM records; meaning is inferred from the endpoint name and standard Kaplan-Meier/Cox survival analysis described in the paper."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 119,
+                "n_censored": 105,
+                "n_events": 14,
+                "censored_ratio": 0.88
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE113863_raw_counts_NCBI.csv",
+        "GSE113863_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 119,
+        "clinical_features": 11,
+        "genes": 39376
+    }
+}

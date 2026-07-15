@@ -1,0 +1,47 @@
+{
+    "data_id": "GSE192667",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE192667",
+    "pmcids": [
+        "PMC8800070"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival (os) (month)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "outcome",
+                "var_values": [
+                    "Dead",
+                    "Alive"
+                ],
+                "var_meaning": "overall survival status (Alive/Dead); 'Dead' indicates death, 'Alive' indicates patient alive at last follow-up (censored)"
+            },
+            "notes": [
+                "Time variable and unit taken from GEO sample metadata 'characteristics_ch1' fields (e.g., 'overall survival (os) (month): 34' in GSM5754372).",
+                "Contradiction between sources: STAR Methods (Samples) states 'Overall survival was defined number of days from the start of the treatment.' This conflicts with the '(month)' unit in the sample metadata; the unit is therefore ambiguous.",
+                "Observed numeric values across samples (examples up to 124) are more consistent with months as the unit; unit chosen as 'month' to reflect the metadata but users should verify original clinical records.",
+                "Event coding (Dead/Alive) is present in metadata but not formally enumerated in Methods; mapping 'Dead' = event (death) and 'Alive' = censored is inferred from common survival-analysis practice and the paper's use of log-rank/Cox models.",
+                "Time origin for OS is explicitly given in the paper Methods as 'start of the treatment' (though the Methods' stated unit—days—disagrees with the sample metadata)."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 89,
+                "n_censored": 17,
+                "n_events": 72,
+                "censored_ratio": 0.19
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE192667_raw_counts.csv",
+        "GSE192667_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 89,
+        "clinical_features": 8,
+        "genes": 26391
+    }
+}

@@ -1,0 +1,43 @@
+{
+    "data_id": "GSE274975",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE274975",
+    "pmcids": [
+        "PMC11669362"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "PFS time, months",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "Response status available",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "PFS event status (1 = event/progression, 0 = censored)"
+            },
+            "notes": [
+                "The variable name 'Response status available' appears to be a misnomer in the supplementary data. However, the number of samples with value '1' in this column is 41, which exactly matches the '# of events' (41) reported in Table 1 of the paper for the Total NSCLC cohort. Therefore, this column represents the binary event indicator for Progression-Free Survival."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 61,
+                "n_censored": 20,
+                "n_events": 41,
+                "censored_ratio": 0.33
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE274975_original.csv",
+        "GSE274975_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 61,
+        "clinical_features": 16,
+        "genes": 26275
+    }
+}

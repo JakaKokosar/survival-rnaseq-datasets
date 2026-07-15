@@ -1,0 +1,83 @@
+{
+    "data_id": "GSE150043",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE150043",
+    "pmcids": [
+        "PMC9247075"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "DFS",
+            "time_var": {
+                "var_name": "Time between surgery and relapse (months) (DFS)c",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": "unknown",
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "The supplementary table contains a column titled exactly 'Time between surgery and relapse (months) (DFS)c' which provides a time value in months for many patients.",
+                "No explicit relapse-event indicator (e.g., relapse yes/no) column is present in the provided supplementary data, so the DFS event variable is not specified.",
+                "Some rows have NA in the DFS time column — likely censored, but censoring/event coding is not provided in the table or in the paper text."
+            ]
+        },
+        {
+            "abbrv": "PRS",
+            "time_var": {
+                "var_name": "Time between relapse and death (months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "Death",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "A column 'Time between relapse and death (months)' is present in the supplementary data and gives a time in months (often NA).",
+                "The supplementary table contains a 'Death' column with values '1' and '0' that likely indicate vital status; however the explicit coding (e.g. 1=death, 0=alive) is not stated in the supplementary header. The paper context implies this is a death indicator but the exact coding is not explicitly documented, so var_meaning set to 'unknown'.",
+                "Many entries for 'Time between relapse and death (months)' are NA; censoring information and linkage between this time and the 'Death' column are not explicitly described in the supplementary file."
+            ],
+            "stats": {
+                "n_incomplete": 9,
+                "n_complete": 10,
+                "n_censored": 0,
+                "n_events": 10,
+                "censored_ratio": 0.0
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "unknown",
+                "var_unit": "unknown"
+            },
+            "event_var": {
+                "var_name": "Death",
+                "var_values": [
+                    "1",
+                    "0"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "The paper explicitly describes overall survival (OS) and shows OS (in months) used for Kaplan–Meier analyses (Fig. 2A) and defines ST (≤12 months) and LT (≥36 months) based on OS.",
+                "However, the provided supplementary table does not contain an explicit 'Overall survival' or 'OS (months)' column. Therefore the OS time variable is not available in the supplementary data (set to 'unknown').",
+                "The 'Death' column in the supplementary data is the only explicit event-like column and is therefore the only available candidate for the OS event variable; its exact coding is not documented in the table, so var_meaning is 'unknown'.",
+                "The 'Group*' column (values 'ST' and 'LT') reflects OS-based grouping thresholds described in the paper (ST ≤12 months, LT ≥36 months), but the underlying per-patient OS times used to assign these groups are not present in the supplied table."
+            ]
+        }
+    ],
+    "data_file_names": [
+        "GSE150043_raw_counts_NCBI.csv",
+        "GSE150043_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 19,
+        "clinical_features": 30,
+        "genes": 39376
+    }
+}

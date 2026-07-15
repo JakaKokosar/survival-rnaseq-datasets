@@ -1,0 +1,64 @@
+{
+    "data_id": "GSE227378",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227378",
+    "pmcids": [
+        "PMC10083302"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "living_day",
+                "var_unit": "day"
+            },
+            "event_var": {
+                "var_name": "die",
+                "var_values": [
+                    "decensed",
+                    "living"
+                ],
+                "var_meaning": "overall survival status (decensed = death event; living = censored/alive at last follow-up)"
+            },
+            "notes": [
+                "Time and event variables taken directly from the provided supplementary CSV (column headers: living_day, die).",
+                "Unit inferred from column name suffix '_day'; no separate unit field provided.",
+                "Spelling 'decensed' is preserved exactly as in the data (interpreted as 'deceased').",
+                "Paper text confirms OS analyses on the same 32-patient cohort (Kaplan–Meier, Cox; 5-year OS reported)."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 32,
+                "n_censored": 7,
+                "n_events": 25,
+                "censored_ratio": 0.22
+            }
+        },
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "PFS_day",
+                "var_unit": "day"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": [],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "Time variable taken from the provided supplementary CSV (column header: PFS_day).",
+                "No explicit progression event/censoring indicator is present in the supplementary CSV; therefore event variable is unknown.",
+                "Paper text reports PFS analyses (time-dependent ROC for PFS) on the same 32-patient cohort, but the event field is not provided in the shared supplementary data.",
+                "Unit inferred from column name suffix '_day'; no separate unit field provided."
+            ]
+        }
+    ],
+    "data_file_names": [
+        "GSE227378_raw_counts_NCBI.csv",
+        "GSE227378_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 32,
+        "clinical_features": 19,
+        "genes": 39376
+    }
+}

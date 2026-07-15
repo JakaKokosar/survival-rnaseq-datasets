@@ -1,0 +1,92 @@
+{
+    "data_id": "GSE165656",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE165656",
+    "pmcids": [
+        "PMC8372368",
+        "PMC10902356",
+        "PMC12092627"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "New OS",
+                "var_unit": "weeks"
+            },
+            "event_var": {
+                "var_name": "vital.status NEW",
+                "var_values": [
+                    "D",
+                    "A"
+                ],
+                "var_meaning": "overall survival status; D=dead, A=alive"
+            },
+            "notes": [
+                "The supplementary table contains both 'vital.status NEW' and a paired numeric field 'vital.status New-numeric'; observed pairs indicate D corresponds to 1 and A corresponds to 0.",
+                "The paper (PMC8372368) reports overall survival in weeks, so the unit for 'New OS' was taken from the paper text rather than from the column name itself."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 81,
+                "n_censored": 11,
+                "n_events": 70,
+                "censored_ratio": 0.14
+            }
+        },
+        {
+            "abbrv": "DOR",
+            "time_var": {
+                "var_name": "New RemDur",
+                "var_unit": "weeks"
+            },
+            "event_var": {
+                "var_name": "event",
+                "var_values": [
+                    "Yes",
+                    "No"
+                ],
+                "var_meaning": "remission duration event indicator; 'Yes' indicates remission ended, consistent with relapse or death after response, and 'No' indicates censored remission duration"
+            },
+            "notes": [
+                "The paper (PMC8372368) reports remission duration in weeks, so the unit for 'New RemDur' was taken from the paper text.",
+                "Interpretation of 'event' is based on cross-referencing the supplementary columns 'resp.simple', 'Relapse', 'New RemDur', and patient outcomes: 'New RemDur' is typically missing for non-responders, and 'event' can be 'Yes' even when 'Relapse' is 'No', consistent with remission duration ending by death without recorded relapse.",
+                "A paired numeric coding column 'event 2' is also present in the supplementary table and appears to encode Yes=1, No=0.",
+                "While the supplementary data column is labeled RemDur, DOR (Duration of Response) is the correct clinical abbreviation for this metric. The authors use 'remission duration' to describe this, and in oncological trials, 'Duration of Response' is the formal term for the time spent in a state of clinical response (CR) before an event (relapse or death) occurs. Do not use 'RemDur' in your final analysis/output; use DOR."
+            ],
+            "stats": {
+                "n_incomplete": 46,
+                "n_complete": 35,
+                "n_censored": 8,
+                "n_events": 27,
+                "censored_ratio": 0.23
+            }
+        },
+        {
+            "abbrv": "EFS",
+            "time_var": {
+                "var_name": "Event.Free.Survival",
+                "var_unit": "weeks"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": [],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "The supplementary table explicitly contains the time variable 'Event.Free.Survival'.",
+                "PMC8372368 reports event-free survival analysis for this cohort, but no unambiguous event indicator column for EFS could be identified from the supplementary table alone.",
+                "The available 'event'/'event 2' fields align best with remission duration rather than EFS, because some non-responders with recorded event-free survival times have 'event'='No'.",
+                "Therefore the EFS event variable/coding was not extracted and is set to unknown."
+            ]
+        }
+    ],
+    "data_file_names": [
+        "GSE165656_raw_counts_NCBI.csv",
+        "GSE165656_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 81,
+        "clinical_features": 58,
+        "genes": 39376
+    }
+}

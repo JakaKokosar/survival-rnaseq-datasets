@@ -1,0 +1,48 @@
+{
+    "data_id": "GSE167573",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE167573",
+    "pmcids": [
+        "PMC8421377"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "os time (months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "OS status",
+                "var_values": [
+                    "0",
+                    "1",
+                    "-"
+                ],
+                "var_meaning": "overall survival status; inferred from the paper and sample metadata that '1' = death, '0' = alive/censored at last follow-up, and '-' = missing"
+            },
+            "notes": [
+                "The GSM metadata explicitly provide 'os time (months)' and 'OS status' for the renal cell carcinoma samples.",
+                "The paper defines OS as 'the time from surgery to the date of death.'",
+                "The numeric coding for 'OS status' is not explicitly decoded in the metadata or Methods; '1' was inferred to mean death because 10 tumor samples have value '1', matching the paper's statement that 10 patients died at the end of follow-up.",
+                "Value '-' appears in some tumor samples for 'os time (months)' and/or 'OS status', indicating missing survival metadata.",
+                "PFS is discussed in the paper for a treated subset, but no per-sample PFS variable is present in the GSM metadata, so it is not extracted as a dataset survival endpoint."
+            ],
+            "stats": {
+                "n_incomplete": 7,
+                "n_complete": 54,
+                "n_censored": 45,
+                "n_events": 9,
+                "censored_ratio": 0.83
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE167573_raw_counts_NCBI.csv",
+        "GSE167573_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 61,
+        "clinical_features": 10,
+        "genes": 39376
+    }
+}

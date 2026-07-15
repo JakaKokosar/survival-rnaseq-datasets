@@ -1,0 +1,20 @@
+Patient ID,Group*,Age at the surgery (years),Sexa,Tumor size (cm)b (measured after surgery),T,N,Number of nodes analyzed,ratio node (invaded/analyzed),ratio node % (invaded/analysed),Surgery margins invaded by tumor cells**,Time between surgery and chemotherapy (in days),Time between surgery and relapse (months) (DFS),Time between relapse and death (months),Death,Vascular resection,Time in hospital after surgery (in days),Re-hospitalisation 6 months after surgery**,Vascular contact (vein) **,Artery contact **,Tumor size by imagery (mm)e,Time between imagery and surgery (days),Adjuvant chemotherapy (CTH),CTH > 3 months,Number of CTH cures,Dose CTH received in % of the maximal theoretical value
+S1,ST,74,F,3,4,1,25,2/25,0.08,1,82,NA,NA,1,1,42,0,1,0,42,7,1,0,1,100
+S2,ST,71,M,3.5,3,0,12,0/12,0.00,0,NA,5.00,1.31,1,1,14,0,0,0,76,121,0,NA,NA,NA
+S3,ST,72,F,3.2,3,0,7,0/7,0.00,0,71,NA,NA,1,0,16,0,NA,NA,NA,NA,1,0,NA,NA
+S4,ST,73,M,4,3,1,7,5/7,0.71,0,54,5.42,2.89,1,0,22,3,1,0,22,6,1,0,1,100
+S5,ST,54,F,3.2,4,1,12,7/12,0.58,0,63,2.30,6.11,1,0,16,0,1,0,29,6,1,0,4,100
+S6,ST,80,M,4,3,1,8,2/8,0.25,1,74,4.50,4.11,1,0,24,0,1,1,34,5,1,0,6,80
+S7,ST,80,M,4,3,0,16,0/16,0.00,0,NA,6.87,2.79,1,0,21,1,1,1,27,3,0,NA,NA,NA
+S8,ST,63,F,3,4,1,14,4/14,0.28,1,43,4.87,4.80,1,1,18,0,1,0,NA,31,1,0,7,100
+S9,ST,66,M,5,3,1B,16,10/16,0.62,0,53,7.10,2.66,1,0,24,0,1,1,19,21,1,0,3,100
+S10,ST,66,M,5,4,1,4,0/4,0.00,0,41,9.37,0.85,1,0,17,0,1,0,NA,92,1,0,2,NA
+L1,LT,78,F,2.5,3,1,13,4/13,0.31,0,55,25.25,NA,1,0,22,0,1,0,15,9,1,0,4,100
+L2,LT,58,M,3.2,3,0,33,0/33,0.00,2,NA,17.16,23.54,1,1,14,1,NA,NA,NA,NA,1,1,NA,NA
+L3,LT,71,F,2,3,0,10,0/10,0.00,1,NA,NA,NA,1,0,11,0,1,0,28,22,0,NA,NA,NA
+L4,LT,83,M,4,3,0,14,0/14,0.00,0,NA,NA,NA,1,0,22,0,1,0,NA,27,0,NA,NA,NA
+L5,LT,67,M,2.2,3,1,25,2/25,0.08,0,16,NA,NA,0,0,17,0,1,0,28,33,1,0,NA,NA
+L6,LT,62,M,5,3,1,7,1/7,0.14,0,71,37.71,22.81,1,0,17,0,0,0,NA,63,1,0,4,75
+L7,LT,58,M,2,1,1,8,3/8,0.37,0,NA,NA,NA,0,0,13,0,1,1,21,28,NA,NA,NA,NA
+L8,LT,77,M,4.5,4,1b,4,3/4,0.75,0,66,NA,NA,0,0,28,0,1,0,41,28,1,0,18,100
+L9,LT,55,M,0.6,1,0,0,0,NA,0,NA,NA,NA,0,0,21,0,1,0,21,28,0,NA,NA,NA

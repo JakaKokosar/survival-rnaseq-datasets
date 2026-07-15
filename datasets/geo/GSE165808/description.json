@@ -1,0 +1,76 @@
+{
+    "data_id": "GSE165808",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE165808",
+    "pmcids": [
+        "PMC8391231",
+        "PMC10137910"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "PFS",
+            "time_var": {
+                "var_name": "progression-free-survival_days",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "recurrence",
+                "var_values": [
+                    "0",
+                    "1",
+                    "Not available"
+                ],
+                "var_meaning": "recurrence indicator for progression-free survival; '0' appears to denote no recurrence (censored), '1' denotes recurrence (event); 'Not available' indicates missing follow-up information"
+            },
+            "notes": [
+                "Time and event fields extracted from GEO sample metadata 'characteristics_ch1' (examples: GSM5050316 etc.).",
+                "Unit 'days' inferred from the variable name suffix '_days' in the sample metadata.",
+                "The paper (PMC8391231) defines 'no recurrence' and recurrence relative to the end of first-line platinum-based chemotherapy; PFS in the dataset appears to be measured relative to that clinical timeline.",
+                "Some samples have 'Not available' for the event and/or time (paper notes 3 patients lost to follow-up), indicating missing PFS data.",
+                "PMC10137910 refers to 'Disease-free survival (DFS)' in analysis of the same cohort; that term appears to correspond to the 'progression-free-survival_days' variable in GEO."
+            ],
+            "stats": {
+                "n_incomplete": 4,
+                "n_complete": 42,
+                "n_censored": 8,
+                "n_events": 34,
+                "censored_ratio": 0.19
+            }
+        },
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall-survival_days",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "live/dead",
+                "var_values": [
+                    "live",
+                    "dead"
+                ],
+                "var_meaning": "overall survival status at last follow-up; 'live' = alive (censored), 'dead' = death (event)"
+            },
+            "notes": [
+                "Overall survival time and status are provided in GEO sample metadata 'characteristics_ch1'.",
+                "Paper (PMC8391231) reports mean and median follow-up and compares OS between cohorts; OS times in GEO match those reported.",
+                "Some samples show identical values for progression-free-survival_days and overall-survival_days when no recurrence/event occurred (consistent with censoring)."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 46,
+                "n_censored": 36,
+                "n_events": 10,
+                "censored_ratio": 0.78
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE165808_raw_counts_NCBI.csv",
+        "GSE165808_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 51,
+        "clinical_features": 9,
+        "genes": 39376
+    }
+}

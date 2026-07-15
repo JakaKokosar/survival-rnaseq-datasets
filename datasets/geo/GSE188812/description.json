@@ -1,0 +1,35 @@
+{
+    "data_id": "GSE188812",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE188812",
+    "pmcids": [
+        "PMC7458651"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "unknown",
+                "var_values": "unknown",
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "GSM sample metadata explicitly contains a characteristics_ch1 field formatted as 'overall survival: <number> months'.",
+                "No explicit event/censoring status variable is present in the GEO metadata; given the high mortality of grade IV glioma, mortality is implied.",
+                "For their primary discovery analysis, the authors did not use continuous survival models but rather grouped patients based on median overall survival (e.g., >24 months vs. shorter for tumors, 21 months for PBMCs).",
+                "Several patients have multiple GSMs (before/after standard treatment) with the same OS value, indicating the survival time is a patient-level variable reused across matched samples."
+            ]
+        }
+    ],
+    "data_summary": {
+        "samples": 20,
+        "clinical_features": 10,
+        "genes": 39376
+    },
+    "data_file_names": [
+        "GSE188812_raw_counts_NCBI.csv"
+    ]
+}

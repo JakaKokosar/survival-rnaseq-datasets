@@ -1,0 +1,52 @@
+{
+    "data_id": "GSE188715",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE188715",
+    "pmcids": [
+        "PMC8718409",
+        "PMC11297740",
+        "PMC9450692",
+        "PMC10192868"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "Overall survival time",
+                "var_unit": "day"
+            },
+            "event_var": {
+                "var_name": "Overall survival status",
+                "var_values": [
+                    "overall survival: death",
+                    "overall survival: survival"
+                ],
+                "var_meaning": "Overall survival status: 'overall survival: death' indicates the patient died (event occurred); 'overall survival: survival' indicates the patient was alive at last follow-up (censored)."
+            },
+            "notes": [
+                "Provenance: Both fields ('Overall survival time' and 'Overall survival status') are present in the provided supplementary CSV block (labelled supp_data) accompanying the request.",
+                "The unit 'day' for 'Overall survival time' is inferred from the per-sample value prefix 'survival day: <number>' present in the CSV values (e.g., 'survival day: 377'); the header itself does not include an explicit unit.",
+                "The 'Overall survival time' values are textual entries of the form 'survival day: <integer>' with some inconsistent spacing (e.g., 'survival day:  443'); the numeric portion represents days but the exact reference timepoint (e.g., from diagnosis, from surgery, or from sample collection) is not specified in the supplementary data.",
+                "The event variable values are textual and no numeric coding (e.g., 0/1) is provided in the supplementary data. Mapping to event/censoring above is inferred from the text but numeric encoding used in analyses (if any) is unknown.",
+                "One sample row (sample_title 'tpm_CA1520663') has 'lost to follow-up' in the Age column and missing values for the survival time and status fields; such records exist in the supplied CSV and will need handling (e.g., exclusion or separate censoring rules) in any analysis.",
+                "Both papers (Frontiers in Pharmacology 2023 and BMC Cancer 2024) describe conducting overall survival analyses on cohorts including the Xiangya cohort; the BMC article states the Xiangya cohort comprises 56 patients with survival outcomes. The supplied CSV contains 57 rows including one with missing survival data (see note above), consistent with the cohort described but with one record lacking survival info.",
+                "No additional survival endpoints (e.g., PFS, DFS) were identified in the supplied CSV. If other endpoints were used in the papers, their corresponding variables are not present in the provided supplementary CSV."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 56,
+                "n_censored": 44,
+                "n_events": 12,
+                "censored_ratio": 0.79
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE188715_original.csv",
+        "GSE188715_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 57,
+        "clinical_features": 8,
+        "genes": 19778
+    }
+}

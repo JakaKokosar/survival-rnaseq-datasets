@@ -1,0 +1,41 @@
+{
+    "data_id": "GSE155945",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE155945",
+    "pmcids": [
+        "PMC8138323"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "dead or last follow up (days)",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "dead",
+                "var_values": [
+                    "-",
+                    "+",
+                    "nd"
+                ],
+                "var_meaning": "unknown"
+            },
+            "notes": [
+                "Time variable 'dead or last follow up (days)' and event variable 'dead' are present in the provided supplementary CSV (user-provided data).",
+                "The paper's Results and Methods describe Kaplan\u2013Meier analyses and refer to 'overall survival' and 'overall survival probability', indicating these fields correspond to overall survival (OS) time and event.",
+                "The header explicitly states the time unit as days (hence var_unit = 'days').",
+                "The exact coding/meaning of the 'dead' column values ('+', '-', 'nd') is not explicitly defined in the paper or the provided supplementary CSV. By common convention '+' likely indicates death (event) and '-' likely indicates alive/censored; 'nd' appears to denote 'not determined' or missing \u2014 this inference is not stated by the authors and thus var_meaning is set to 'unknown'.",
+                "Row ID 48 contains 'nd' for time and event, confirming presence of missing/unreported survival data for at least one sample.",
+                "If formal/authoritative mapping of symbols to event codes is required, confirm with the original supplementary files or the study authors; mapping here is inferred from typical usage and the context of the paper."
+            ]
+        }
+    ],
+    "data_summary": {
+        "samples": 100,
+        "clinical_features": 9,
+        "genes": 39376
+    },
+    "data_file_names": [
+        "GSE155945_raw_counts_NCBI.csv"
+    ]
+}

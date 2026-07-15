@@ -1,0 +1,48 @@
+{
+    "data_id": "GSE144561",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE144561",
+    "pmcids": [
+        "PMC7335061"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "OS (days)",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "Alive at analysis?",
+                "var_values": [
+                    "N",
+                    "Y",
+                    "**"
+                ],
+                "var_meaning": "Patient vital status at the time of analysis: 'N' appears to indicate deceased (event occurred), 'Y' indicates alive at analysis (censored), '**' appears to denote missing/unavailable"
+            },
+            "notes": [
+                "Time and event variables were extracted from the user-supplied supplementary CSV (columns 'OS (days)' and 'Alive at analysis?').",
+                "The manuscript (Franses et al., Nature Communications 2020) presents Kaplan–Meier curves for 'overall survival' (Fig. 2c), indicating the endpoint is overall survival; however, the paper does not explicitly define the time origin (e.g., date of diagnosis, date of surgery, or date of blood draw) used for OS in the cohort, so the time-zero for 'OS (days)' is unknown.",
+                "Rows with '**' (e.g., locPDAC10) show missing/unavailable values for the event and/or time fields in the provided file.",
+                "The mapping 'N' = event (death) and 'Y' = censored (alive at last follow-up) is an inference based on column name and typical usage and is consistent with 'OS (days)' values for 'Y' entries representing follow-up durations; the file/manuscript does not explicitly document this coding.",
+                "No other survival endpoints (e.g., PFS, DFS) were identified in the provided supplementary data or clearly defined for this cohort in the manuscript."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 33,
+                "n_censored": 5,
+                "n_events": 28,
+                "censored_ratio": 0.15
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE144561_raw_counts_NCBI.csv",
+        "GSE144561_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 35,
+        "clinical_features": 11,
+        "genes": 39376
+    }
+}

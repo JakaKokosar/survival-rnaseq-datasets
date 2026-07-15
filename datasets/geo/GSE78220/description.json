@@ -1,0 +1,46 @@
+{
+    "data_id": "GSE78220",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE78220",
+    "pmcids": [
+        "PMC4808437"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival (days)",
+                "var_unit": "days"
+            },
+            "event_var": {
+                "var_name": "vital status",
+                "var_values": [
+                    "Alive",
+                    "Dead"
+                ],
+                "var_meaning": "overall survival status (censored if Alive, event if Dead)"
+            },
+            "notes": [
+                "Both 'overall survival (days)' and 'vital status' are present in the GSM sample characteristics for this cohort.",
+                "The paper explicitly discusses survival in this anti-PD-1-treated melanoma cohort ('improved survival'; Figure 1A/B), consistent with the OS variables in GEO metadata.",
+                "At least one sample has missing time value recorded as 'overall survival (days): NA' (e.g., Pt8), so OS time is not complete for all samples.",
+                "Patient Pt27 appears twice as two pre-treatment biopsies (GSM2069842 and GSM2069843) with the same OS annotations, indicating duplicated patient-level survival information across samples."
+            ],
+            "stats": {
+                "n_incomplete": 1,
+                "n_complete": 27,
+                "n_censored": 15,
+                "n_events": 12,
+                "censored_ratio": 0.56
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE78220_raw_counts_NCBI.csv",
+        "GSE78220_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 28,
+        "clinical_features": 18,
+        "genes": 39376
+    }
+}

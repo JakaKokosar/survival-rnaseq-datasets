@@ -1,0 +1,73 @@
+{
+    "data_id": "GSE133713",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE133713",
+    "pmcids": [
+        "PMC7334053"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "overall survival time (os in months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "death",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "overall survival status; likely 1 = deceased, 0 = alive/censored"
+            },
+            "notes": [
+                "Variables 'overall survival time (os in months)' and 'death' are present in the GEO Sample 'characteristics_ch1' fields (e.g., GSM3923193).",
+                "Coding for 'death' (1 vs 0) is not explicitly defined in the series metadata or paper; mapping to deceased/alive inferred from co-occurrence with OS times (samples with death:1 generally have shorter OS).",
+                "Time origin for 'overall survival time' (e.g., from diagnosis, randomization, surgery, or treatment start) is not specified in the GEO metadata or main paper text (paper references prior report/Supplementary Methods), so the exact start point is unknown."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 23,
+                "n_censored": 11,
+                "n_events": 12,
+                "censored_ratio": 0.48
+            }
+        },
+        {
+            "abbrv": "RFS",
+            "time_var": {
+                "var_name": "recurrence free survival time (rfs in months)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "event",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "recurrence event indicator; likely 1 = recurrence, 0 = no recurrence/censored"
+            },
+            "notes": [
+                "Variable 'recurrence free survival time (rfs in months)' and the accompanying 'event' flag are present in GEO Sample 'characteristics_ch1' entries (e.g., GSM3923193 shows 'recurrence free survival time (rfs in months): 12.3' with 'event: 1').",
+                "'event' is an ambiguous name in the metadata (not labeled explicitly as 'rfs event'); mapping to RFS event is inferred because it consistently appears alongside the 'recurrence free survival time' field.",
+                "Coding for 'event' (1 vs 0) is not explicitly defined in the series metadata or paper; inference (1 = recurrence) is based on sample patterns, including samples with 'rfs = 0' and 'event: 1' consistent with immediate/present recurrence.",
+                "Time origin for RFS (whether from surgery, treatment start, or randomization) is not specified in the provided metadata or paper text (referenced definitions are in prior report/Supplementary Methods), so origin is unknown."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 23,
+                "n_censored": 7,
+                "n_events": 16,
+                "censored_ratio": 0.3
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE133713_original.csv",
+        "GSE133713_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 23,
+        "clinical_features": 9,
+        "genes": 24748
+    }
+}

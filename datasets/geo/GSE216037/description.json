@@ -1,0 +1,47 @@
+{
+    "data_id": "GSE216037",
+    "data_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216037",
+    "pmcids": [
+        "PMC9780475"
+    ],
+    "survival-endpoints": [
+        {
+            "abbrv": "OS",
+            "time_var": {
+                "var_name": "Overall survival(month)",
+                "var_unit": "months"
+            },
+            "event_var": {
+                "var_name": "Survival state",
+                "var_values": [
+                    "0",
+                    "1"
+                ],
+                "var_meaning": "overall survival event status (inferred coding: '1' = death/event, '0' = censored/alive)"
+            },
+            "notes": [
+                "Source/provenance: GEO series GSE216037 sample metadata (fields under Sample_characteristics_ch1; e.g., GSM6656519) and study Methods which state 'Overall survival of patients was assessed using Kaplan–Meier analysis.'",
+                "Unit 'month' taken directly from the time variable name 'overall survival(month)'; the time origin (e.g., from diagnosis, surgery, or sample collection) is not specified in the paper or metadata and is therefore unknown.",
+                "The coding of 'survival state' (0 vs 1) is not explicitly defined in the metadata or manuscript; the mapping '1' = death and '0' = censored/alive is inferred from the pattern of values (samples with long follow-up commonly have '0', short follow-up often have '1') and the use of Kaplan–Meier, but this inference is not explicitly stated by the authors.",
+                "Observed time values in the metadata include integer and decimal month values (e.g., '9.5'), consistent with the var_unit 'month'.",
+                "No other survival endpoints (e.g., progression-free survival, disease-free survival) were identified in the provided metadata or paper text."
+            ],
+            "stats": {
+                "n_incomplete": 0,
+                "n_complete": 52,
+                "n_censored": 35,
+                "n_events": 17,
+                "censored_ratio": 0.67
+            }
+        }
+    ],
+    "data_file_names": [
+        "GSE216037_original.csv",
+        "GSE216037_preprocessed.csv"
+    ],
+    "data_summary": {
+        "samples": 52,
+        "clinical_features": 12,
+        "genes": 34372
+    }
+}
