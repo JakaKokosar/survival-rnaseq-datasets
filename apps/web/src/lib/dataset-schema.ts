@@ -37,6 +37,13 @@ const datasetSummarySchema = z.object({
 	genes: z.number(),
 });
 
+const dataFileMetadataSchema = z.object({
+	filename: z.string(),
+	size_bytes: z.number().int().nonnegative(),
+	rows: z.number().int().nonnegative(),
+	columns: z.number().int().nonnegative(),
+});
+
 export const datasetSchema = z.object({
 	data_id: z.string(),
 	data_url: z.url(),
@@ -45,6 +52,7 @@ export const datasetSchema = z.object({
 	candidate_genes: z.array(z.string()).optional(),
 	data_summary: datasetSummarySchema,
 	data_file_names: z.array(z.string()).optional(),
+	data_files: z.array(dataFileMetadataSchema).optional(),
 	'Experiment type': z.string(),
 	Reproducible: reproducibleValueSchema,
 	'NCBI-generated data': ncbiDataValueSchema,

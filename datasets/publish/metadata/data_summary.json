@@ -72,6 +72,26 @@
             "genes": 18418
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE100797_original.csv",
+                "size_bytes": 3482403,
+                "rows": 25,
+                "columns": 18429
+            },
+            {
+                "filename": "GSE100797_preprocessed.csv",
+                "size_bytes": 2404709,
+                "rows": 25,
+                "columns": 11825
+            },
+            {
+                "filename": "GSE100797_preprocessed_ssgsea.csv",
+                "size_bytes": 26383,
+                "rows": 25,
+                "columns": 61
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -152,6 +172,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE102073_raw_counts_NCBI.csv",
+                "size_bytes": 10852056,
+                "rows": 84,
+                "columns": 39395
+            },
+            {
+                "filename": "GSE102073_preprocessed.csv",
+                "size_bytes": 21779877,
+                "rows": 84,
+                "columns": 13998
+            },
+            {
+                "filename": "GSE102073_preprocessed_ssgsea.csv",
+                "size_bytes": 95072,
+                "rows": 84,
+                "columns": 69
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -205,6 +245,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE113863_raw_counts_NCBI.csv",
+                "size_bytes": 9746395,
+                "rows": 119,
+                "columns": 39387
+            },
+            {
+                "filename": "GSE113863_preprocessed.csv",
+                "size_bytes": 159589,
+                "rows": 119,
+                "columns": 89
+            },
+            {
+                "filename": "GSE113863_preprocessed_ssgsea.csv",
+                "size_bytes": 103461,
+                "rows": 119,
+                "columns": 61
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Targeted",
         "NCBI-generated data": "Available",
@@ -288,6 +348,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE120622_raw_counts_NCBI.csv",
+                "size_bytes": 9857761,
+                "rows": 81,
+                "columns": 39392
+            },
+            {
+                "filename": "GSE120622_preprocessed.csv",
+                "size_bytes": 20329228,
+                "rows": 81,
+                "columns": 13598
+            },
+            {
+                "filename": "GSE120622_preprocessed_ssgsea.csv",
+                "size_bytes": 84992,
+                "rows": 81,
+                "columns": 66
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -339,6 +419,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE131521_raw_counts_NCBI.csv",
+                "size_bytes": 2355322,
+                "rows": 17,
+                "columns": 39381
+            },
+            {
+                "filename": "GSE131521_preprocessed.csv",
+                "size_bytes": 4394481,
+                "rows": 17,
+                "columns": 13911
+            },
+            {
+                "filename": "GSE131521_preprocessed_ssgsea.csv",
+                "size_bytes": 18344,
+                "rows": 17,
+                "columns": 55
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -418,6 +518,26 @@
             "genes": 24748
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE133713_original.csv",
+                "size_bytes": 8052032,
+                "rows": 23,
+                "columns": 24757
+            },
+            {
+                "filename": "GSE133713_preprocessed.csv",
+                "size_bytes": 4650643,
+                "rows": 23,
+                "columns": 11724
+            },
+            {
+                "filename": "GSE133713_preprocessed_ssgsea.csv",
+                "size_bytes": 24237,
+                "rows": 23,
+                "columns": 59
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -498,6 +618,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE136961_raw_counts_NCBI.csv",
+                "size_bytes": 1146013,
+                "rows": 21,
+                "columns": 39384
+            },
+            {
+                "filename": "GSE136961_preprocessed.csv",
+                "size_bytes": 66695,
+                "rows": 21,
+                "columns": 367
+            },
+            {
+                "filename": "GSE136961_preprocessed_ssgsea.csv",
+                "size_bytes": 11122,
+                "rows": 21,
+                "columns": 58
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -551,6 +691,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE144561_raw_counts_NCBI.csv",
+                "size_bytes": 3309959,
+                "rows": 35,
+                "columns": 39387
+            },
+            {
+                "filename": "GSE144561_preprocessed.csv",
+                "size_bytes": 5656493,
+                "rows": 35,
+                "columns": 9790
+            },
+            {
+                "filename": "GSE144561_preprocessed_ssgsea.csv",
+                "size_bytes": 37327,
+                "rows": 35,
+                "columns": 61
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -633,6 +793,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE148355_raw_counts_NCBI.csv",
+                "size_bytes": 6283553,
+                "rows": 54,
+                "columns": 39407
+            },
+            {
+                "filename": "GSE148355_preprocessed.csv",
+                "size_bytes": 11222011,
+                "rows": 54,
+                "columns": 11449
+            },
+            {
+                "filename": "GSE148355_preprocessed_ssgsea.csv",
+                "size_bytes": 59802,
+                "rows": 54,
+                "columns": 81
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "PARTIALLY",
@@ -722,6 +902,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE150043_raw_counts_NCBI.csv",
+                "size_bytes": 2478750,
+                "rows": 19,
+                "columns": 39406
+            },
+            {
+                "filename": "GSE150043_preprocessed.csv",
+                "size_bytes": 4318523,
+                "rows": 19,
+                "columns": 12146
+            },
+            {
+                "filename": "GSE150043_preprocessed_ssgsea.csv",
+                "size_bytes": 22186,
+                "rows": 19,
+                "columns": 80
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "PARTIALLY",
@@ -804,6 +1004,26 @@
             "genes": 18944
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE162682_original.csv",
+                "size_bytes": 32047697,
+                "rows": 105,
+                "columns": 18944
+            },
+            {
+                "filename": "GSE162682_preprocessed.csv",
+                "size_bytes": 26129663,
+                "rows": 105,
+                "columns": 15151
+            },
+            {
+                "filename": "GSE162682_preprocessed_ssgsea.csv",
+                "size_bytes": 113109,
+                "rows": 105,
+                "columns": 69
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -857,6 +1077,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE164150_raw_counts_NCBI.csv",
+                "size_bytes": 5746049,
+                "rows": 47,
+                "columns": 39383
+            },
+            {
+                "filename": "GSE164150_preprocessed.csv",
+                "size_bytes": 11408243,
+                "rows": 47,
+                "columns": 13085
+            },
+            {
+                "filename": "GSE164150_preprocessed_ssgsea.csv",
+                "size_bytes": 48226,
+                "rows": 47,
+                "columns": 57
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -955,6 +1195,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE165656_raw_counts_NCBI.csv",
+                "size_bytes": 9625829,
+                "rows": 81,
+                "columns": 39434
+            },
+            {
+                "filename": "GSE165656_preprocessed.csv",
+                "size_bytes": 17798867,
+                "rows": 81,
+                "columns": 11899
+            },
+            {
+                "filename": "GSE165656_preprocessed_ssgsea.csv",
+                "size_bytes": 110765,
+                "rows": 81,
+                "columns": 108
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -1037,6 +1297,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE165808_raw_counts_NCBI.csv",
+                "size_bytes": 5887754,
+                "rows": 51,
+                "columns": 39385
+            },
+            {
+                "filename": "GSE165808_preprocessed.csv",
+                "size_bytes": 11805689,
+                "rows": 51,
+                "columns": 13827
+            },
+            {
+                "filename": "GSE165808_preprocessed_ssgsea.csv",
+                "size_bytes": 48285,
+                "rows": 51,
+                "columns": 59
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -1090,6 +1370,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE167573_raw_counts_NCBI.csv",
+                "size_bytes": 7537470,
+                "rows": 61,
+                "columns": 39386
+            },
+            {
+                "filename": "GSE167573_preprocessed.csv",
+                "size_bytes": 15137868,
+                "rows": 61,
+                "columns": 13399
+            },
+            {
+                "filename": "GSE167573_preprocessed_ssgsea.csv",
+                "size_bytes": 67963,
+                "rows": 61,
+                "columns": 60
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -1146,6 +1446,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE181582_raw_counts_NCBI.csv",
+                "size_bytes": 9942974,
+                "rows": 96,
+                "columns": 39391
+            },
+            {
+                "filename": "GSE181582_preprocessed.csv",
+                "size_bytes": 13702484,
+                "rows": 96,
+                "columns": 7778
+            },
+            {
+                "filename": "GSE181582_preprocessed_ssgsea.csv",
+                "size_bytes": 100146,
+                "rows": 96,
+                "columns": 65
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -1234,6 +1554,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE183924_raw_counts_NCBI.csv",
+                "size_bytes": 3868315,
+                "rows": 28,
+                "columns": 39409
+            },
+            {
+                "filename": "GSE183924_preprocessed.csv",
+                "size_bytes": 7876042,
+                "rows": 28,
+                "columns": 15003
+            },
+            {
+                "filename": "GSE183924_preprocessed_ssgsea.csv",
+                "size_bytes": 41883,
+                "rows": 28,
+                "columns": 83
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -1304,6 +1644,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE184941_raw_counts_NCBI.csv",
+                "size_bytes": 6941687,
+                "rows": 60,
+                "columns": 39401
+            },
+            {
+                "filename": "GSE184941_preprocessed.csv",
+                "size_bytes": 12903978,
+                "rows": 60,
+                "columns": 12013
+            },
+            {
+                "filename": "GSE184941_preprocessed_ssgsea.csv",
+                "size_bytes": 66105,
+                "rows": 60,
+                "columns": 75
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "PARTIALLY",
@@ -1362,6 +1722,26 @@
             "genes": 19778
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE188715_original.csv",
+                "size_bytes": 6075008,
+                "rows": 57,
+                "columns": 19695
+            },
+            {
+                "filename": "GSE188715_preprocessed.csv",
+                "size_bytes": 3295530,
+                "rows": 57,
+                "columns": 9683
+            },
+            {
+                "filename": "GSE188715_preprocessed_ssgsea.csv",
+                "size_bytes": 57581,
+                "rows": 57,
+                "columns": 58
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -1415,6 +1795,26 @@
             "genes": 26391
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE192667_raw_counts.csv",
+                "size_bytes": 8745143,
+                "rows": 89,
+                "columns": 26399
+            },
+            {
+                "filename": "GSE192667_preprocessed.csv",
+                "size_bytes": 27740883,
+                "rows": 89,
+                "columns": 17014
+            },
+            {
+                "filename": "GSE192667_preprocessed_ssgsea.csv",
+                "size_bytes": 86782,
+                "rows": 89,
+                "columns": 58
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -1466,6 +1866,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE201868_raw_counts_NCBI.csv",
+                "size_bytes": 3702629,
+                "rows": 30,
+                "columns": 39385
+            },
+            {
+                "filename": "GSE201868_preprocessed.csv",
+                "size_bytes": 6767286,
+                "rows": 30,
+                "columns": 12123
+            },
+            {
+                "filename": "GSE201868_preprocessed_ssgsea.csv",
+                "size_bytes": 32583,
+                "rows": 30,
+                "columns": 59
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -1518,6 +1938,26 @@
             "genes": 34372
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE216037_original.csv",
+                "size_bytes": 13038793,
+                "rows": 52,
+                "columns": 34384
+            },
+            {
+                "filename": "GSE216037_preprocessed.csv",
+                "size_bytes": 6538858,
+                "rows": 52,
+                "columns": 13410
+            },
+            {
+                "filename": "GSE216037_preprocessed_ssgsea.csv",
+                "size_bytes": 53499,
+                "rows": 52,
+                "columns": 62
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -1570,6 +2010,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE216490_raw_counts_NCBI.csv",
+                "size_bytes": 9576482,
+                "rows": 95,
+                "columns": 39387
+            },
+            {
+                "filename": "GSE216490_preprocessed.csv",
+                "size_bytes": 10097942,
+                "rows": 95,
+                "columns": 5850
+            },
+            {
+                "filename": "GSE216490_preprocessed_ssgsea.csv",
+                "size_bytes": 98453,
+                "rows": 95,
+                "columns": 61
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "NO",
@@ -1652,6 +2112,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE218527_raw_counts_NCBI.csv",
+                "size_bytes": 5749378,
+                "rows": 47,
+                "columns": 39385
+            },
+            {
+                "filename": "GSE218527_preprocessed.csv",
+                "size_bytes": 10907907,
+                "rows": 47,
+                "columns": 12497
+            },
+            {
+                "filename": "GSE218527_preprocessed_ssgsea.csv",
+                "size_bytes": 50426,
+                "rows": 47,
+                "columns": 59
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -1704,6 +2184,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE224564_raw_counts_NCBI.csv",
+                "size_bytes": 19372343,
+                "rows": 175,
+                "columns": 39385
+            },
+            {
+                "filename": "GSE224564_preprocessed.csv",
+                "size_bytes": 38590198,
+                "rows": 175,
+                "columns": 12676
+            },
+            {
+                "filename": "GSE224564_preprocessed_ssgsea.csv",
+                "size_bytes": 163139,
+                "rows": 175,
+                "columns": 59
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -1774,6 +2274,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE227378_raw_counts_NCBI.csv",
+                "size_bytes": 3119075,
+                "rows": 32,
+                "columns": 39395
+            },
+            {
+                "filename": "GSE227378_preprocessed.csv",
+                "size_bytes": 155211,
+                "rows": 32,
+                "columns": 270
+            },
+            {
+                "filename": "GSE227378_preprocessed_ssgsea.csv",
+                "size_bytes": 35123,
+                "rows": 32,
+                "columns": 69
+            }
+        ],
         "Experiment type": "Non-coding RNA profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "PARTIALLY",
@@ -1854,6 +2374,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE229706_raw_counts_NCBI.csv",
+                "size_bytes": 13959150,
+                "rows": 150,
+                "columns": 39414
+            },
+            {
+                "filename": "GSE229706_preprocessed.csv",
+                "size_bytes": 27037014,
+                "rows": 150,
+                "columns": 11995
+            },
+            {
+                "filename": "GSE229706_preprocessed_ssgsea.csv",
+                "size_bytes": 139656,
+                "rows": 150,
+                "columns": 88
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "PARTIALLY",
@@ -1932,6 +2472,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE241876_raw_counts_NCBI.csv",
+                "size_bytes": 1854933,
+                "rows": 12,
+                "columns": 39392
+            },
+            {
+                "filename": "GSE241876_preprocessed.csv",
+                "size_bytes": 3280588,
+                "rows": 12,
+                "columns": 14441
+            },
+            {
+                "filename": "GSE241876_preprocessed_ssgsea.csv",
+                "size_bytes": 15547,
+                "rows": 12,
+                "columns": 66
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -1982,6 +2542,26 @@
             "genes": 26275
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE274975_original.csv",
+                "size_bytes": 5013826,
+                "rows": 61,
+                "columns": 26290
+            },
+            {
+                "filename": "GSE274975_preprocessed.csv",
+                "size_bytes": 12827068,
+                "rows": 61,
+                "columns": 11666
+            },
+            {
+                "filename": "GSE274975_preprocessed_ssgsea.csv",
+                "size_bytes": 69157,
+                "rows": 61,
+                "columns": 66
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",
@@ -2034,6 +2614,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE60052_raw_counts_NCBI.csv",
+                "size_bytes": 5576007,
+                "rows": 48,
+                "columns": 39395
+            },
+            {
+                "filename": "GSE60052_preprocessed.csv",
+                "size_bytes": 8947342,
+                "rows": 48,
+                "columns": 9986
+            },
+            {
+                "filename": "GSE60052_preprocessed_ssgsea.csv",
+                "size_bytes": 52554,
+                "rows": 48,
+                "columns": 69
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -2085,6 +2685,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE78220_raw_counts_NCBI.csv",
+                "size_bytes": 3801111,
+                "rows": 28,
+                "columns": 39394
+            },
+            {
+                "filename": "GSE78220_preprocessed.csv",
+                "size_bytes": 7294963,
+                "rows": 28,
+                "columns": 13949
+            },
+            {
+                "filename": "GSE78220_preprocessed_ssgsea.csv",
+                "size_bytes": 31313,
+                "rows": 28,
+                "columns": 68
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "Scope": "Whole-transcriptome",
         "NCBI-generated data": "Available",
@@ -2138,6 +2758,26 @@
             "genes": 39376
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE87340_raw_counts_NCBI.csv",
+                "size_bytes": 3824418,
+                "rows": 54,
+                "columns": 39387
+            },
+            {
+                "filename": "GSE87340_preprocessed.csv",
+                "size_bytes": 7508081,
+                "rows": 54,
+                "columns": 14875
+            },
+            {
+                "filename": "GSE87340_preprocessed_ssgsea.csv",
+                "size_bytes": 28217,
+                "rows": 54,
+                "columns": 61
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Available",
         "Reproducible": "YES",
@@ -2191,6 +2831,26 @@
             "genes": 30891
         },
         "candidate_genes": [],
+        "data_files": [
+            {
+                "filename": "GSE96058_original.csv",
+                "size_bytes": 1777946819,
+                "rows": 3273,
+                "columns": 30891
+            },
+            {
+                "filename": "GSE96058_preprocessed.csv",
+                "size_bytes": 643772594,
+                "rows": 3273,
+                "columns": 11582
+            },
+            {
+                "filename": "GSE96058_preprocessed_ssgsea.csv",
+                "size_bytes": 3534703,
+                "rows": 3273,
+                "columns": 76
+            }
+        ],
         "Experiment type": "Expression profiling by high throughput sequencing",
         "NCBI-generated data": "Not available",
         "Reproducible": "YES",

@@ -4,6 +4,13 @@ export interface DatasetSummary {
 	genes: number;
 }
 
+export interface DataFileMetadata {
+	filename: string;
+	size_bytes: number;
+	rows: number;
+	columns: number;
+}
+
 export type ReproducibleValue = 'YES' | 'NO' | 'PARTIALLY';
 export type NcbiDataValue = 'Available' | 'Not available';
 
@@ -56,6 +63,7 @@ export interface RawDataset {
 	candidate_genes?: string[];
 	data_summary: DatasetSummary;
 	data_file_names?: string[];
+	data_files?: DataFileMetadata[];
 	'Experiment type': string;
 	Reproducible: ReproducibleValue;
 	'NCBI-generated data': NcbiDataValue;

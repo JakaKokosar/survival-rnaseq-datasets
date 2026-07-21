@@ -16,23 +16,40 @@
 	let sampleOrigins = $derived(sampleOriginMap.get(dataset.data_id) ?? []);
 	let relatedPublications = $derived(dataset.related_publications);
 	let reproducibilityNoteId = $derived(`reproducibility-note-${dataset.data_id}`);
+	const getDataFileLabel = (filename: string) => {
+		if (filename.endsWith('_preprocessed_ssgsea.csv')) return 'preprocessed-hallmarks.csv';
+		if (filename.endsWith('_preprocessed.csv')) return 'preprocessed.csv';
+		return 'original.csv';
+	};
 	let dataFiles = $derived.by(() => {
 		const filenames = dataset.data_file_names ?? [];
+		const metadataByFilename = new Map(
+			(dataset.data_files ?? []).map((file) => [file.filename, file]),
+		);
 		const files = filenames.map((filename) => ({
 			filename,
-			label: filename.endsWith('_preprocessed.csv') ? 'preprocessed.csv' : 'original.csv',
+			label: getDataFileLabel(filename),
+			metadata: metadataByFilename.get(filename),
 		}));
 		const hasPreprocessedFile = filenames.some((filename) => filename.endsWith('_preprocessed.csv'));
 
 		if (hasPreprocessedFile) {
+			const filename = `${dataset.data_id}_preprocessed_ssgsea.csv`;
 			files.push({
-				filename: `${dataset.data_id}_preprocessed_ssgsea.csv`,
-				label: 'preprocessed-hallmarks.csv',
+				filename,
+				label: getDataFileLabel(filename),
+				metadata: metadataByFilename.get(filename),
 			});
 		}
 
 		return files;
 	});
+	const formatFileSize = (bytes: number) => {
+		if (bytes < 1_000) return `${bytes} B`;
+		if (bytes < 1_000_000) return `${Math.round(bytes / 1_000)} KB`;
+		if (bytes < 1_000_000_000) return `${(bytes / 1_000_000).toFixed(1)} MB`;
+		return `${(bytes / 1_000_000_000).toFixed(1)} GB`;
+	};
 	let detailTitle = $derived(
 		seriesSummary?.title ? `${dataset.data_id} - ${seriesSummary.title}` : dataset.data_id,
 	);
@@ -172,26 +189,51 @@
 						</dd>
 					</dl>
 				</section>
-				<section data-tour="prepared-datasets" class="flex flex-col gap-2 md:min-w-0 md:border-l md:border-slate-200 md:pl-6">
+				<section data-tour="prepared-datasets" class="md:min-w-0 md:border-l md:border-slate-200 md:pl-6">
 					<h3 class="text-xs font-medium uppercase tracking-wide text-slate-500">Data files</h3>
-					{#each dataFiles as file (file.filename)}
-						<a
-							href={buildDataFileDownloadUrl(file.filename)}
-							download={file.filename}
-							title={file.filename}
-							class="inline-flex self-start items-start gap-1.5 rounded text-sm text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-						>
-							<svg aria-hidden="true" class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
-								></path>
-							</svg>
-							<span>{file.label}</span>
-						</a>
-					{/each}
+					<div data-testid="data-files-list" class="mt-1 flex flex-col gap-0.5">
+						{#each dataFiles as file (file.filename)}
+							<a
+								href={buildDataFileDownloadUrl(file.filename)}
+								download={file.filename}
+								title={file.filename}
+								aria-label={`Download ${file.label}`}
+								class="group -mx-2 grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 rounded px-2 py-1 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset"
+							>
+								<span class="truncate text-sm text-blue-600 group-hover:text-blue-700">
+									{file.label}
+								</span>
+								{#if file.metadata}
+									<span class="grid shrink-0 grid-cols-[6rem_auto_3.5rem] items-center gap-x-1.5 text-[11px] leading-4 tabular-nums text-slate-400">
+										<span
+											title={`${file.metadata.rows.toLocaleString()} rows × ${file.metadata.columns.toLocaleString()} columns`}
+											class="text-right"
+										>
+											{file.metadata.rows.toLocaleString()} × {file.metadata.columns.toLocaleString()}
+										</span>
+										<span data-testid="data-file-separator" aria-hidden="true" class="justify-self-center text-slate-300">·</span>
+										<span class="text-left">{formatFileSize(file.metadata.size_bytes)}</span>
+									</span>
+								{:else}
+									<span aria-hidden="true"></span>
+								{/if}
+								<svg
+									aria-hidden="true"
+									class="h-3.5 w-3.5 text-slate-400 transition-colors group-hover:text-blue-600"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
+									></path>
+								</svg>
+							</a>
+						{/each}
+					</div>
 				</section>
 			</div>
 		{:else}

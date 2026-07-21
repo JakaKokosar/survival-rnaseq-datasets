@@ -91,25 +91,56 @@ describe('DatasetDetailHeader related publications', () => {
 		renderHeader(
 			createDataset({
 				data_file_names: ['GSE123_raw_counts_NCBI.csv', 'GSE123_preprocessed.csv'],
+				data_files: [
+					{
+						filename: 'GSE123_raw_counts_NCBI.csv',
+						size_bytes: 3_300_000,
+						rows: 25,
+						columns: 18_429,
+					},
+					{
+						filename: 'GSE123_preprocessed.csv',
+						size_bytes: 2_300_000,
+						rows: 25,
+						columns: 18_429,
+					},
+					{
+						filename: 'GSE123_preprocessed_ssgsea.csv',
+						size_bytes: 26_000,
+						rows: 25,
+						columns: 61,
+					},
+				],
 			}),
 		);
 
 		expect(screen.getByRole('heading', { level: 3, name: 'Data files' })).toBeTruthy();
 		expect(screen.queryByText('Prepared downloads')).toBeNull();
 
-		const original = screen.getByRole('link', { name: 'original.csv' });
+		const original = screen.getByRole('link', { name: 'Download original.csv' });
 		expect(original.getAttribute('href')).toBe('https://example.com/files/GSE123_raw_counts_NCBI.csv');
 		expect(original.getAttribute('download')).toBe('GSE123_raw_counts_NCBI.csv');
-		expect(original.classList.contains('self-start')).toBe(true);
+		expect(original.className).toContain('hover:bg-slate-50');
+		expect(screen.getByTestId('data-files-list')).toBeTruthy();
 
-		const preprocessed = screen.getByRole('link', { name: 'preprocessed.csv' });
+		const preprocessed = screen.getByRole('link', { name: 'Download preprocessed.csv' });
 		expect(preprocessed.getAttribute('download')).toBe('GSE123_preprocessed.csv');
 
-		const hallmarks = screen.getByRole('link', { name: 'preprocessed-hallmarks.csv' });
+		const hallmarks = screen.getByRole('link', { name: 'Download preprocessed-hallmarks.csv' });
 		expect(hallmarks.getAttribute('href')).toBe(
 			'https://example.com/files/GSE123_preprocessed_ssgsea.csv',
 		);
 		expect(hallmarks.getAttribute('download')).toBe('GSE123_preprocessed_ssgsea.csv');
+		expect(screen.getAllByTitle('25 rows × 18,429 columns')).toHaveLength(2);
+		expect(screen.getByTitle('25 rows × 61 columns')).toBeTruthy();
+		expect(screen.getByText('3.3 MB').classList.contains('text-left')).toBe(true);
+		expect(screen.getByText('2.3 MB')).toBeTruthy();
+		expect(screen.getByText('26 KB')).toBeTruthy();
+		const separators = screen.getAllByTestId('data-file-separator');
+		expect(separators).toHaveLength(3);
+		expect(separators.every((separator) => separator.classList.contains('justify-self-center'))).toBe(
+			true,
+		);
 	});
 
 	it('renders short citations as publication links instead of PMCIDs', () => {

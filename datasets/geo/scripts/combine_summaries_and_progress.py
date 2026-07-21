@@ -50,6 +50,37 @@ def read_sample_header(sample_file_path: pathlib.Path) -> List[str]:
         return next(reader, [])
 
 
+def published_file_names(description: dict) -> List[str]:
+    """Return canonical downloads, including the derived hallmark-score file."""
+    names = list(description.get("data_file_names") or [])
+    data_id = description.get("data_id")
+    if data_id and any(name.endswith("_preprocessed.csv") for name in names):
+        names.append(f"{data_id}_preprocessed_ssgsea.csv")
+    return list(dict.fromkeys(names))
+
+
+def get_data_file_metadata(description: dict, gse_folder_path: str) -> List[dict]:
+    """Build cheap, web-facing size and shape metadata for published CSV files."""
+    sample_count = description.get("data_summary", {}).get("samples")
+    if not isinstance(sample_count, int):
+        raise ValueError(f"Missing sample count for {description.get('data_id', gse_folder_path)}")
+
+    files = []
+    for filename in published_file_names(description):
+        path = pathlib.Path(gse_folder_path) / filename
+        if not path.is_file():
+            raise FileNotFoundError(f"Missing published data file: {path}")
+        files.append(
+            {
+                "filename": filename,
+                "size_bytes": path.stat().st_size,
+                "rows": sample_count,
+                "columns": len(read_sample_header(path)),
+            }
+        )
+    return files
+
+
 def get_candidate_genes(header: list, survival_var_names: list) -> Optional[list]:
     """Identify survival column indices and return trailing columns as gene names.
     Uses only survival vars that exist in the header (sample file may omit some)."""
@@ -161,6 +192,7 @@ if __name__ == "__main__":
                 if genes is not None:
                     candidate_genes = genes
         description["candidate_genes"] = candidate_genes
+        description["data_files"] = get_data_file_metadata(description, gse_folder)
         description.update(progress_data[gseid])
         data.append(description)
 
