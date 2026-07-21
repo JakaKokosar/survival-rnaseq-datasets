@@ -1,18 +1,23 @@
 # Agent instructions
 
-- This project uses **pnpm** for all dependency management and script execution. Do not use `npm`, `yarn`, or `bun` for any purpose.
-- Don't run any dev servers unless explicitly asked to do so.
-- Don't do any browser check unless explicitly asked to do so.
+## Cross-cutting rules
 
-## Dataset artifacts
+- Use **pnpm** only. Do not use `npm`, `yarn`, or `bun`.
+- Do not run dev servers or browser checks unless explicitly asked.
+- The webapp reads `datasets/publish/metadata/` and `datasets/publish/downloads/`. Do not duplicate those under `apps/web/`.
 
-- The webapp consumes committed JSON from `datasets/publish/metadata/` and local
-  downloads from `datasets/publish/downloads/`. Do not create copies in
-  `apps/web/src/` or a separate development-download directory.
+## Where to look
+
+| Task | Start here |
+|------|------------|
+| Web app (Astro/Svelte) | [apps/web/README.md](apps/web/README.md) |
+| Deploy site or downloads | [apps/web/docs/deploy.md](apps/web/docs/deploy.md) |
+| Data pipeline, GSE workspaces, assembly | [datasets/README.md](datasets/README.md) |
+| Rebuild order, bulk stages, new GSE | [datasets/docs/workflows.md](datasets/docs/workflows.md) |
+| Dataset agent guidance | [datasets/AGENTS.md](datasets/AGENTS.md) |
+
+## Quick reminders
+
 - Use `pnpm data:assemble` when canonical per-GSE outputs already exist.
-- When canonical outputs must be regenerated, run each bulk notebook stage
-  separately and review its failure summary before continuing.
-- Treat a new GSE as a separate onboarding workflow. The bulk stages only run
-  notebooks already present in registered GSE workspaces and do not replace
-  study-specific preparation, metadata mapping, curation, or review.
-- Preserve the canonical stage order documented in `datasets/docs/workflows.md`.
+- Regenerate outputs by running bulk notebook stages separately (review failures after each), then assemble.
+- A new GSE is a separate onboarding workflow — not covered by bulk stages alone.

@@ -13,6 +13,9 @@ downstream processing produces the metadata and CSV files used by the webapp.
 
 `docs/workflows.md` is the canonical source for commands and execution order.
 
+Deploying published downloads to the production server is documented in
+[apps/web/docs/deploy.md](../apps/web/docs/deploy.md).
+
 ## Setup
 
 From the monorepo root:
