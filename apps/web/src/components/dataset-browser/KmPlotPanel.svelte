@@ -69,6 +69,7 @@
 	let showConfidenceIntervals = $state(true);
 	let showMedianSurvival = $state(true);
 	let showCensoringTicks = $state(true);
+	let displayExpanded = $state(true);
 
 	let pyReady = $state(false);
 	let pyEnv = $state<KmEnv | null>(null);
@@ -539,7 +540,7 @@
 	});
 </script>
 
-<section data-tour="km-analysis">
+<section data-tour="km-analysis" class="km-analysis">
 	{#if showHeader}
 		<button
 			onclick={onToggleOpen}
@@ -559,9 +560,9 @@
 		</button>
 	{/if}
 	{#if isOpen}
-		<div id="km-plot-panel-content" class="min-w-0">
+		<div id="km-plot-panel-content" class="km-panel-content min-w-0">
 			<div class="km-workspace min-w-0">
-				<div class="min-w-0 font-sans text-slate-700">
+				<div class="km-main min-w-0 font-sans text-slate-700">
 					<div class="km-layout grid min-w-0">
 						<aside
 							class="km-controls flex min-w-0 flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
@@ -743,12 +744,25 @@
 							</div>
 
 							<div class="shrink-0 overflow-hidden border-t border-slate-200 bg-white">
-								<div
-									class="border-b border-slate-100 bg-slate-50/90 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
+								<button
+									type="button"
+									onclick={() => (displayExpanded = !displayExpanded)}
+									aria-expanded={displayExpanded}
+									aria-controls="km-display-body"
+									class="flex w-full items-center justify-between border-b border-slate-100 bg-slate-50/90 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
 								>
-									Display
-								</div>
-								<div id="km-display-body">
+									<span>Display</span>
+									<svg
+										aria-hidden="true"
+										class="h-3.5 w-3.5 transition-transform {displayExpanded ? 'rotate-180' : ''}"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+									</svg>
+								</button>
+								<div id="km-display-body" hidden={!displayExpanded}>
 									<label class="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
 										<input
 											type="checkbox"
@@ -780,7 +794,7 @@
 
 						<div data-tour="km-plot" class="min-h-0 w-full min-w-0">
 							<div
-								class="relative h-[min(68vh,720px)] min-h-[300px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
+								class="km-plot-frame relative min-h-[300px] w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
 								{@attach attachPlotResize}
 							>
 								{#if !pyReady}
@@ -988,6 +1002,12 @@
 <style>
 	.km-workspace {
 		container-type: inline-size;
+		--km-panel-height: clamp(300px, calc(100vh - 34rem), 720px);
+		--km-panel-height: clamp(300px, calc(100dvh - 34rem), 720px);
+	}
+
+	.km-plot-frame {
+		height: var(--km-panel-height);
 	}
 
 	.km-layout {
@@ -1001,7 +1021,7 @@
 		}
 
 		.km-controls {
-			height: min(68vh, 720px);
+			height: var(--km-panel-height);
 			min-height: 300px;
 			overscroll-behavior: contain;
 		}
@@ -1020,6 +1040,31 @@
 			max-height: none;
 			flex: 1 1 0%;
 			overscroll-behavior: contain;
+		}
+	}
+
+	@media (min-width: 1024px) and (max-height: 1050px) {
+		.km-analysis,
+		.km-panel-content,
+		.km-workspace,
+		.km-main,
+		.km-layout {
+			height: 100%;
+			min-height: 0;
+		}
+
+		.km-panel-content {
+			display: grid;
+			grid-template-rows: minmax(0, 1fr) auto;
+		}
+
+		.km-workspace {
+			--km-panel-height: 100%;
+		}
+
+		.km-controls,
+		.km-plot-frame {
+			min-height: 0;
 		}
 	}
 

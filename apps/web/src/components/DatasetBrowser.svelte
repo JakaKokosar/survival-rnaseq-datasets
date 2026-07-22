@@ -481,11 +481,11 @@
 			aria-labelledby={mobileDetailsTabId}
 			tabindex={isDesktop ? undefined : 0}
 			hidden={!isDesktop && mobileTab !== 'details'}
-			class="overflow-y-auto bg-slate-50"
+			class="dataset-details-panel overflow-y-auto bg-slate-50 {detailSection === 'km' ? 'dataset-details-panel-km' : ''}"
 		>
 			{#if selectedDataset}
-				<div class="p-6">
-					<div class="space-y-6">
+				<div class="dataset-detail-shell p-6">
+					<div class="dataset-detail-stack flex flex-col gap-6 {detailSection === 'km' ? 'dataset-detail-stack-km' : ''}">
 						<DatasetDetailHeader
 							dataset={selectedDataset}
 							{buildDataFileDownloadUrl}
@@ -497,7 +497,7 @@
 						<div
 							role="tablist"
 							aria-label="Dataset analysis"
-							class="flex overflow-x-auto border-b border-slate-200"
+							class="dataset-analysis-tabs flex overflow-x-auto border-b border-slate-200"
 						>
 							<button
 								bind:this={kmSectionTabEl}
@@ -510,7 +510,7 @@
 								tabindex={detailSection === 'km' ? 0 : -1}
 								onclick={() => (detailSection = 'km')}
 								onkeydown={handleDetailSectionKeydown}
-								class="shrink-0 border-b-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailSection === 'km'
+								class="dataset-analysis-tab shrink-0 border-b-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailSection === 'km'
 									? 'border-slate-600 text-slate-700'
 									: 'border-transparent text-slate-400 hover:text-slate-600'}"
 							>
@@ -527,7 +527,7 @@
 								tabindex={detailSection === 'sample-data' ? 0 : -1}
 								onclick={() => (detailSection = 'sample-data')}
 								onkeydown={handleDetailSectionKeydown}
-								class="shrink-0 border-b-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailSection === 'sample-data'
+								class="dataset-analysis-tab shrink-0 border-b-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailSection === 'sample-data'
 									? 'border-slate-600 text-slate-700'
 									: 'border-transparent text-slate-400 hover:text-slate-600'}"
 							>
@@ -544,7 +544,7 @@
 								tabindex={detailSection === 'endpoints' ? 0 : -1}
 								onclick={() => (detailSection = 'endpoints')}
 								onkeydown={handleDetailSectionKeydown}
-								class="shrink-0 border-b-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailSection === 'endpoints'
+								class="dataset-analysis-tab shrink-0 border-b-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 {detailSection === 'endpoints'
 									? 'border-slate-600 text-slate-700'
 									: 'border-transparent text-slate-400 hover:text-slate-600'}"
 							>
@@ -553,7 +553,7 @@
 						</div>
 
 						{#if detailSection === 'km'}
-							<div id={kmSectionPanelId} role="tabpanel" aria-labelledby={kmSectionTabId}>
+							<div class="dataset-section-panel" id={kmSectionPanelId} role="tabpanel" aria-labelledby={kmSectionTabId}>
 								<KmPlotPanel
 									isOpen={true}
 									showHeader={false}
@@ -597,3 +597,39 @@
 		</div>
 	</main>
 </div>
+
+<style>
+	@media (min-width: 1024px) and (max-height: 1050px) {
+		.dataset-details-panel-km {
+			overflow-y: hidden;
+		}
+
+		.dataset-detail-shell {
+			height: 100%;
+			min-height: 0;
+			padding: 1rem;
+		}
+
+		.dataset-detail-stack-km {
+			display: grid;
+			height: 100%;
+			min-height: 0;
+			grid-template-rows: auto auto minmax(0, 1fr);
+			gap: 1rem;
+		}
+
+		.dataset-analysis-tabs,
+		.dataset-section-panel {
+			min-height: 0;
+		}
+
+		.dataset-section-panel {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.dataset-analysis-tab {
+			padding-block: 0.625rem;
+		}
+	}
+</style>

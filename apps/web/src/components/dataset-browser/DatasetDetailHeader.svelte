@@ -133,7 +133,7 @@
 	</span>
 {/snippet}
 
-<header data-tour="dataset-detail-header" class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+<header data-tour="dataset-detail-header" class="dataset-detail-header rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
 	<!-- Title row with GEO link -->
 	<div class="flex items-start justify-between gap-3">
 		<h2 class="text-lg font-bold leading-snug text-slate-900">
@@ -159,17 +159,17 @@
 
 	<!-- Summary paragraph -->
 	{#if seriesSummary}
-		<div class="mt-3 border-l-2 border-slate-200 pl-3">
-			<p class="text-sm leading-relaxed text-slate-600">{@render highlightedText(seriesSummary.summary)}</p>
+		<div class="dataset-summary mt-3 border-l-2 border-slate-200 pl-3">
+			<p class="dataset-summary-text text-sm leading-relaxed text-slate-600">{@render highlightedText(seriesSummary.summary)}</p>
 			<p class="mt-1 text-xs italic text-slate-400">— AI-generated summary</p>
 		</div>
 	{/if}
 
 	<!-- Metadata -->
-	<div class="mt-4 border-t border-slate-100 pt-4">
+	<div class="dataset-metadata mt-4 border-t border-slate-100 pt-4">
 		{#if dataFiles.length > 0}
-			<div class="flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] md:items-start md:gap-x-6 md:gap-y-0">
-				<section class="md:min-w-0">
+			<div class="dataset-metadata-layout flex flex-col gap-4">
+				<section class="min-w-0">
 					<dl class="grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-2 text-sm leading-6 text-slate-900">
 						<dt class="font-medium text-slate-500">Sample origin:</dt>
 						<dd class="text-slate-900">
@@ -189,7 +189,7 @@
 						</dd>
 					</dl>
 				</section>
-				<section data-tour="prepared-datasets" class="md:min-w-0 md:border-l md:border-slate-200 md:pl-6">
+				<section data-tour="prepared-datasets" class="dataset-files min-w-0">
 					<h3 class="text-xs font-medium uppercase tracking-wide text-slate-500">Data files</h3>
 					<div data-testid="data-files-list" class="mt-1 flex flex-col gap-0.5">
 						{#each dataFiles as file (file.filename)}
@@ -259,3 +259,43 @@
 	</div>
 
 </header>
+
+<style>
+	.dataset-detail-header {
+		container-type: inline-size;
+	}
+
+	@container (min-width: 42rem) {
+		.dataset-metadata-layout {
+			display: grid;
+			grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 1.1fr);
+			align-items: start;
+			column-gap: 1.5rem;
+			row-gap: 0;
+		}
+
+		.dataset-files {
+			border-left: 1px solid var(--color-slate-200);
+			padding-left: 1.5rem;
+		}
+	}
+
+	@media (min-width: 1024px) and (max-height: 1050px) {
+		.dataset-detail-header {
+			padding: 1rem;
+		}
+
+		.dataset-summary {
+			margin-top: 0.5rem;
+		}
+
+		.dataset-summary-text {
+			line-height: 1.375;
+		}
+
+		.dataset-metadata {
+			margin-top: 0.75rem;
+			padding-top: 0.75rem;
+		}
+	}
+</style>

@@ -265,7 +265,7 @@ describe('KmPlotPanel', () => {
 		expect(paperLink.getAttribute('target')).toBe('_blank');
 	});
 
-	it('keeps display controls visible and toggles chart layers', async () => {
+	it('collapses display controls and toggles chart layers', async () => {
 		const { container } = renderPanel();
 		await waitFor(() => {
 			expect(container.querySelector('[data-testid="km-py-loading"]')).toBeNull();
@@ -274,8 +274,16 @@ describe('KmPlotPanel', () => {
 		expect(screen.getByTestId('km-confidence-layer')).not.toBeNull();
 		expect(screen.getByTestId('km-median-layer')).not.toBeNull();
 		expect(screen.getByTestId('km-censor-layer')).not.toBeNull();
-		expect(screen.getByText('Display')).not.toBeNull();
-		expect(screen.queryByRole('button', { name: 'Display' })).toBeNull();
+		const displayButton = screen.getByRole('button', { name: 'Display' });
+		expect(displayButton.getAttribute('aria-expanded')).toBe('true');
+
+		await fireEvent.click(displayButton);
+		expect(displayButton.getAttribute('aria-expanded')).toBe('false');
+		expect((container.querySelector('#km-display-body') as HTMLElement).hidden).toBe(true);
+
+		await fireEvent.click(displayButton);
+		expect(displayButton.getAttribute('aria-expanded')).toBe('true');
+		expect((container.querySelector('#km-display-body') as HTMLElement).hidden).toBe(false);
 
 		await fireEvent.click(screen.getByLabelText('Show confidence intervals'));
 		await fireEvent.click(screen.getByLabelText('Show median survival'));
