@@ -17,7 +17,6 @@
 	let relatedPublications = $derived(dataset.related_publications);
 	let reproducibilityNoteId = $derived(`reproducibility-note-${dataset.data_id}`);
 	const getDataFileLabel = (filename: string) => {
-		if (filename.endsWith('_preprocessed_ssgsea.csv')) return 'preprocessed-hallmarks.csv';
 		if (filename.endsWith('_preprocessed.csv')) return 'preprocessed.csv';
 		return 'original.csv';
 	};
@@ -26,23 +25,11 @@
 		const metadataByFilename = new Map(
 			(dataset.data_files ?? []).map((file) => [file.filename, file]),
 		);
-		const files = filenames.map((filename) => ({
+		return filenames.map((filename) => ({
 			filename,
 			label: getDataFileLabel(filename),
 			metadata: metadataByFilename.get(filename),
 		}));
-		const hasPreprocessedFile = filenames.some((filename) => filename.endsWith('_preprocessed.csv'));
-
-		if (hasPreprocessedFile) {
-			const filename = `${dataset.data_id}_preprocessed_ssgsea.csv`;
-			files.push({
-				filename,
-				label: getDataFileLabel(filename),
-				metadata: metadataByFilename.get(filename),
-			});
-		}
-
-		return files;
 	});
 	const formatFileSize = (bytes: number) => {
 		if (bytes < 1_000) return `${bytes} B`;

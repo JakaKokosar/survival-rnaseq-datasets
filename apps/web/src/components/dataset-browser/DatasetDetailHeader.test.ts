@@ -126,18 +126,14 @@ describe('DatasetDetailHeader related publications', () => {
 		const preprocessed = screen.getByRole('link', { name: 'Download preprocessed.csv' });
 		expect(preprocessed.getAttribute('download')).toBe('GSE123_preprocessed.csv');
 
-		const hallmarks = screen.getByRole('link', { name: 'Download preprocessed-hallmarks.csv' });
-		expect(hallmarks.getAttribute('href')).toBe(
-			'https://example.com/files/GSE123_preprocessed_ssgsea.csv',
-		);
-		expect(hallmarks.getAttribute('download')).toBe('GSE123_preprocessed_ssgsea.csv');
+		expect(screen.queryByRole('link', { name: 'Download preprocessed-hallmarks.csv' })).toBeNull();
 		expect(screen.getAllByTitle('25 rows × 18,429 columns')).toHaveLength(2);
-		expect(screen.getByTitle('25 rows × 61 columns')).toBeTruthy();
+		expect(screen.queryByTitle('25 rows × 61 columns')).toBeNull();
 		expect(screen.getByText('3.3 MB').classList.contains('text-left')).toBe(true);
 		expect(screen.getByText('2.3 MB')).toBeTruthy();
-		expect(screen.getByText('26 KB')).toBeTruthy();
+		expect(screen.queryByText('26 KB')).toBeNull();
 		const separators = screen.getAllByTestId('data-file-separator');
-		expect(separators).toHaveLength(3);
+		expect(separators).toHaveLength(2);
 		expect(separators.every((separator) => separator.classList.contains('justify-self-center'))).toBe(
 			true,
 		);
