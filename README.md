@@ -1,6 +1,7 @@
 # Survival RNA-seq data monorepo
 
-Astro/Svelte dataset browser plus Python/Jupyter pipeline for metadata and downloadable CSVs.
+Astro/Svelte dataset browser plus Python/Jupyter workflows for literature
+retrieval, dataset curation, metadata, and downloadable CSVs.
 
 ## Packages
 
@@ -8,6 +9,7 @@ Astro/Svelte dataset browser plus Python/Jupyter pipeline for metadata and downl
 |------|------|
 | [apps/web](apps/web/README.md) | Astro app — dev, build, deploy |
 | [datasets](datasets/README.md) | Data pipeline — GSE workspaces, assembly, workflows |
+| [pubmed-retrieval](pubmed-retrieval/README.md) | Literature retrieval — discover and filter GEO RNA-seq datasets with survival data |
 
 Published artifacts consumed by the webapp:
 
@@ -23,6 +25,10 @@ cp datasets/.env.example datasets/.env
 ```
 
 Set `OPENAI_API_KEY` in `datasets/.env` for OpenAI-backed pipeline stages.
+
+The PubMed retrieval workflow uses its own `uv` environment. See
+[pubmed-retrieval/README.md](pubmed-retrieval/README.md) for setup and execution
+instructions.
 
 ## Common commands
 
