@@ -1,3 +1,7 @@
+[![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22145582.svg)](https://doi.org/10.5281/zenodo.22145582)
+[![Code DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21900172.svg)](https://doi.org/10.5281/zenodo.21900172)
+
+
 # Survival RNA-seq data monorepo
 
 Astro/Svelte dataset browser plus Python/Jupyter workflows for literature
