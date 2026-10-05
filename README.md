@@ -7,6 +7,14 @@
 Astro/Svelte dataset browser plus Python/Jupyter workflows for literature
 retrieval, dataset curation, metadata, and downloadable CSVs.
 
+## Data
+
+The curated collection of 33 cancer RNA-seq datasets with survival outcomes is
+archived on Zenodo, and can also be browsed at <https://survival.biolab.si>.
+
+- **Dataset:** <https://doi.org/10.5281/zenodo.22145582>
+- **Code snapshot:** <https://doi.org/10.5281/zenodo.21900172>
+
 ## Packages
 
 | Path | Docs |
