@@ -12,7 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/svelte": "^9.0.1",
+    "@astrojs/svelte": "^9.1.2",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/svelte-virtual": "^3.13.33",
     "@tanstack/table-core": "^8.21.3",
